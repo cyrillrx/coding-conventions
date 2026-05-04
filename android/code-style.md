@@ -203,10 +203,9 @@ The are prefixed by `img_` and suffixed by their size (meaning 160, 72 or 24 dp)
 
 For instance `img_package_72`is for the image named package and with size 72x72.
 
-When importing the vector asset, remove hardcoded colors in the XML describing the icons and set the associated color (@color/foo). 
-
-As these images are not mono color, it's not possible to tint them at use. 
-Don't forget to import both the normal and the dark mode version of an image.
+As these images are not mono color, it's not possible to tint them at use.
+Colors should be defined via the design system theme rather than hardcoded.
+Don't forget to import both the light and the dark mode version of an image.
 
 ## Formatting
 
