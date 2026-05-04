@@ -496,44 +496,26 @@ Note: As shown in the previous examples, skipping a line after a return statemen
 
 ## Framework specificities
 
-### Getting RecyclerView's adapter
+### List state in Compose
 
-Two ways of getting a RecyclerView's adapter can be found.
+Use `LazyColumn` / `LazyRow` for lists. When the parent needs to control or observe scroll position, hoist a `LazyListState` rather than reaching into child composables.
 
 ```kotlin
-// 1st kind : storing the adapter
-class MyFragment : Fragment() {
-    private val recyclerView: RecyclerView
-    private lateinit var adapter: MyAdapter
+// Good: state is hoisted, the caller controls it
+val listState = rememberLazyListState()
 
-    override fun onCreate() {
-        adapter = MyAdapter()
-        recyclerView.adapter = newAdapter
-    }
-
-    private fun doStuffOnAdapter() {
-        // The adapter can be got directly from the field of this fragment
-    }
+LazyColumn(state = listState) {
+    items(items) { item -> ItemRow(item) }
 }
 
-// 2nd kind : getting the adapter in the RecyclerView
-class MyFragment : Fragment() {
-    private val recyclerView: RecyclerView
-
-    override fun onCreate() {
-        recyclerView.adapter = MyAdapter()
-    }
-
-    private fun getAdapter() = recyclerView.adapter as MyAdapter
-
-    private fun doStuffOnAdapter() {
-        // The adapter can be got from the getAdapter() method
-    }
+// Elsewhere: scroll to top on refresh
+LaunchedEffect(refreshTrigger) {
+    listState.animateScrollToItem(0)
 }
 ```
 
-Either the first and second type of getting the adapter is accepted in the project. In the first case, be careful that the stored adapter is always the one set in the RecyclerView. In the second case, keep in mind that it requires more computational work.
-<sup>[[link](#Getting-RecyclerViews-adapter)]</sup>
+When the caller doesn't need to interact with scroll state, let `LazyColumn` own it internally — don't hoist unnecessarily.
+<sup>[[link](#list-state-in-compose)]</sup>
 
 ### Event spreading
 
