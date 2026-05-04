@@ -6,7 +6,6 @@ It was inspired by [GitHub's Ruby guide](https://web.archive.org/web/20160410033
 
 ## Table of Contents
   * [Source code organization](#source-code-organization)
-  * [Id naming](#id-naming)
   * [Naming rules](#naming-rules)
   * [Formatting](#formatting)
   * [Code idioms](#code-idioms)
@@ -38,51 +37,6 @@ When implementing an interface, keep the implementing members in the same order 
 
 Always put overloads next to each other in a class.
 <sup>[[link](#overload-layout)]</sup>
-
-## Id naming
-
-In a CustomView / Layout we don't need to specify the name of the (class / customview) in our id
-
-For example, for the class `CalendarStartingMonthChoiceView` :
-
-dont use -> tv_calendar_starting_month_choice_title
-
-just use -> tv_title
-
-### XML
-
-TextView -> tv_something (example : tv_title / tv_message / tv_description)
-
-ImageView -> iv_something (example : iv_icon / iv_header / iv_background)
-
-EditText -> et_something (example : et_firstName / et_city / et_address)
-
-MaterialButton -> btn_something (example : btn_back / btn_next / btn_login)
-
-
-For custom view / Layout, dont prefix by `view_` or `layout_`, be consistent 
-
-example -> for BillingShippingAddressView, for the id, we can put something like 
-
-`android:id="@+id/shipping_address_container"` or `android:id="@+id/container_shipping_address"`
-
-Sometime, you will have TextView or ImageView for a button. In this case, your id should be : 
-
-`android:id="@+id/btn_something"` and not `android:id="@+id/tv_something"` / `android:id="@+id/iv_something"`
-
-### Class / Layout / Custom View
-
-TextView -> tvSomething (example : tvTitle / tvMessage / tvDescription)
-
-ImageView -> ivSomething (example : ivIcon / ivHeader / ivBackground)
-
-EditText -> etSomething (example : etFirstName / etCity / etAddress)
-
-MaterialButton -> btnSomething (example : btnBack / btnNext / btnLogin)
-
-
-For customView / Layout, we also dont need to prefix by `view`Something (example : viewBillingShippingAddress)
-we can write something like : `private val selectionTopBar: Selection3TopBarView`
 
 ## Naming rules
 
