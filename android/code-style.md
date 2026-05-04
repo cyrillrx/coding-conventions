@@ -614,39 +614,24 @@ Note 2: The encapsulation of `Events` and `Callback` inside `PhotoView` is not m
 If `PhotoView.Events` and `PhotoView.Callback` grow too much, it's perfectly fine to create external classes: `PhotoViewEvents` and `PhotoViewCallback`.
 <sup>[[link](#unmanaged-implementation)]</sup>
 
-### View visibility management
-We have multiple ways to change a view visibility.
-We can use the original `View.setVisibility(visibility: Int)` with `visibility` as an integer value between `View.VISIBLE`, `View.INVISIBLE` or `View.GONE` ; or with AndroidX core KTX use inline vars `View.isVisible: Boolean`, `View.isInvisible: Boolean` and `View.isGone: Boolean`.
-By default we recommend to use `View.isVisible: Boolean` instead of `View.setVisibility(visibility: Int)` with `View.VISIBLE` or `View.GONE`. Thus, to set a view as `GONE` (not visible), we should use `isVisible` setting the property to `false `(not use `View.isGone: Boolean`)
+### Visibility in Compose
 
-As setting a view as invisible is less common and often related between switching view from invisible to visible, we continue to use `View.setVisibility(visibility: Int)` with `View.INVISIBLE`.
+In Compose, showing or hiding content is expressed with a plain `if`. There is no equivalent of `INVISIBLE` (occupying space while hidden) — use `Spacer` with a fixed size if a placeholder is needed.
 
 ```kotlin
-    // Bad using setVisibility only
-    private fun manageCompanyInfoShowing(isComplementAddressShowing: Boolean) {
-        if (isComplementAddressShowing) {
-            tvAddCompanyInfo.setVisibility(View.GONE)
-            inputLayoutCompany.setVisibility(View.VISIBLE)
-            inputLayoutVat.setVisibility(View.VISIBLE)
-        } else {
-            tvAddCompanyInfo.setVisibility(View.VISIBLE)
-            inputLayoutCompany.setVisibility(View.GONE)
-            inputLayoutVat.setVisibility(View.INVISIBLE)
-        }
-    }
+// Good: content simply doesn't exist when hidden
+if (isCompanyInfoVisible) {
+    CompanyInfoSection()
+}
+
+// Good: animated transition
+AnimatedVisibility(visible = isCompanyInfoVisible) {
+    CompanyInfoSection()
+}
 ```
 
-```kotlin
-    // Good and concise with KTX for visible and gone visibility state
-    private fun manageCompanyInfoShowing(isComplementAddressShowing: Boolean) {
-        tvAddCompanyInfo.isVisible = !isComplementAddressShowing
-        inputLayoutCompany.isVisible = isComplementAddressShowing
-        val vatVisibility = if (isComplementAddressShowing) View.VISIBLE else View.INVISIBLE
-        inputLayoutVat.setVisibility(vatVisibility)
-    }
-```
-
-As we can see, using KTX view visibility can be more concise and more readable.
+Prefer `AnimatedVisibility` when the appearance/disappearance benefits from a transition; use a bare `if` otherwise.
+<sup>[[link](#visibility-in-compose)]</sup>
 
 ### Content description
 For illustration, icons etc. we decided that instead of setting empty content description we should use null
