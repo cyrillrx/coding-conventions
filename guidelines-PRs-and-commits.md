@@ -20,7 +20,7 @@ encouraged to be used, like lists:
 
 or code quotes: `ItemClass`
 
-https://cheerz0.atlassian.net/browse/ISSUE-ID
+https://your-tracker.example.com/browse/ISSUE-ID
 ```
 
 ### Commit structure breakdown

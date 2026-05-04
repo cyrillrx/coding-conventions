@@ -1,7 +1,5 @@
 # Swift Style Guide
 
-This is Cheerz's Swift Style Guide.
-
 TODO
 
 ## Table of Contents

@@ -1,7 +1,5 @@
 # Android Style Guide
 
-This is Cheerz's Android Style Guide.
-
 It is based on [Kotlin's coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html)
 
 It was inspired by [GitHub's Ruby guide](https://web.archive.org/web/20160410033955/https://github.com/styleguide/ruby) and [Airbnb's Ruby guide](https://github.com/airbnb/ruby).
@@ -98,8 +96,8 @@ Names of modules should not be prefixed using company name (e.g. `cz-app`).
 
 ### Naming packages
 
-Names of packages are **always lower case** and do NOT use underscores (`com.cheerz.network`).
-Using multi-word names is generally discouraged, but if you do need to use multiple words, you can either simply concatenate them together (`com.cheerz.mypackage`).
+Names of packages are **always lower case** and do NOT use underscores (`com.example.network`).
+Using multi-word names is generally discouraged, but if you do need to use multiple words, you can either simply concatenate them together (`com.example.mypackage`).
 <sup>[[link](#naming-packages)]</sup>
 
 ### Naming test methods
