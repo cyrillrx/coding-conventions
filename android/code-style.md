@@ -517,102 +517,41 @@ LaunchedEffect(refreshTrigger) {
 When the caller doesn't need to interact with scroll state, let `LazyColumn` own it internally — don't hoist unnecessarily.
 <sup>[[link](#list-state-in-compose)]</sup>
 
-### Event spreading
+### Event propagation
 
-#### Managed implementation
+Use `ViewModel` as the single source of truth. Expose **state** via `StateFlow` and **one-shot events** via `SharedFlow` (or `Channel`). Composables collect these flows and react accordingly — no manual subscribe/unsubscribe, no custom callback interfaces.
 
-In the case of a managed parent/child implementation, the emitter can expose a method to pass either a callback or a lamba depending of the complexity of information to spread.
-The Emitter can accept one or many listeners.
-
- ```kotlin
- // Set a single lambda
- fun setOnEventListener(lambda: (SomeData) -> Unit)
-
-// Add a new callback
- fun addOnEventListener(callback: Callback)
- ```
-<sup>[[link](#managed-implementation)]</sup>
-
-#### Unmanaged implementation
-
-When creating reusable components, you are not necessarily aware of how many layers will separate the emitter from the receiver.
-In this case, creating a publish/subscribe pattern could help implementation and maintainability.
-
-[Illustration of a problem with the different solutions that can be used](https://docs.google.com/drawings/d/1QPfs1hEdWlpZ_SfFAuUKA6tJanA-8RtDMiASfBY8yPo/edit?usp=sharing). Here we choose the solution 2.
-
-Implementation example :
 ```kotlin
-class GalleryActivity : AppCompatActivity() {
+// ViewModel
+class GalleryViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(GalleryUiState())
+    val uiState: StateFlow<GalleryUiState> = _uiState.asStateFlow()
 
-    private val photoViewCallbacks: PhotoView.Callback = object : PhotoView.Callback() {
-        override fun onClick(photoData: SomePhotoData) {
-            super.onClick(photoData)
-            // handle simple click here
-        }
+    private val _events = MutableSharedFlow<GalleryEvent>()
+    val events: SharedFlow<GalleryEvent> = _events.asSharedFlow()
 
-        // onLongClick does not need to be implemented
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ...
-        PhotoView.Events.subscribe(photoViewCallbacks)
-    }
-
-    override fun onDestroy() {
-        PhotoView.Events.unsubscribe(photoViewCallbacks)
-        ...
-        super.onDestroy()
+    fun onPhotoClick(photo: Photo) {
+        viewModelScope.launch { _events.emit(GalleryEvent.OpenPhoto(photo)) }
     }
 }
 
-class PhotoView : View {
-    private val currentPhoto = SomePhotoData()
+// Composable
+@Composable
+fun GalleryScreen(viewModel: GalleryViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    init {
-        setOnClickListener { Events.emitOnClick(currentPhoto) }
-        setOnLongClickListener { Events.emitOnLongClick(currentPhoto); true }
-    }
-
-    abstract class Callback {
-        open fun onClick(photoData: SomePhotoData) {}
-        open fun onLongClick(photoData: SomePhotoData) {}
-    }
-
-    object Events {
-        private val listeners: Set = HashSet<Callback>()
-
-        fun subscribe(callback: Callback): Boolean = listeners.add(callback)
-
-        fun unsubscribe(callback: Callback): Boolean = listeners.remove(callback)
-
-        fun emitOnClick(photoData: SomePhotoData) {
-            listeners.forEach {
-                try {
-                    it.onClick(photoData)
-                } catch (e: Exception) {
-                    // handle exception to prevent to allow all listeners to be called.
-                }
-            }
-        }
-
-        fun emitOnLongClick(photoData: SomePhotoData) {
-            listeners.forEach {
-                try {
-                    it.onLongClick(photoData)
-                } catch (e: Exception) {
-                    // handle exception to prevent to allow all listeners to be called.
-                }
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is GalleryEvent.OpenPhoto -> { /* navigate */ }
             }
         }
     }
 }
 ```
-Note 1: When storing a list of callbacks/listeners always use `Set` to avoid duplication issues.
 
-Note 2: The encapsulation of `Events` and `Callback` inside `PhotoView` is not mandatory.
-If `PhotoView.Events` and `PhotoView.Callback` grow too much, it's perfectly fine to create external classes: `PhotoViewEvents` and `PhotoViewCallback`.
-<sup>[[link](#unmanaged-implementation)]</sup>
+Prefer `StateFlow` for state that must survive recomposition; prefer `SharedFlow` (replay = 0) for fire-and-forget events such as navigation or snackbars.
+<sup>[[link](#event-propagation)]</sup>
 
 ### Visibility in Compose
 
