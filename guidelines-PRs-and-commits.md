@@ -72,12 +72,13 @@ Also, **when squashing** your commits before merging to master, **be careful not
 Either copy the PR description into the resulting commit's description or rewrite it altogether.
 
 ## Rules for authors
-* Diff should not be more than -/+200 lines (except for conversion from Java to Kotlin).
-* Diff should not alter more than 10 files (except for assets pulls).
-* Author must proofread the PR before submitting it for review.
-* Author must assign reviewers directly on Github.
+* Keep the diff under 200 lines and 10 files when possible. For mechanical changes (renaming, moving files), exceptions are acceptable.
+* Proofread your own PR before submitting it for review. Check diff, description, and comments.
+* Assign reviewers directly on GitHub.
 
 ## Rules for reviewers
-* PRs should be reviewed in less than 24h when possible.
-* If you don't have the time today. Don't rush to approve PRs without really reviewing them.
-* You can add meaning to your PR comments by using [Code Review Emojis](code-review-emojis.md).
+* Review PRs within 24 hours when possible.
+* If you're short on time, don't rush. An unreviewed PR is better than a rubber-stamped one.
+* Be constructive and kind: critique the code, not the author.
+* Back your comments with sources (docs, articles, benchmarks) rather than personal preference. Avoid arguments from authority. Don't request changes you can't justify.
+* Use [Code Review Emojis](code-review-emojis.md) to add meaning to your comments (blocking vs. non-blocking, suggestion vs. question, etc.).
