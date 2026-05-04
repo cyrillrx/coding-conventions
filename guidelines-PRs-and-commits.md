@@ -10,7 +10,7 @@ The general structure of a commit message should be as following:
 ```
 [Type] ISSUE-ID - Short title
 
-Description preceded by an intentinally skipped line and having the
+Description preceded by an intentionally skipped line and having the
 lines hard-wrapped at 70 columns.
 
 Other paragraphs might be added, and all the markdown formatting is
@@ -72,9 +72,9 @@ Also, **when squashing** your commits before merging to master, **be careful not
 Either copy the PR description into the resulting commit's description or rewrite it altogether.
 
 ## Rules for authors
-* Diff should not be more than -/+200 lines (expect for conversion from Java to Kotlin).
-* Diff Should not alter more than 10 files (expect for assets pulls).
-* Author must be proofreaded the PR before submitting it for review.
+* Diff should not be more than -/+200 lines (except for conversion from Java to Kotlin).
+* Diff Should not alter more than 10 files (except for assets pulls).
+* Author must proofread the PR before submitting it for review.
 * Author must assign reviewers directly on Github.
 
 ## Rules for reviewers

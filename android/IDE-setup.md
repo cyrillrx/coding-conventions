@@ -20,11 +20,11 @@ To configure IntelliJ/Android Studio according to this style guide, you can eith
 
 * Still in `Settings` | `Editor` | `Code Style` | `Kotlin`
 * Click `Blank Lines` tab
-* In setction `Keep Maximum Blank lines`
+* In section `Keep Maximum Blank lines`
 * * Set `In declarations:` to `1`
 * * Set `In code:` to `1`
 * * Set `Before '}':` to `1`
-* In setction `Minimun Blank lines`
+* In section `Minimum Blank lines`
 * * Set `After class header:` to `0`
 * * Set `Arround 'when' branches with {}` to `0`
 * * Set `Before declaration with comment or annotation` to `1`
@@ -34,7 +34,7 @@ To configure IntelliJ/Android Studio according to this style guide, you can eith
 
 * Still in `Settings` | `Editor` | `Code Style` | `Kotlin`
 * Click `Imports` tab
-* In setction `Top-level name import`
+* In section `Top-level name import`
 * * Select entry `Use single line imports`
 * In section `Java Statics and Enum Members`
 * * Select entry `Use single line imports`
