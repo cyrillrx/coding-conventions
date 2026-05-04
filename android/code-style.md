@@ -97,7 +97,7 @@ Names of modules should not be prefixed using company name (e.g. `cz-app`).
 ### Naming packages
 
 Names of packages are **always lower case** and do NOT use underscores (`com.example.network`).
-Using multi-word names is generally discouraged, but if you do need to use multiple words, you can either simply concatenate them together (`com.example.mypackage`).
+Using multi-word names is generally discouraged, but if you do need to use multiple words, you can simply concatenate them together (`com.example.mypackage`).
 <sup>[[link](#naming-packages)]</sup>
 
 ### Naming test methods
@@ -548,7 +548,7 @@ Two ways of getting a RecyclerView's adapter can be found.
 
 ```kotlin
 // 1st kind : storing the adapter
-class MyFragment: Fragment() {
+class MyFragment : Fragment() {
     private val recyclerView: RecyclerView
     private lateinit var adapter: MyAdapter
 
@@ -563,7 +563,7 @@ class MyFragment: Fragment() {
 }
 
 // 2nd kind : getting the adapter in the RecyclerView
-class MyFragment: Fragment() {
+class MyFragment : Fragment() {
     private val recyclerView: RecyclerView
 
     override fun onCreate() {
@@ -710,7 +710,7 @@ As setting a view as invisible is less common and often related between switchin
     }
 ```
 
-As we can see using KTX view visibility can be more concise and more readable
+As we can see, using KTX view visibility can be more concise and more readable.
 
 ### Content description
 For illustration, icons etc. we decided that instead of setting empty content description we should use null

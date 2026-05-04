@@ -73,7 +73,7 @@ Either copy the PR description into the resulting commit's description or rewrit
 
 ## Rules for authors
 * Diff should not be more than -/+200 lines (except for conversion from Java to Kotlin).
-* Diff Should not alter more than 10 files (except for assets pulls).
+* Diff should not alter more than 10 files (except for assets pulls).
 * Author must proofread the PR before submitting it for review.
 * Author must assign reviewers directly on Github.
 
