@@ -27,12 +27,10 @@ All commits follow this structure:
 
 Description hard-wrapped at 70 columns.
 
-https://your-tracker.example.com/browse/ISSUE-ID
+Resolves: ISSUE-ID
 ```
 
 **Types:** `Feat`, `UI`, `Tech`, `Tracking`, `Test`, `Build`, `Docs`, `Fix`
-
-The subject prefix also uses a platform tag where relevant: `[Android]`, `[iOS]`, `[Docs]`.
 
 ## Conventions in force
 
