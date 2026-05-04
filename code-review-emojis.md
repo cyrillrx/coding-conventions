@@ -18,7 +18,7 @@ For example:
 | | `:code:` | Meaning |
 | :-: | :-: | - |
 | 👍👌🎉🙏 | `:+1:` `:ok_hand:` `:tada:` `:pray:` | I like this... <br /><br /> ...and I want the author to know it! This is a way to highlight positive parts of a code review. |
-| 🔧💣 | `:wrench:` `:bomb:` | Mandatory change that impacts the behavior of the code. <br /><br /> I feel this might lead to a bug or crash and I think this needs to be changed. |
+| 🔧 | `:wrench:` | Mandatory change that impacts the behavior of the code. <br /><br /> I feel this might lead to a bug or crash and I think this needs to be changed. |
 | ⛏ | `:pick:` | This is a nitpick. <br /><br /> This is a small adjustment I think should be made in order to improve readability, coherence with the codebase or compliance to the guidelines. Might also be an organization suggestion. |
 | 💭 | `:thought_balloon:` | Let me think out loud here for a minute. <br /><br /> I might express concern, suggest an alternative solution, or walk through the code in my own words to make sure I understand. |
 | 🕐 | `:clock1:` | The comment may be addressed in later. A Jira ticket has to be created (and referenced in the code). |
