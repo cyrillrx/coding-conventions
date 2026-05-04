@@ -6,7 +6,6 @@ It was inspired by [GitHub's Ruby guide](https://web.archive.org/web/20160410033
 
 ## Table of Contents
   * [Source code organization](#source-code-organization)
-  * [Id naming](#id-naming)
   * [Naming rules](#naming-rules)
   * [Formatting](#formatting)
   * [Code idioms](#code-idioms)
@@ -38,51 +37,6 @@ When implementing an interface, keep the implementing members in the same order 
 
 Always put overloads next to each other in a class.
 <sup>[[link](#overload-layout)]</sup>
-
-## Id naming
-
-In a CustomView / Layout we don't need to specify the name of the (class / customview) in our id
-
-For example, for the class `CalendarStartingMonthChoiceView` :
-
-dont use -> tv_calendar_starting_month_choice_title
-
-just use -> tv_title
-
-### XML
-
-TextView -> tv_something (example : tv_title / tv_message / tv_description)
-
-ImageView -> iv_something (example : iv_icon / iv_header / iv_background)
-
-EditText -> et_something (example : et_firstName / et_city / et_address)
-
-MaterialButton -> btn_something (example : btn_back / btn_next / btn_login)
-
-
-For custom view / Layout, dont prefix by `view_` or `layout_`, be consistent 
-
-example -> for BillingShippingAddressView, for the id, we can put something like 
-
-`android:id="@+id/shipping_address_container"` or `android:id="@+id/container_shipping_address"`
-
-Sometime, you will have TextView or ImageView for a button. In this case, your id should be : 
-
-`android:id="@+id/btn_something"` and not `android:id="@+id/tv_something"` / `android:id="@+id/iv_something"`
-
-### Class / Layout / Custom View
-
-TextView -> tvSomething (example : tvTitle / tvMessage / tvDescription)
-
-ImageView -> ivSomething (example : ivIcon / ivHeader / ivBackground)
-
-EditText -> etSomething (example : etFirstName / etCity / etAddress)
-
-MaterialButton -> btnSomething (example : btnBack / btnNext / btnLogin)
-
-
-For customView / Layout, we also dont need to prefix by `view`Something (example : viewBillingShippingAddress)
-we can write something like : `private val selectionTopBar: Selection3TopBarView`
 
 ## Naming rules
 
@@ -249,10 +203,9 @@ The are prefixed by `img_` and suffixed by their size (meaning 160, 72 or 24 dp)
 
 For instance `img_package_72`is for the image named package and with size 72x72.
 
-When importing the vector asset, remove hardcoded colors in the XML describing the icons and set the associated color (@color/foo). 
-
-As these images are not mono color, it's not possible to tint them at use. 
-Don't forget to import both the normal and the dark mode version of an image.
+As these images are not mono color, it's not possible to tint them at use.
+Colors should be defined via the design system theme rather than hardcoded.
+Don't forget to import both the light and the dark mode version of an image.
 
 ## Formatting
 
@@ -542,175 +495,81 @@ Note: As shown in the previous examples, skipping a line after a return statemen
 
 ## Framework specificities
 
-### Getting RecyclerView's adapter
+### List state in Compose
 
-Two ways of getting a RecyclerView's adapter can be found.
+Use `LazyColumn` / `LazyRow` for lists. When the parent needs to control or observe scroll position, hoist a `LazyListState` rather than reaching into child composables.
 
 ```kotlin
-// 1st kind : storing the adapter
-class MyFragment : Fragment() {
-    private val recyclerView: RecyclerView
-    private lateinit var adapter: MyAdapter
+// Good: state is hoisted, the caller controls it
+val listState = rememberLazyListState()
 
-    override fun onCreate() {
-        adapter = MyAdapter()
-        recyclerView.adapter = newAdapter
-    }
-
-    private fun doStuffOnAdapter() {
-        // The adapter can be got directly from the field of this fragment
-    }
+LazyColumn(state = listState) {
+    items(items) { item -> ItemRow(item) }
 }
 
-// 2nd kind : getting the adapter in the RecyclerView
-class MyFragment : Fragment() {
-    private val recyclerView: RecyclerView
-
-    override fun onCreate() {
-        recyclerView.adapter = MyAdapter()
-    }
-
-    private fun getAdapter() = recyclerView.adapter as MyAdapter
-
-    private fun doStuffOnAdapter() {
-        // The adapter can be got from the getAdapter() method
-    }
+// Elsewhere: scroll to top on refresh
+LaunchedEffect(refreshTrigger) {
+    listState.animateScrollToItem(0)
 }
 ```
 
-Either the first and second type of getting the adapter is accepted in the project. In the first case, be careful that the stored adapter is always the one set in the RecyclerView. In the second case, keep in mind that it requires more computational work.
-<sup>[[link](#Getting-RecyclerViews-adapter)]</sup>
+When the caller doesn't need to interact with scroll state, let `LazyColumn` own it internally — don't hoist unnecessarily.
+<sup>[[link](#list-state-in-compose)]</sup>
 
-### Event spreading
+### Event propagation
 
-#### Managed implementation
+Use `ViewModel` as the single source of truth. Expose **state** via `StateFlow` and **one-shot events** via `SharedFlow` (or `Channel`). Composables collect these flows and react accordingly — no manual subscribe/unsubscribe, no custom callback interfaces.
 
-In the case of a managed parent/child implementation, the emitter can expose a method to pass either a callback or a lamba depending of the complexity of information to spread.
-The Emitter can accept one or many listeners.
-
- ```kotlin
- // Set a single lambda
- fun setOnEventListener(lambda: (SomeData) -> Unit)
-
-// Add a new callback
- fun addOnEventListener(callback: Callback)
- ```
-<sup>[[link](#managed-implementation)]</sup>
-
-#### Unmanaged implementation
-
-When creating reusable components, you are not necessarily aware of how many layers will separate the emitter from the receiver.
-In this case, creating a publish/subscribe pattern could help implementation and maintainability.
-
-[Illustration of a problem with the different solutions that can be used](https://docs.google.com/drawings/d/1QPfs1hEdWlpZ_SfFAuUKA6tJanA-8RtDMiASfBY8yPo/edit?usp=sharing). Here we choose the solution 2.
-
-Implementation example :
 ```kotlin
-class GalleryActivity : AppCompatActivity() {
+// ViewModel
+class GalleryViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(GalleryUiState())
+    val uiState: StateFlow<GalleryUiState> = _uiState.asStateFlow()
 
-    private val photoViewCallbacks: PhotoView.Callback = object : PhotoView.Callback() {
-        override fun onClick(photoData: SomePhotoData) {
-            super.onClick(photoData)
-            // handle simple click here
-        }
+    private val _events = MutableSharedFlow<GalleryEvent>()
+    val events: SharedFlow<GalleryEvent> = _events.asSharedFlow()
 
-        // onLongClick does not need to be implemented
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ...
-        PhotoView.Events.subscribe(photoViewCallbacks)
-    }
-
-    override fun onDestroy() {
-        PhotoView.Events.unsubscribe(photoViewCallbacks)
-        ...
-        super.onDestroy()
+    fun onPhotoClick(photo: Photo) {
+        viewModelScope.launch { _events.emit(GalleryEvent.OpenPhoto(photo)) }
     }
 }
 
-class PhotoView : View {
-    private val currentPhoto = SomePhotoData()
+// Composable
+@Composable
+fun GalleryScreen(viewModel: GalleryViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    init {
-        setOnClickListener { Events.emitOnClick(currentPhoto) }
-        setOnLongClickListener { Events.emitOnLongClick(currentPhoto); true }
-    }
-
-    abstract class Callback {
-        open fun onClick(photoData: SomePhotoData) {}
-        open fun onLongClick(photoData: SomePhotoData) {}
-    }
-
-    object Events {
-        private val listeners: Set = HashSet<Callback>()
-
-        fun subscribe(callback: Callback): Boolean = listeners.add(callback)
-
-        fun unsubscribe(callback: Callback): Boolean = listeners.remove(callback)
-
-        fun emitOnClick(photoData: SomePhotoData) {
-            listeners.forEach {
-                try {
-                    it.onClick(photoData)
-                } catch (e: Exception) {
-                    // handle exception to prevent to allow all listeners to be called.
-                }
-            }
-        }
-
-        fun emitOnLongClick(photoData: SomePhotoData) {
-            listeners.forEach {
-                try {
-                    it.onLongClick(photoData)
-                } catch (e: Exception) {
-                    // handle exception to prevent to allow all listeners to be called.
-                }
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is GalleryEvent.OpenPhoto -> { /* navigate */ }
             }
         }
     }
 }
 ```
-Note 1: When storing a list of callbacks/listeners always use `Set` to avoid duplication issues.
 
-Note 2: The encapsulation of `Events` and `Callback` inside `PhotoView` is not mandatory.
-If `PhotoView.Events` and `PhotoView.Callback` grow too much, it's perfectly fine to create external classes: `PhotoViewEvents` and `PhotoViewCallback`.
-<sup>[[link](#unmanaged-implementation)]</sup>
+Prefer `StateFlow` for state that must survive recomposition; prefer `SharedFlow` (replay = 0) for fire-and-forget events such as navigation or snackbars.
+<sup>[[link](#event-propagation)]</sup>
 
-### View visibility management
-We have multiple ways to change a view visibility.
-We can use the original `View.setVisibility(visibility: Int)` with `visibility` as an integer value between `View.VISIBLE`, `View.INVISIBLE` or `View.GONE` ; or with AndroidX core KTX use inline vars `View.isVisible: Boolean`, `View.isInvisible: Boolean` and `View.isGone: Boolean`.
-By default we recommend to use `View.isVisible: Boolean` instead of `View.setVisibility(visibility: Int)` with `View.VISIBLE` or `View.GONE`. Thus, to set a view as `GONE` (not visible), we should use `isVisible` setting the property to `false `(not use `View.isGone: Boolean`)
+### Visibility in Compose
 
-As setting a view as invisible is less common and often related between switching view from invisible to visible, we continue to use `View.setVisibility(visibility: Int)` with `View.INVISIBLE`.
+In Compose, showing or hiding content is expressed with a plain `if`. There is no equivalent of `INVISIBLE` (occupying space while hidden) — use `Spacer` with a fixed size if a placeholder is needed.
 
 ```kotlin
-    // Bad using setVisibility only
-    private fun manageCompanyInfoShowing(isComplementAddressShowing: Boolean) {
-        if (isComplementAddressShowing) {
-            tvAddCompanyInfo.setVisibility(View.GONE)
-            inputLayoutCompany.setVisibility(View.VISIBLE)
-            inputLayoutVat.setVisibility(View.VISIBLE)
-        } else {
-            tvAddCompanyInfo.setVisibility(View.VISIBLE)
-            inputLayoutCompany.setVisibility(View.GONE)
-            inputLayoutVat.setVisibility(View.INVISIBLE)
-        }
-    }
+// Good: content simply doesn't exist when hidden
+if (isCompanyInfoVisible) {
+    CompanyInfoSection()
+}
+
+// Good: animated transition
+AnimatedVisibility(visible = isCompanyInfoVisible) {
+    CompanyInfoSection()
+}
 ```
 
-```kotlin
-    // Good and concise with KTX for visible and gone visibility state
-    private fun manageCompanyInfoShowing(isComplementAddressShowing: Boolean) {
-        tvAddCompanyInfo.isVisible = !isComplementAddressShowing
-        inputLayoutCompany.isVisible = isComplementAddressShowing
-        val vatVisibility = if (isComplementAddressShowing) View.VISIBLE else View.INVISIBLE
-        inputLayoutVat.setVisibility(vatVisibility)
-    }
-```
-
-As we can see, using KTX view visibility can be more concise and more readable.
+Prefer `AnimatedVisibility` when the appearance/disappearance benefits from a transition; use a bare `if` otherwise.
+<sup>[[link](#visibility-in-compose)]</sup>
 
 ### Content description
 For illustration, icons etc. we decided that instead of setting empty content description we should use null
