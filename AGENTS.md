@@ -38,6 +38,8 @@ All commits follow **Conventional Commits** (see [`collaboration/git-and-collabo
 
 Use `git mv` for any file rename or move, to preserve history.
 
+**Authorship:** commits and PRs are owned by their human author. Never add AI attribution — no `Co-Authored-By` trailer, no `🤖 Generated with` footer, no "assisted by" mention. See [`collaboration/git-and-collaboration.md`](collaboration/git-and-collaboration.md#6-authorship).
+
 ## Conventions in force
 
 ### Collaboration (`collaboration/`)

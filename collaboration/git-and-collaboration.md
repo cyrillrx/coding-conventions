@@ -89,7 +89,13 @@ Bad (monolithic):
 feat(spell): redesign spell list screen with new item, samples, and strings
 ```
 
-## 6. Pull Request Etiquette
+## 6. Authorship
+
+Commits and pull requests are owned by their human author, regardless of the tools used to write them. The author is the only author of record.
+
+Do not include AI-generated attribution anywhere in the history or on the platform — no `Co-Authored-By` trailers for AI assistants, no `🤖 Generated with` footers in commit messages or PR descriptions, no "assisted by" mentions. A commit or PR carries the name of the person who is accountable for it; the tooling that helped produce it is not credited.
+
+## 7. Pull Request Etiquette
 
 All commit conventions above also apply to Pull Request titles and descriptions.
 
@@ -108,14 +114,14 @@ All commit conventions above also apply to Pull Request titles and descriptions.
 - Back your comments with sources (docs, articles, benchmarks) rather than personal preference. Avoid arguments from authority. Don't request changes you can't justify.
 - Use [Code Review Emojis](code-review-emojis.md) to add meaning to your comments (blocking vs. non-blocking, suggestion vs. question, etc.).
 
-## 7. CI & Policies
+## 8. CI & Policies
 
 - **Pull Requests**: All code must be reviewed via PRs before merging into `main`.
 - **Code Quality**: PRs must pass all automated checks (linting, tests, build) on the CI pipeline before they are mergeable.
 - **Warnings as Errors**: Treat compiler warnings seriously. Fix them proactively.
 - **Security Scans**: Integrate automated security scanning where applicable.
 
-## 8. Architecture Decision Records (ADRs)
+## 9. Architecture Decision Records (ADRs)
 
 For any change that significantly affects the data model, source format, or technical architecture, an **ADR must be created or updated before starting the implementation**.
 
