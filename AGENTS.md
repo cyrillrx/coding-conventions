@@ -4,47 +4,54 @@ This file provides guidance to AI agents working in this repository.
 
 ## Purpose
 
-Documentation-only repository containing coding conventions and collaboration guidelines for a mobile tech team. There is no build system, no tests, and no runnable code — all files are Markdown.
+Documentation-only repository containing coding conventions and collaboration guidelines, shared across projects. There is no build system, no tests, and no runnable code — all files are Markdown (plus a shared editor config). The conventions are the human-readable source of truth and must remain understandable without any AI tooling.
 
 ## Structure
 
 ```
-README.md                      # Index linking to all documents
-guidelines-PRs-and-commits.md # Commit format, PR rules for authors and reviewers
-code-review-emojis.md          # Emoji legend for code review comments
-android/
-  README.md                    # Index for Android docs
-  IDE-setup.md                 # Android Studio configuration steps
-  code-style.md                # Kotlin/Compose style guide
+README.md                              # Index linking to all documents
+collaboration/
+  git-and-collaboration.md             # Conventional Commits, branching, PR etiquette, ADRs
+  code-review-emojis.md                # Emoji legend for code review comments
+conventions/
+  coding-conventions.md                # Clean Code principles (all languages)
+  docs-conventions.md                  # Documentation file naming, Markdown tables
+  kmp-conventions.md                   # Kotlin Multiplatform / Compose style, architecture, testing
+  rust-conventions.md                  # Rust backend conventions
+  go-conventions.md                    # Go backend conventions
+  bruno-conventions.md                 # Bruno API testing conventions
+configs/
+  kotlin/.editorconfig                 # Shared ktlint configuration for Kotlin projects
 ```
 
 ## Commit message format
 
-All commits follow this structure:
+All commits follow **Conventional Commits** (see [`collaboration/git-and-collaboration.md`](collaboration/git-and-collaboration.md)):
 
 ```
-[Type] ISSUE-ID - Short title (verb in infinitive, ≤70 chars)
+<type>(<scope>): <subject>
 
-Description hard-wrapped at 70 columns.
-
-Resolves: ISSUE-ID
+<body>
 ```
 
-**Types:** `Feat`, `UI`, `Tech`, `Tracking`, `Test`, `Build`, `Docs`, `Fix`
+**Types:** `feat`, `fix`, `ui`, `refactor`, `style`, `docs`, `test`, `chore`, `ci`, `build`. Subject in the imperative, present tense, no leading capital, no trailing dot.
+
+Use `git mv` for any file rename or move, to preserve history.
 
 ## Conventions in force
 
-### Android (`android/code-style.md`)
-- Kotlin only; based on [Kotlin's coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html)
-- Jetpack Compose — no XML layouts, no View system APIs
-- 4-space indent, 120-char line limit, trailing commas on multi-param declarations
-- Prefer early returns over deep nesting; prefer affirmative conditions
-- List state: hoist `LazyListState` when the parent needs to interact with it
-- Visibility: bare `if` for show/hide, `AnimatedVisibility` for transitions
-- Events: `StateFlow` for UI state, `SharedFlow` for one-shot events (navigation, snackbars)
-- Image resources: `ic_` prefix + size suffix for icons, `img_` prefix + size suffix for multicolor images
-
-### Collaboration (`guidelines-PRs-and-commits.md`)
+### Collaboration (`collaboration/`)
 - PRs: ≤200 lines, ≤10 files; exceptions for mechanical changes
 - Reviewers must be constructive and back comments with sources
-- Use [code-review-emojis.md](code-review-emojis.md) to signal blocking vs. non-blocking comments
+- Trunk-based development; short-lived feature branches named after commit types
+- Use [code-review-emojis.md](collaboration/code-review-emojis.md) to signal blocking vs. non-blocking comments
+
+### Kotlin / Compose (`conventions/kmp-conventions.md`)
+- Kotlin only; Jetpack/Compose Multiplatform — no XML layouts, no View-system APIs
+- MVVM + Unidirectional Data Flow: `StateFlow` for state, `SharedFlow` (one-shot) for events
+- Formatting 100% delegated to ktlint via `configs/kotlin/.editorconfig` (4-space indent, 120 cols, trailing commas)
+- Prefer early returns over deep nesting; prefer affirmative conditions
+- Image resources: `ic_` prefix + size suffix for icons, `img_` prefix + size suffix for multicolor images
+
+### Backend (`conventions/{rust,go}-conventions.md`)
+- Layered architecture, explicit error handling, formatter-enforced style (`rustfmt` / `gofmt`)
