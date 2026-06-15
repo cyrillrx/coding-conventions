@@ -1,0 +1,22 @@
+{
+  "name": "cyrillrx-conventions",
+  "owner": {
+    "name": "cyrillrx"
+  },
+  "metadata": {
+    "description": "Coding conventions, git workflow and KMP skills derived from this repository's documentation",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "git-workflow",
+      "source": "./plugins/git-workflow",
+      "description": "Atomic Conventional Commits and PR review workflow"
+    },
+    {
+      "name": "kmp-conventions",
+      "source": "./plugins/kmp-conventions",
+      "description": "Kotlin Multiplatform / Compose style and architecture patterns"
+    }
+  ]
+}
