@@ -19,3 +19,39 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 ## Shared configs
 
 - [`configs/kotlin/.editorconfig`](configs/kotlin/.editorconfig) — ktlint configuration for Kotlin projects
+
+## Claude Code plugins
+
+These conventions are also published as a [Claude Code](https://claude.com/claude-code) plugin marketplace, so they can be installed as reusable skills in any project. The docs above stay the source of truth; the plugin skills are **derived** from them (regenerated with the repo-local `/sync-plugins` skill).
+
+Marketplace name: **`cyrillrx-conventions`**. Available plugins:
+
+| Plugin            | Skills                          | What it does                                          |
+| ----------------- | ------------------------------- | ----------------------------------------------------- |
+| `git-workflow`    | `/commit`, `/address-review`    | Atomic Conventional Commits; PR review-comment workflow |
+| `kmp-conventions` | `kmp-style` (auto-invoked)      | Kotlin Multiplatform / Compose style and architecture |
+
+### Install in a project
+
+One-off, from any project in Claude Code:
+
+```
+/plugin marketplace add cyrillrx/coding-conventions
+/plugin install git-workflow@cyrillrx-conventions
+```
+
+For a team project, commit this to the project's `.claude/settings.json` so the plugins install on trust:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "cyrillrx-conventions": {
+      "source": { "source": "github", "repo": "cyrillrx/coding-conventions" }
+    }
+  },
+  "enabledPlugins": {
+    "git-workflow@cyrillrx-conventions": true,
+    "kmp-conventions@cyrillrx-conventions": true
+  }
+}
+```
