@@ -4,8 +4,7 @@
     "name": "cyrillrx"
   },
   "metadata": {
-    "description": "Coding conventions, git workflow and KMP skills derived from this repository's documentation",
-    "version": "1.0.0"
+    "description": "Coding conventions, git workflow and KMP skills derived from this repository's documentation"
   },
   "plugins": [
     {
