@@ -47,7 +47,7 @@ All commits follow **Conventional Commits** (see [`collaboration/git-and-collabo
 <body>
 ```
 
-**Types:** `feat`, `fix`, `ui`, `refactor`, `style`, `docs`, `test`, `chore`, `ci`, `build`. Subject in the imperative, present tense, no leading capital, no trailing dot.
+**Types:** `feat`, `fix`, `ui`, `refactor`, `perf`, `style`, `docs`, `test`, `chore`, `ci`, `build`. Subject in the imperative, present tense, no leading capital, no trailing dot.
 
 Use `git mv` for any file rename or move, to preserve history.
 

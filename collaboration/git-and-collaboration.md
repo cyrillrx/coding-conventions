@@ -23,11 +23,12 @@ A commit message should help reviewers get context around a change, but more imp
 <body>
 ```
 
-- **Types**: `feat`, `fix`, `ui`, `refactor`, `style`, `docs`, `test`, `chore`, `ci`, `build` (and potentially `perf`, `security`).
+- **Types**: `feat`, `fix`, `ui`, `refactor`, `perf`, `style`, `docs`, `test`, `chore`, `ci`, `build`.
   - `feat` — new user-facing functionality
   - `fix` — bug fix
   - `ui` — visible UI change that is not a new feature (e.g. removing an icon, adjusting layout, tweaking a component)
   - `refactor` — internal code restructuring with **no visible change** to the user
+  - `perf` — code change that improves performance, with no other behavior change
   - `style` — formatting only (linter/formatter), no behavior change
   - `docs` — documentation only
   - `test` — adding or fixing tests

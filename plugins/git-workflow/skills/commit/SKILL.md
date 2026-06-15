@@ -51,6 +51,7 @@ Commits are owned by their human author. **Never** add `Co-Authored-By` trailers
 | `fix`      | Bug fix                                                                |
 | `ui`       | Visible UI change that is **not** a new feature (layout, icon, color)  |
 | `refactor` | Internal restructuring with **no** visible change                      |
+| `perf`     | Code change that improves performance, with no other behavior change   |
 | `style`    | Formatting only (linter/formatter), no behavior change                 |
 | `docs`     | Documentation only                                                     |
 | `test`     | Tests only                                                             |
