@@ -55,3 +55,7 @@ For a team project, commit this to the project's `.claude/settings.json` so the 
   }
 }
 ```
+
+> **Heads up:** `enabledPlugins` installs and enables these plugins for anyone who trusts the project folder, without an explicit `/plugin install` prompt. Only commit this once your team is comfortable trusting `cyrillrx/coding-conventions` as a code source — the skills can run git and `gh` commands on contributors' machines.
+
+The plugins are **derived** from the convention docs and regenerated regularly, so they intentionally carry no version: a given install tracks the marketplace repo's `main` at the time `/plugin marketplace add` (or its auto-update) runs. Re-run `/plugin marketplace update cyrillrx-conventions` to pull the latest skills.
