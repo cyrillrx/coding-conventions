@@ -8,6 +8,7 @@ allowed-tools:
   - Write
   - Bash(git status:*)
   - Bash(git diff:*)
+  - Bash(claude plugin validate:*)
 ---
 
 # Sync plugins from conventions
@@ -37,7 +38,9 @@ When a convention doc changes, the derived skills must be regenerated so the plu
 3. Regenerate **only the derived content** — the convention rules, format tables, and knowledge body — to match the current docs. **Preserve the skill-specific mechanics** that are not in the docs: the frontmatter (`name`, `description`, `allowed-tools`, `argument-hint`), the workflow steps (plan-then-execute, GraphQL triage flow), and the generated-from header comment.
 4. Each derived `SKILL.md` keeps its header comment naming its source doc(s) and pointing back to `/sync-plugins`.
 5. If a new convention doc has no plugin yet (rust/go/bruno), either create the plugin (manifest under `.claude-plugin/plugin.json`, skill under `skills/<name>/SKILL.md`, and an entry in `.claude-plugin/marketplace.json`) or leave it — note the decision to the user.
-6. Show the resulting `git diff` for the regenerated skills and ask the user to review before committing. Do not commit.
+6. If the set of plugins or skills changed (one added, removed, or renamed), update the plugin table in `README.md` and the structure block in `AGENTS.md` to match — they are maintained by hand and must stay in sync with `marketplace.json`.
+7. Validate the result with `claude plugin validate .` — it must pass (the two advisory `version` warnings are intentional and expected).
+8. Show the resulting `git diff` for the regenerated skills and ask the user to review before committing. Do not commit.
 
 ## Notes
 
