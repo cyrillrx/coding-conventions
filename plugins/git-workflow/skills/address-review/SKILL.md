@@ -64,6 +64,11 @@ query($owner:String!, $repo:String!, $pr:Int!) {
 
 Filter for `isResolved: false` threads. If there are none, inform the user and stop.
 
+> The query caps at 100 threads and 10 comments per thread. This covers normal PRs;
+> the first comment (needed for `in_reply_to`) is always present. If a thread count
+> of exactly 100 is returned, warn the user that older threads may be truncated
+> rather than silently treating the batch as complete.
+
 ### Step 3 — Triage comments
 
 For each unresolved thread, read the file at `path` around the relevant `line`, then present a triage table:
