@@ -26,10 +26,10 @@ These conventions are also published as a [Claude Code](https://claude.com/claud
 
 Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 
-| Plugin            | Skills                          | What it does                                          |
-| ----------------- | ------------------------------- | ----------------------------------------------------- |
-| `git-workflow`    | `/commit`, `/address-review`    | Atomic Conventional Commits; PR review-comment workflow |
-| `kmp-conventions` | `kmp-style` (auto-invoked)      | Kotlin Multiplatform / Compose style and architecture |
+| Plugin            | Skills                       | What it does                                            |
+| ----------------- | ---------------------------- | ------------------------------------------------------- |
+| `git-workflow`    | `/commit`, `/address-review` | Atomic Conventional Commits; PR review-comment workflow |
+| `kmp-conventions` | `kmp-style` (auto-invoked)   | Kotlin Multiplatform / Compose style and architecture  |
 
 ### Install in a project
 

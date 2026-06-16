@@ -1,7 +1,14 @@
 ---
 name: commit
 description: Stage and commit changes as multiple atomic Conventional Commits, one per logical unit. Use when the user asks to commit, or to split working changes into clean commits.
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git log:*), Bash(git restore --staged:*), Bash(git reset HEAD:*)
+allowed-tools:
+  - Bash(git add:*)
+  - Bash(git status:*)
+  - Bash(git diff:*)
+  - Bash(git commit:*)
+  - Bash(git log:*)
+  - Bash(git restore --staged:*)
+  - Bash(git reset HEAD:*)
 ---
 
 <!--

@@ -100,7 +100,10 @@ gh api repos/<OWNER>/<REPO>/pulls/<PR_NUMBER>/comments \
 > Do **not** use `POST /pulls/comments/{id}/replies` — it returns 404 for comments
 > created by bots (Gemini, CodeRabbit, etc.) and is unreliable in general.
 
-For **general** PR comments (no associated file/line):
+The `reviewThreads` query in Step 2 only surfaces inline review threads, so the
+reply above covers every thread you triaged. Only if the user explicitly asks you
+to respond to a **general** PR comment (one with no associated file/line, which
+never appears in `reviewThreads`) use the issue-comments endpoint instead:
 
 ```bash
 gh api repos/<OWNER>/<REPO>/issues/<PR_NUMBER>/comments -X POST -f body="<reply>"
