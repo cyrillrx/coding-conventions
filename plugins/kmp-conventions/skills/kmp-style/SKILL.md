@@ -1,11 +1,6 @@
 ---
 name: kmp-style
-description: >-
-  Apply this team's Kotlin Multiplatform / Compose conventions when writing or
-  reviewing Kotlin, Compose, ViewModel, or KMP/CMP code — architecture (MVVM +
-  UDF), state and event modeling, naming, formatting, and testing. Use whenever
-  editing .kt files, building Compose screens or ViewModels, or reviewing Kotlin
-  style.
+description: This team's Kotlin Multiplatform / Compose conventions — MVVM + UDF architecture, state and event modeling, naming, formatting, testing. Use when editing .kt files, building Compose screens or ViewModels, or reviewing Kotlin style.
 ---
 
 <!--
