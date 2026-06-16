@@ -22,7 +22,20 @@ conventions/
   bruno-conventions.md                 # Bruno API testing conventions
 configs/
   kotlin/.editorconfig                 # Shared ktlint configuration for Kotlin projects
+.claude-plugin/
+  marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
+plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
+  git-workflow/                        # /commit, /address-review
+  kmp-conventions/                     # kmp-style knowledge skill
+.claude/skills/
+  sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs
 ```
+
+## Conventions are the source of truth; plugins are derived
+
+The Markdown docs in `collaboration/` and `conventions/` are the human-readable source of truth and must stay understandable without any AI tooling. The Claude Code plugin skills under `plugins/` are **derived** from those docs.
+
+**When you change a convention doc, regenerate the affected plugin skills in the same PR** by running the repo-local `/sync-plugins` skill. Never hand-edit the generated convention content inside a `SKILL.md` — edit the doc, then sync. Each derived `SKILL.md` names its source doc in a header comment.
 
 ## Commit message format
 
@@ -34,7 +47,7 @@ All commits follow **Conventional Commits** (see [`collaboration/git-and-collabo
 <body>
 ```
 
-**Types:** `feat`, `fix`, `ui`, `refactor`, `style`, `docs`, `test`, `chore`, `ci`, `build`. Subject in the imperative, present tense, no leading capital, no trailing dot.
+**Types:** `feat`, `fix`, `ui`, `refactor`, `perf`, `style`, `docs`, `test`, `chore`, `ci`, `build`. Subject in the imperative, present tense, no leading capital, no trailing dot.
 
 Use `git mv` for any file rename or move, to preserve history.
 

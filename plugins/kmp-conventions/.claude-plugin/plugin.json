@@ -1,0 +1,10 @@
+{
+  "name": "kmp-conventions",
+  "description": "Kotlin Multiplatform / Compose style and architecture patterns from this team's conventions",
+  "author": {
+    "name": "cyrillrx"
+  },
+  "homepage": "https://github.com/cyrillrx/coding-conventions",
+  "repository": "https://github.com/cyrillrx/coding-conventions",
+  "keywords": ["kotlin", "kmp", "compose", "android", "mvvm", "code-style"]
+}
