@@ -70,6 +70,7 @@ Formatting is **100% delegated to ktlint** via the shared `configs/kotlin/.edito
 ## Testing
 
 - Every ViewModel has a test (common test source set); every new public ViewModel method and every bug fix gets a test.
-- ViewModel tests use `StandardTestDispatcher` + `runTest` with in-memory fakes; cover initial `Loading`, `Error`, happy-path `WithData`, and the `silentRefresh` cases.
+- ViewModel tests use `StandardTestDispatcher` + `runTest` with in-memory fakes (`RamXxxRepository` for mutable stores, `SampleXxxRepository` for fixed data); cover initial `Loading`, `Error`, happy-path `WithData`, and the `silentRefresh` cases.
 - Pure functions: `kotlin.test`, one test file per function, backtick method names, no setup/fakes/coroutines.
+- E2E: cover critical user journeys with Maestro flows in `.maestro/flows/`; they complement, never replace, unit tests.
 - No tests for pure layout composables (previews) or trivial delegation classes.

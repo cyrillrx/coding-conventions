@@ -482,7 +482,7 @@ Never call a load function from `ON_RESUME`: the `init` block already handles th
 
 ### ViewModel tests
 
-Use `StandardTestDispatcher` + `runTest`. Inject repositories via the constructor; use in-memory fakes. Required cases:
+Use `StandardTestDispatcher` + `runTest`. Inject repositories via the constructor; use in-memory fakes. Name fakes by their strategy: `RamXxxRepository` for a mutable in-memory store, `SampleXxxRepository` for fixed sample data. Required cases:
 
 | Case                                    | Description                                              |
 | --------------------------------------- | -------------------------------------------------------- |
@@ -518,6 +518,10 @@ class IsValidWalkSpeedTest {
     }
 }
 ```
+
+### End-to-end tests
+
+Cover critical user journeys with end-to-end UI tests using **Maestro**. Document the test scenarios per feature in a dedicated doc, keep the automated flows in a `.maestro/flows/` directory, and run them via the Maestro CLI against a connected device or emulator. E2E flows complement — never replace — ViewModel and domain unit tests.
 
 ### What does NOT need tests
 
