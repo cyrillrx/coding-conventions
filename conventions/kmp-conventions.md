@@ -495,7 +495,11 @@ Never call a load function from `ON_RESUME`: the `init` block already handles th
 
 ### ViewModel tests
 
-Use `StandardTestDispatcher` + `runTest`. Inject repositories via the constructor; use the in-memory implementations described in [Naming in-memory repositories](#naming-in-memory-repositories). Required cases:
+- **Coroutines**: `StandardTestDispatcher` + `runTest`.
+- **Dependencies**: inject repositories through the ViewModel constructor.
+- **In-memory repositories**: reuse the `Ram`/`Sample` implementations described in [Naming in-memory repositories](#naming-in-memory-repositories) rather than declaring a new test double for each test.
+
+Required cases:
 
 | Case                                    | Description                                              |
 | --------------------------------------- | -------------------------------------------------------- |
