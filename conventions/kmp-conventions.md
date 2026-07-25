@@ -225,6 +225,19 @@ val draft = DraftItem(
 
 When using an acronym in a declaration name, capitalize it if it consists of two letters (`IOStream`); capitalize only the first letter if it is longer (`XmlFormatter`, `HttpInputStream`).
 
+### Naming in-memory repositories
+
+Name in-memory repository implementations after their **strategy**, not after their role as a test double — never `FakeXxxRepository` or `MockXxxRepository`.
+
+| Prefix   | Strategy                                 | Example                 |
+| -------- | ---------------------------------------- | ----------------------- |
+| `Ram`    | Mutable in-memory store; writes are kept | `RamUserListRepository` |
+| `Sample` | Fixed sample data; effectively read-only | `SampleSpellRepository` |
+
+`Ram` keeps only its first letter capitalized, per the acronym rule above.
+
+These implementations belong to the **main source set** of the data layer (e.g. `shared/core/src/commonMain/.../<feature>/data/`), not to a test source set: Compose previews depend on them too. ViewModel tests reuse these implementations rather than declaring a test double of their own.
+
 ### Naming constants
 
 #### Arguments of Activities/Fragments
@@ -482,7 +495,7 @@ Never call a load function from `ON_RESUME`: the `init` block already handles th
 
 ### ViewModel tests
 
-Use `StandardTestDispatcher` + `runTest`. Inject repositories via the constructor; use in-memory fakes. Name fakes by their strategy: `RamXxxRepository` for a mutable in-memory store, `SampleXxxRepository` for fixed sample data. Required cases:
+Use `StandardTestDispatcher` + `runTest`. Inject repositories via the constructor; use the in-memory implementations described in [Naming in-memory repositories](#naming-in-memory-repositories). Required cases:
 
 | Case                                    | Description                                              |
 | --------------------------------------- | -------------------------------------------------------- |

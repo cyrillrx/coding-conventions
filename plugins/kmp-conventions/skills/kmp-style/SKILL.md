@@ -62,6 +62,7 @@ Screens showing mutable persisted data refresh on `LifecycleEventEffect(Lifecycl
 - `ARG_` prefix for Activity/Fragment argument keys; `KEY_` prefix for other key constants (grouped by prefix).
 - Image resources: `ic_<name>_<size>` for mono-color icons, `img_<name>_<size>` for multicolor images.
 - Test methods may use backtick names with spaces.
+- In-memory repositories are named by **strategy**, never by their double role: `RamXxxRepository` (mutable store) / `SampleXxxRepository` (fixed data) — never `Fake`/`Mock`. They live in the **main** source set of the data layer, since Compose previews use them too.
 
 ## Formatting
 
@@ -70,7 +71,7 @@ Formatting is **100% delegated to ktlint** via the shared `configs/kotlin/.edito
 ## Testing
 
 - Every ViewModel has a test (common test source set); every new public ViewModel method and every bug fix gets a test.
-- ViewModel tests use `StandardTestDispatcher` + `runTest` with in-memory fakes (`RamXxxRepository` for mutable stores, `SampleXxxRepository` for fixed data); cover initial `Loading`, `Error`, happy-path `WithData`, and the `silentRefresh` cases.
+- ViewModel tests use `StandardTestDispatcher` + `runTest` with the `Ram`/`Sample` in-memory repositories (see Naming); cover initial `Loading`, `Error`, happy-path `WithData`, and the `silentRefresh` cases.
 - Pure functions: `kotlin.test`, one test file per function, backtick method names, no setup/fakes/coroutines.
 - E2E: cover critical user journeys with Maestro flows in `.maestro/flows/`; they complement, never replace, unit tests.
 - No tests for pure layout composables (previews) or trivial delegation classes.
