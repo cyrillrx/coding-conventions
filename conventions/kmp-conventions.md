@@ -534,7 +534,71 @@ class IsValidWalkSpeedTest {
 
 ### End-to-end tests
 
-Cover critical user journeys with end-to-end UI tests using **Maestro**. Document the test scenarios per feature in a dedicated doc, keep the automated flows in a `.maestro/flows/` directory, and run them via the Maestro CLI against a connected device or emulator. E2E flows complement — never replace — ViewModel and domain unit tests.
+Cover critical user journeys with end-to-end UI tests using **Maestro**. E2E flows complement — never replace — ViewModel and domain unit tests: logic stays covered by unit tests, E2E only proves the journey holds together end to end.
+
+**Flows** live in a `.maestro/flows/` directory, one file per journey, named after the journey in kebab-case (`create-spell-list.yaml`). Start from a clean state, comment each navigation step, and finish on an explicit assertion of the journey's outcome.
+
+```yaml
+appId: com.example.app
+---
+- launchApp:
+    clearState: true
+
+# Navigate to Spell lists
+- tapOn:
+    text: "Spell lists"
+
+# Open the create-list dialog
+- tapOn:
+    text: "Create"
+
+# Fill and confirm the dialog — its nodes are addressed by id, not by label
+- tapOn:
+    id: "input_list_name"
+- inputText: "My Test Spell List"
+- tapOn:
+    id: "button_confirm_create"
+
+# Verify the list appears in the Spell lists screen
+- assertVisible:
+    text: "My Test Spell List"
+```
+
+**Targeting nodes** — matching a visible label by text is fine for navigation, but any node a flow addresses by identity (text fields, list containers, icon-only buttons) must expose a **stable id**: localized text changes with the copy and with the locale.
+
+On Android, Maestro reads the accessibility tree, where a Compose `testTag` only surfaces as a resource id once `testTagsAsResourceId` is enabled on an ancestor:
+
+```kotlin
+@OptIn(ExperimentalComposeUiApi::class)
+Modifier.semantics { testTagsAsResourceId = true }
+```
+
+Maestro then targets the node with `id: "<testTag>"`.
+
+The flag applies to a semantics **subtree**, so it must be re-enabled inside every dialog: an `AlertDialog` renders in a separate Android window, and the flag set on the screen root does not reach the dialog content. A `testTag` set inside a dialog without its own `semantics` wrapper stays invisible to Maestro.
+
+How a project centralizes and applies these ids is up to the project.
+
+**Running the flows** — Maestro drives the installed app on a device or simulator, so flows are **not** part of the PR gate; run them locally before merging a change that touches a critical journey.
+
+Install the app first. The steps differ per platform (substitute the project's own module, scheme and product names):
+
+```bash
+# Android — needs a connected device or a running emulator
+./gradlew :<android-app-module>:installDebug
+
+# iOS — needs a booted simulator
+xcodebuild -scheme <ios-scheme> -destination 'platform=iOS Simulator,name=<device>' build
+xcrun simctl install booted <path-to-built>.app
+```
+
+Then run the flows — the command is the same on both platforms:
+
+```bash
+maestro test .maestro/flows/
+```
+
+Maestro covers the Android and iOS apps only; the Desktop (JVM) target has no E2E coverage.
 
 ### What does NOT need tests
 
@@ -547,4 +611,5 @@ Refer to [`git-and-collaboration.md`](../collaboration/git-and-collaboration.md)
 
 KMP-specific CI requirements:
 - PRs must pass `ktlintCheck` and the project must build successfully for all targets (Android, iOS, Desktop).
+- Maestro E2E flows are **not** a PR gate — they need a device or simulator; run them locally (see [End-to-end tests](#end-to-end-tests)).
 - Use KDoc for public APIs in shared modules to clearly define their contracts.
