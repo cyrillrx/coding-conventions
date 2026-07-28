@@ -492,6 +492,7 @@ Never call a load function from `ON_RESUME`: the `init` block already handles th
 - Every ViewModel must have a test file in the common test source set.
 - Every new public method on an existing ViewModel must be covered by at least one test.
 - Every bug fix must be accompanied by a regression test that fails before the fix and passes after.
+- Every critical user journey must be covered by an end-to-end flow (see [End-to-end tests](#end-to-end-tests)).
 
 ### ViewModel tests
 
@@ -517,7 +518,7 @@ For ViewModels with mutations (delete, rename, add): test optimistic mutation, u
 - Use `kotlin.test` (`kotlin.test.Test`, `kotlin.test.assertEquals`, …) — no JUnit dependency needed for pure-function tests.
 - One test file per function or class under test (e.g. `isValidWalkSpeed` → `IsValidWalkSpeedTest.kt`).
 - Method names are backtick strings describing the expected behaviour in plain English.
-- No setup, fakes, or coroutines needed for pure functions — just call and assert.
+- No setup, test doubles, or coroutines needed for pure functions — just call and assert.
 
 ```kotlin
 class IsValidWalkSpeedTest {
@@ -538,9 +539,9 @@ class IsValidWalkSpeedTest {
 
 ### End-to-end tests
 
-Cover critical user journeys with end-to-end UI tests using **Maestro**. E2E flows complement — never replace — ViewModel and domain unit tests: logic stays covered by unit tests, E2E only proves the journey holds together end to end.
+Critical user journeys are covered by end-to-end UI tests written with **Maestro**. E2E flows complement — never replace — ViewModel and domain unit tests: logic stays covered by unit tests, E2E only proves the journey holds together end to end.
 
-**Flows** live in a `.maestro/flows/` directory, one file per journey, named after the journey in kebab-case (`create-spell-list.yaml`). Start from a clean state, comment each navigation step, and finish on an explicit assertion of the journey's outcome.
+**Flows** live in a `.maestro/flows/` directory, one file per journey, named after the journey in kebab-case (`create-collection.yaml`). Start from a clean state, comment each navigation step, and finish on an explicit assertion of the journey's outcome.
 
 ```yaml
 appId: com.example.app
@@ -548,52 +549,71 @@ appId: com.example.app
 - launchApp:
     clearState: true
 
-# Navigate to Spell lists
+# Navigate to the collections screen
 - tapOn:
-    text: "Spell lists"
+    text: "Collections"
 
-# Open the create-list dialog
+# Open the create-collection dialog
 - tapOn:
     text: "Create"
 
 # Fill and confirm the dialog — its nodes are addressed by id, not by label
 - tapOn:
-    id: "input_list_name"
-- inputText: "My Test Spell List"
+    id: "input_collection_name"
+- inputText: "My Test Collection"
 - tapOn:
     id: "button_confirm_create"
 
-# Verify the list appears in the Spell lists screen
+# Verify the collection appears in the list
 - assertVisible:
-    text: "My Test Spell List"
+    text: "My Test Collection"
 ```
 
 **Targeting nodes** — matching a visible label by text is fine for navigation, but any node a flow addresses by identity (text fields, list containers, icon-only buttons) must expose a **stable id**: localized text changes with the copy and with the locale.
 
-On Android, Maestro reads the accessibility tree, where a Compose `testTag` only surfaces as a resource id once `testTagsAsResourceId` is enabled on an ancestor:
+A Compose `testTag` reaches Maestro differently on each platform:
+
+- **Android** — Maestro reads the accessibility tree, where a `testTag` only surfaces as a resource id once `testTagsAsResourceId` is enabled on an ancestor. That property is Android-only, so it cannot be set from `commonMain`, where screens and dialogs live.
+- **iOS** — Compose Multiplatform maps a `testTag` to the node's `accessibilityIdentifier`, which Maestro reads as `id`. Nothing to enable: since Compose Multiplatform 1.8 the accessibility tree is resolved on demand (the former `accessibilitySyncOptions` configuration was removed).
+
+Wrap that difference in a single `expect` modifier instead of scattering platform code across screens:
 
 ```kotlin
+// commonMain
+expect fun Modifier.exposeTestTags(): Modifier
+
+// androidMain
 @OptIn(ExperimentalComposeUiApi::class)
-Modifier.semantics { testTagsAsResourceId = true }
+actual fun Modifier.exposeTestTags(): Modifier = semantics { testTagsAsResourceId = true }
+
+// iosMain, jvmMain — tags are already exposed, or irrelevant
+actual fun Modifier.exposeTestTags(): Modifier = this
 ```
 
 Maestro then targets the node with `id: "<testTag>"`.
 
-The flag applies to a semantics **subtree**, so it must be re-enabled inside every dialog: an `AlertDialog` renders in a separate Android window, and the flag set on the screen root does not reach the dialog content. A `testTag` set inside a dialog without its own `semantics` wrapper stays invisible to Maestro.
+Apply `exposeTestTags()` on every screen root **and again inside every dialog**: on Android the flag applies to a semantics **subtree**, and an `AlertDialog` renders in a separate window, so the flag set on the screen root never reaches the dialog content. A `testTag` set inside a dialog whose content does not call `exposeTestTags()` stays invisible to Maestro.
 
-How a project centralizes and applies these ids is up to the project.
+How a project names and centralizes the tags themselves is up to the project.
 
 **Running the flows** — Maestro drives the installed app on a device or simulator, so flows are **not** part of the PR gate; run them locally before merging a change that touches a critical journey.
 
-Install the app first. The steps differ per platform (substitute the project's own module, scheme and product names):
+One set of flows covers both mobile platforms: on a full-Compose app the composable tree is identical, so a flow validates the journey once, and re-running it on the other platform validates the **platform layer** underneath (id resolution, system back, dialog windowing, `actual` implementations). **Android is the reference platform** — run the flows there for any change to a critical journey. Re-run them on iOS when the change touches platform-specific code (`actual` implementations, native interop, system navigation), or before a release.
+
+Install the app first (substitute the project's own module, project, scheme and product names):
 
 ```bash
 # Android — needs a connected device or a running emulator
 ./gradlew :<android-app-module>:installDebug
 
 # iOS — needs a booted simulator
-xcodebuild -scheme <ios-scheme> -destination 'platform=iOS Simulator,name=<device>' build
-xcrun simctl install booted <path-to-built>.app
+xcodebuild -project <ios-app-dir>/<project>.xcodeproj \
+    -scheme <ios-scheme> \
+    -configuration Debug \
+    -destination 'platform=iOS Simulator,name=<device>' \
+    -derivedDataPath build \
+    build
+xcrun simctl install booted build/Build/Products/Debug-iphonesimulator/<product>.app
 ```
 
 Then run the flows — the command is the same on both platforms:
