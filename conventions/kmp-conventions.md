@@ -492,7 +492,7 @@ Never call a load function from `ON_RESUME`: the `init` block already handles th
 - Every ViewModel must have a test file in the common test source set.
 - Every new public method on an existing ViewModel must be covered by at least one test.
 - Every bug fix must be accompanied by a regression test that fails before the fix and passes after.
-- Every critical user journey must be covered by an end-to-end flow (see [End-to-end tests](#end-to-end-tests)).
+- Critical user journeys **should** be covered by an end-to-end flow — a strong recommendation, not a hard rule, since E2E runs locally rather than in CI (see [End-to-end tests](#end-to-end-tests)).
 
 ### ViewModel tests
 
@@ -574,7 +574,7 @@ appId: com.example.app
 A Compose `testTag` reaches Maestro differently on each platform:
 
 - **Android** — Maestro reads the accessibility tree, where a `testTag` only surfaces as a resource id once `testTagsAsResourceId` is enabled on an ancestor. That property is Android-only, so it cannot be set from `commonMain`, where screens and dialogs live.
-- **iOS** — Compose Multiplatform maps a `testTag` to the node's `accessibilityIdentifier`, which Maestro reads as `id`. Nothing to enable: since Compose Multiplatform 1.8 the accessibility tree is resolved on demand (the former `accessibilitySyncOptions` configuration was removed).
+- **iOS** — Compose Multiplatform maps a `testTag` to the node's `accessibilityIdentifier`, which Maestro reads as `id`. Nothing to enable: recent Compose Multiplatform resolves the accessibility tree on demand, so the earlier `accessibilitySyncOptions` opt-in is no longer required.
 
 Wrap that difference in a single `expect` modifier instead of scattering platform code across screens:
 
@@ -583,14 +583,17 @@ Wrap that difference in a single `expect` modifier instead of scattering platfor
 expect fun Modifier.exposeTestTags(): Modifier
 
 // androidMain
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class) // needed while testTagsAsResourceId is @ExperimentalComposeUiApi
 actual fun Modifier.exposeTestTags(): Modifier = semantics { testTagsAsResourceId = true }
 
-// iosMain, jvmMain — tags are already exposed, or irrelevant
+// iosMain — testTag already maps to accessibilityIdentifier
+actual fun Modifier.exposeTestTags(): Modifier = this
+
+// jvmMain (Desktop) — no E2E coverage
 actual fun Modifier.exposeTestTags(): Modifier = this
 ```
 
-Maestro then targets the node with `id: "<testTag>"`.
+`commonMain` holds the single `expect`; each target source set needs its own `actual` (or one shared intermediate source set). Maestro then targets the node with `id: "<testTag>"`.
 
 Apply `exposeTestTags()` on every screen root **and again inside every dialog**: on Android the flag applies to a semantics **subtree**, and an `AlertDialog` renders in a separate window, so the flag set on the screen root never reaches the dialog content. A `testTag` set inside a dialog whose content does not call `exposeTestTags()` stays invisible to Maestro.
 
