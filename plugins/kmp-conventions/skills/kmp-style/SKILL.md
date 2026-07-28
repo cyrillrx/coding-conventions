@@ -62,6 +62,7 @@ Screens showing mutable persisted data refresh on `LifecycleEventEffect(Lifecycl
 - `ARG_` prefix for Activity/Fragment argument keys; `KEY_` prefix for other key constants (grouped by prefix).
 - Image resources: `ic_<name>_<size>` for mono-color icons, `img_<name>_<size>` for multicolor images.
 - Test methods may use backtick names with spaces.
+- In-memory repositories are named by **strategy**, never by their double role: `RamXxxRepository` (mutable store) / `SampleXxxRepository` (fixed data) — never `Fake`/`Mock`. They live in the **main** source set of the data layer, since Compose previews use them too.
 
 ## Formatting
 
@@ -70,6 +71,9 @@ Formatting is **100% delegated to ktlint** via the shared `configs/kotlin/.edito
 ## Testing
 
 - Every ViewModel has a test (common test source set); every new public ViewModel method and every bug fix gets a test.
-- ViewModel tests use `StandardTestDispatcher` + `runTest` with in-memory fakes; cover initial `Loading`, `Error`, happy-path `WithData`, and the `silentRefresh` cases.
-- Pure functions: `kotlin.test`, one test file per function, backtick method names, no setup/fakes/coroutines.
+- ViewModel tests use `StandardTestDispatcher` + `runTest` with the `Ram`/`Sample` in-memory repositories (see Naming); cover initial `Loading`, `Error`, happy-path `WithData`, and the `silentRefresh` cases.
+- Pure functions: `kotlin.test`, one test file per function, backtick method names, no setup/doubles/coroutines.
+- E2E: critical journeys should have a Maestro flow in `.maestro/flows/`, one kebab-case file per journey — `launchApp: clearState: true`, commented steps, closing assertion. Strongly recommended, not a hard rule. They complement, never replace, unit tests.
+- E2E ids: nodes addressed by identity (fields, containers, icon-only buttons) expose a stable `testTag` rather than relying on localized text. Hide the platform difference behind an `expect fun Modifier.exposeTestTags()` — `semantics { testTagsAsResourceId = true }` on Android (Android-only API, unavailable in `commonMain`), a no-op on iOS (`testTag` already maps to `accessibilityIdentifier`). It is a subtree flag, so re-apply it inside every dialog: an `AlertDialog` is a separate window.
+- E2E runs are **not** a PR gate. One set of flows covers both platforms; Android is the reference platform, iOS is re-run for platform-specific changes or before a release. Install the app, then `maestro test .maestro/flows/`. No Desktop coverage.
 - No tests for pure layout composables (previews) or trivial delegation classes.
