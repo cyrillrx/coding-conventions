@@ -539,7 +539,7 @@ class IsValidWalkSpeedTest {
 
 ### End-to-end tests
 
-Critical user journeys are covered by end-to-end UI tests written with **Maestro**. E2E flows complement — never replace — ViewModel and domain unit tests: logic stays covered by unit tests, E2E only proves the journey holds together end to end.
+Critical user journeys are typically covered by end-to-end UI tests written with **Maestro**. E2E flows complement — never replace — ViewModel and domain unit tests: logic stays covered by unit tests, E2E only proves the journey holds together end to end.
 
 **Flows** live in a `.maestro/flows/` directory, one file per journey, named after the journey in kebab-case (`create-collection.yaml`). Start from a clean state, comment each navigation step, and finish on an explicit assertion of the journey's outcome.
 
