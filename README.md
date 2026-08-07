@@ -10,7 +10,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 ## Conventions
 
 - [General Coding Conventions](conventions/coding-conventions.md) — Clean Code principles (all languages)
-- [Documentation Conventions](conventions/docs-conventions.md) — file naming, Markdown tables
+- [Documentation Conventions](conventions/docs-conventions.md) — file naming, section separators, Markdown tables
 - [Kotlin Multiplatform & Compose](conventions/kmp-conventions.md) — architecture, style, testing (Android / KMP / CMP)
 - [Rust Backend](conventions/rust-conventions.md)
 - [Go Backend](conventions/go-conventions.md)

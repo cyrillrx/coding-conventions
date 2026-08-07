@@ -15,7 +15,7 @@ collaboration/
   code-review-emojis.md                # Emoji legend for code review comments
 conventions/
   coding-conventions.md                # Clean Code principles (all languages)
-  docs-conventions.md                  # Documentation file naming, Markdown tables
+  docs-conventions.md                  # Documentation file naming, section separators, Markdown tables
   kmp-conventions.md                   # Kotlin Multiplatform / Compose style, architecture, testing
   rust-conventions.md                  # Rust backend conventions
   go-conventions.md                    # Go backend conventions
