@@ -33,8 +33,6 @@ Output the plan, then end your turn with a confirmation question such as "Does t
 **Step 2 — Execute after approval.**
 Only once the user has explicitly approved the plan (e.g. "yes", "go ahead", "ok"), execute each commit in the listed order without asking for confirmation again. Stage only the files for each commit, commit, then move to the next. The project must compile after each individual commit.
 
----
-
 ## Conventional Commits format
 
 ```
@@ -66,8 +64,6 @@ Commits are owned by their human author. **Never** add `Co-Authored-By` trailers
 | `chore`    | Miscellaneous maintenance                                              |
 | `ci`       | CI/CD pipeline changes                                                 |
 
----
-
 ## Grouping strategy — split as finely as possible
 
 Group files by **layer** and by **feature**. One layer + one feature = one commit. Never mix a refactor with a feature, or business logic with resources.
@@ -92,8 +88,6 @@ feat(settings): implement preferences repository
 feat(settings): add settings route and router
 feat(settings): add settings screen with string resources
 ```
-
----
 
 ## Rules
 
