@@ -22,7 +22,7 @@ For example:
 | ⛏ | `:pick:` | This is a nitpick. <br /><br /> This is a small adjustment I think should be made in order to improve readability, coherence with the codebase or compliance to the guidelines. Might also be an organization suggestion. |
 | 💭 | `:thought_balloon:` | Let me think out loud here for a minute. <br /><br /> I might express concern, suggest an alternative solution, or walk through the code in my own words to make sure I understand. |
 | 🕐 | `:clock1:` | The comment may be addressed in later. A Jira ticket has to be created (and referenced in the code). |
-| 🏕 | `:camping:`  | Here is an opportunity, not directly related to your changes, for us to leave the campground [code] cleaner than we found it. Might be |
+| 🏕 | `:camping:`  | Here is an opportunity, not directly related to your changes, for us to leave the campground [code] cleaner than we found it. Prefer this when the cleanup can land with the current PR; use `:clock1:` when the follow-up needs a separate ticket. |
 | ❓ | `:question:` | I have a question. <br /><br /> This should be a fully formed question with sufficient information and context that requires a response. |
 | 📝 | `:memo:` | This is an explanatory note, fun fact, or relevant commentary that does not require any action. |
 
