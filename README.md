@@ -19,6 +19,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 ## Shared configs
 
 - [`configs/kotlin/.editorconfig`](configs/kotlin/.editorconfig) — ktlint configuration for Kotlin projects
+- [`.github/pull_request_template.md`](.github/pull_request_template.md) — PR description template; copy it into a project's own `.github/`
 
 ## Claude Code plugins
 
