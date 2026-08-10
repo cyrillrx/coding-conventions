@@ -15,7 +15,7 @@ collaboration/
   code-review-emojis.md                # Emoji legend for code review comments
 conventions/
   coding-conventions.md                # Clean Code principles (all languages)
-  docs-conventions.md                  # Documentation file naming, section separators, Markdown tables
+  docs-conventions.md                  # Documentation file naming, section separators, line wrapping, Markdown tables
   kmp-conventions.md                   # Kotlin Multiplatform / Compose style, architecture, testing
   rust-conventions.md                  # Rust backend conventions
   go-conventions.md                    # Go backend conventions
@@ -64,6 +64,7 @@ Use `git mv` for any file rename or move, to preserve history.
 ### Documentation (`conventions/docs-conventions.md`)
 - Sections are separated by the heading itself — no `---` horizontal rule between sections
 - Exception: `---` that carries meaning stays (YAML front matter, document separators inside code fences)
+- No hard wrap in prose — one line per paragraph, per bullet; column limits apply to code only
 
 ### Kotlin / Compose (`conventions/kmp-conventions.md`)
 - Kotlin only; Jetpack/Compose Multiplatform — no XML layouts, no View-system APIs
