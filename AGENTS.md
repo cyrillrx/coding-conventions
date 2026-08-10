@@ -51,6 +51,8 @@ All commits follow **Conventional Commits** (see [`collaboration/git-and-collabo
 
 **Types:** `feat`, `fix`, `ui`, `refactor`, `perf`, `style`, `docs`, `test`, `chore`, `ci`, `build`. Subject in the imperative, present tense, no leading capital, no trailing dot.
 
+**Language:** English — commit messages, and Pull Request titles and descriptions.
+
 Use `git mv` for any file rename or move, to preserve history.
 
 **Authorship:** commits and PRs are owned by their human author. Never add AI attribution — no `Co-Authored-By` trailer, no `🤖 Generated with` footer, no "assisted by" mention. See [`collaboration/git-and-collaboration.md`](collaboration/git-and-collaboration.md#6-authorship).
