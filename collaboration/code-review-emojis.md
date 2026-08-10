@@ -46,8 +46,6 @@ Prepend comments with the appropriate emoji to convey the meaning associated wit
 
 > 🕐 We really need to invest some time in refactoring out our use of this deprecated library. _Issue created: [LINK TO ISSUE]_.
 
----
-
 ### Credits
 
 This is inspired by this repository with little adaptations to meet our team needs.
