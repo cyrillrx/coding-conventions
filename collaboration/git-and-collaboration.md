@@ -23,6 +23,7 @@ A commit message should help reviewers get context around a change, but more imp
 <body>
 ```
 
+- **Language**: English — all commits are written in English.
 - **Types**: `feat`, `fix`, `ui`, `refactor`, `perf`, `style`, `docs`, `test`, `chore`, `ci`, `build`.
   - `feat` — new user-facing functionality
   - `fix` — bug fix
@@ -98,7 +99,7 @@ Do not include AI-generated attribution anywhere in the history or on the platfo
 
 ## 7. Pull Request Etiquette
 
-All commit conventions above also apply to Pull Request titles and descriptions.
+All commit conventions above also apply to Pull Request titles and descriptions. The title and description must be written in **English**.
 
 **When squashing** commits before merging, do not leave the working commit list as the resulting commit description. Either copy the PR description into the resulting commit's body or rewrite it.
 
