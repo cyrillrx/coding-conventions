@@ -6,6 +6,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 
 - [Git & Collaboration](collaboration/git-and-collaboration.md) — Conventional Commits, branching, PR etiquette, ADRs
 - [Code Review Emojis](collaboration/code-review-emojis.md) — emoji legend for review comments
+- [Code Review Triage](collaboration/code-review-triage.md) — turning findings into decisions: severity, impact, complexity, recommendation
 
 ## Conventions
 
@@ -27,10 +28,10 @@ These conventions are also published as a [Claude Code](https://claude.com/claud
 
 Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 
-| Plugin            | Skills                       | What it does                                            |
-| ----------------- | ---------------------------- | ------------------------------------------------------- |
-| `git-workflow`    | `/commit`, `/address-review` | Atomic Conventional Commits; PR review-comment workflow |
-| `kmp-conventions` | `kmp-style` (auto-invoked)   | Kotlin Multiplatform / Compose style and architecture  |
+| Plugin            | Skills                                           | What it does                                                                    |
+| ----------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- |
+| `git-workflow`    | `/commit`, `/triage-findings`, `/address-review` | Atomic Conventional Commits; review-finding triage; answering reviewer comments |
+| `kmp-conventions` | `kmp-style` (auto-invoked)                       | Kotlin Multiplatform / Compose style and architecture                           |
 
 ### Install in a project
 

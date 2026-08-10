@@ -13,6 +13,7 @@ README.md                              # Index linking to all documents
 collaboration/
   git-and-collaboration.md             # Conventional Commits, branching, PR etiquette, ADRs
   code-review-emojis.md                # Emoji legend for code review comments
+  code-review-triage.md                # Severity/impact/complexity grid, fix-here vs follow-up vs no-action
 conventions/
   coding-conventions.md                # Clean Code principles (all languages)
   docs-conventions.md                  # Documentation file naming, section separators, line wrapping, Markdown tables
@@ -27,7 +28,7 @@ configs/
 .claude-plugin/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
-  git-workflow/                        # /commit, /address-review
+  git-workflow/                        # /commit, /triage-findings, /address-review
   kmp-conventions/                     # kmp-style knowledge skill
 .claude/skills/
   sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs
@@ -64,6 +65,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Reviewers must be constructive and back comments with sources
 - Trunk-based development; short-lived feature branches named after commit types
 - Use [code-review-emojis.md](collaboration/code-review-emojis.md) to signal blocking vs. non-blocking comments
+- Every review finding gets a decision — see [code-review-triage.md](collaboration/code-review-triage.md): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale
 
 ### Documentation (`conventions/docs-conventions.md`)
 - Sections are separated by the heading itself — no `---` horizontal rule between sections

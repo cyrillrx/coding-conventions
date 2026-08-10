@@ -26,6 +26,8 @@ When a convention doc changes, the derived skills must be regenerated so the plu
 | ---------------------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------- |
 | `collaboration/git-and-collaboration.md`                               | `plugins/git-workflow/skills/commit/SKILL.md`            | Commit format, types table, authorship rule, grouping       |
 | `collaboration/git-and-collaboration.md`                               | `plugins/git-workflow/skills/address-review/SKILL.md`    | Triage criteria, authorship rule in the commit step         |
+| `collaboration/code-review-triage.md`                                  | `plugins/git-workflow/skills/triage-findings/SKILL.md`   | Four axes, severity/impact/complexity scales, decision grid and overrides, follow-up ownership rules |
+| `collaboration/code-review-triage.md` (§7 only)                        | `plugins/git-workflow/skills/address-review/SKILL.md`    | The escalation to `triage-findings`. **Never the scales or the grid.** |
 | `conventions/kmp-conventions.md`, `conventions/coding-conventions.md`  | `plugins/kmp-conventions/skills/kmp-style/SKILL.md`      | The entire knowledge body                                   |
 | _not yet created_ — `conventions/rust-conventions.md`                  | `plugins/rust-conventions/` (to create)                  | —                                                           |
 | _not yet created_ — `conventions/go-conventions.md`                    | `plugins/go-conventions/` (to create)                    | —                                                           |
@@ -37,10 +39,11 @@ When a convention doc changes, the derived skills must be regenerated so the plu
 2. For each changed source doc, open the derived skill(s) from the mapping above.
 3. Regenerate **only the derived content** — the convention rules, format tables, and knowledge body — to match the current docs. **Preserve the skill-specific mechanics** that are not in the docs: the frontmatter (`name`, `description`, `allowed-tools`, `argument-hint`), the workflow steps (plan-then-execute, GraphQL triage flow), and the generated-from header comment.
 4. Each derived `SKILL.md` keeps its header comment naming its source doc(s) and pointing back to `/sync-plugins`.
-5. If a new convention doc has no plugin yet (rust/go/bruno), either create the plugin (manifest under `.claude-plugin/plugin.json`, skill under `skills/<name>/SKILL.md`, and an entry in `.claude-plugin/marketplace.json`) or leave it — note the decision to the user.
-6. If the set of plugins or skills changed (one added, removed, or renamed), update the plugin table in `README.md` and the structure block in `AGENTS.md` to match — they are maintained by hand and must stay in sync with `marketplace.json`.
-7. Validate the result with `claude plugin validate .` — it must pass (the two advisory `version` warnings are intentional and expected).
-8. Show the resulting `git diff` for the regenerated skills and ask the user to review before committing. Do not commit.
+5. **No scale, outcome vocabulary, or protocol may appear in two skills.** If two skills need the same block, one doc owns it, one skill derives it in full, and the other names the skill that owns it. Duplicating it is how the two silently diverge at the next sync.
+6. If a new convention doc has no plugin yet (rust/go/bruno), either create the plugin (manifest under `.claude-plugin/plugin.json`, skill under `skills/<name>/SKILL.md`, and an entry in `.claude-plugin/marketplace.json`) or leave it — note the decision to the user.
+7. If the set of plugins or skills changed (one added, removed, or renamed), update the plugin table in `README.md`, the structure block in `AGENTS.md`, the `keywords` in the plugin's `plugin.json`, and the plugin `description` in `.claude-plugin/marketplace.json` — all four are maintained by hand and drift silently.
+8. Validate the result with `claude plugin validate .` — it must pass (the two advisory `version` warnings are intentional and expected).
+9. Show the resulting `git diff` for the regenerated skills and ask the user to review before committing. Do not commit.
 
 ## Notes
 

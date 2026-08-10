@@ -81,6 +81,12 @@ For each unresolved thread, read the file at `path` around the relevant `line`, 
 
 Per the team's conventions, reviewers are expected to back their requests with sources (docs, articles, benchmarks). A comment that expresses personal preference without justification should be marked ❌ or ⚠️. When in doubt, consult the project's conventions (`CLAUDE.md` / `AGENTS.md` and any linked convention docs).
 
+When a ✅ comment is too costly or too broad to address in this PR, it is not simply applied: it becomes a deferred finding, and the deferral needs an owner and a trace — on the author's own PR, a ticket in the project's tracker referenced under a `## Follow-ups` section of the description. Run `/git-workflow:triage-findings` when the full severity / impact / complexity scoring is needed to decide.
+
+**Do not invent severity, impact, or complexity levels here.** This skill decides what to say to the reviewer; `triage-findings` decides what the codebase does about it. Restating its scales from memory is how the two drift apart.
+
+The two are also split by what they touch: this skill works **through the GitHub API** — it reads the threads and writes the replies and resolutions. `triage-findings` never calls the API at all; it reads the conversation and the local git state. If nobody is waiting for an answer, nothing here applies.
+
 Wait for the user to confirm, adjust, or override each recommendation before proceeding.
 
 ### Step 4 — Apply fixes and reply to all threads
