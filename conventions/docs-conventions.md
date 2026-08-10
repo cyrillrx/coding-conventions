@@ -12,6 +12,12 @@
 - Do not add a horizontal rule between sections. A `---` on its own line renders a line on top of a break the heading already makes, and doubles the visual noise in long documents.
 - The exception is where `---` carries meaning rather than decoration: YAML front matter delimiters, and document separators inside fenced code blocks (a Maestro flow, a multi-document manifest).
 
+## Line wrapping
+
+- Do not hard-wrap prose. One line per paragraph, per bullet, per table row — rendering and editing both soft-wrap.
+- A hard wrap turns a one-word edit into a reflowed paragraph: the diff shows several changed lines instead of one, and review comments anchor to lines the change never touched.
+- Column limits belong to code, not to prose. Inside fenced code blocks, follow the language's own convention (120 columns for Kotlin, the `rustfmt` and `gofmt` defaults).
+
 ## Markdown tables
 
 - Always align table columns with spaces so pipes are vertically aligned.

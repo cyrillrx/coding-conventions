@@ -64,10 +64,7 @@ query($owner:String!, $repo:String!, $pr:Int!) {
 
 Filter for `isResolved: false` threads. If there are none, inform the user and stop.
 
-> The query caps at 100 threads and 10 comments per thread. This covers normal PRs;
-> the first comment (needed for `in_reply_to`) is always present. If a thread count
-> of exactly 100 is returned, warn the user that older threads may be truncated
-> rather than silently treating the batch as complete.
+> The query caps at 100 threads and 10 comments per thread. This covers normal PRs; the first comment (needed for `in_reply_to`) is always present. If a thread count of exactly 100 is returned, warn the user that older threads may be truncated rather than silently treating the batch as complete.
 
 ### Step 3 — Triage comments
 
@@ -97,13 +94,9 @@ gh api repos/<OWNER>/<REPO>/pulls/<PR_NUMBER>/comments \
   -X POST -f body="<reply>" -F in_reply_to=<COMMENT_DATABASE_ID>
 ```
 
-> Do **not** use `POST /pulls/comments/{id}/replies` — it returns 404 for comments
-> created by bots (Gemini, CodeRabbit, etc.) and is unreliable in general.
+> Do **not** use `POST /pulls/comments/{id}/replies` — it returns 404 for comments created by bots (Gemini, CodeRabbit, etc.) and is unreliable in general.
 
-The `reviewThreads` query in Step 2 only surfaces inline review threads, so the
-reply above covers every thread you triaged. Only if the user explicitly asks you
-to respond to a **general** PR comment (one with no associated file/line, which
-never appears in `reviewThreads`) use the issue-comments endpoint instead:
+The `reviewThreads` query in Step 2 only surfaces inline review threads, so the reply above covers every thread you triaged. Only if the user explicitly asks you to respond to a **general** PR comment (one with no associated file/line, which never appears in `reviewThreads`) use the issue-comments endpoint instead:
 
 ```bash
 gh api repos/<OWNER>/<REPO>/issues/<PR_NUMBER>/comments -X POST -f body="<reply>"
