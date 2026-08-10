@@ -61,6 +61,10 @@ Use `git mv` for any file rename or move, to preserve history.
 - Trunk-based development; short-lived feature branches named after commit types
 - Use [code-review-emojis.md](collaboration/code-review-emojis.md) to signal blocking vs. non-blocking comments
 
+### Documentation (`conventions/docs-conventions.md`)
+- Sections are separated by the heading itself — no `---` horizontal rule between sections
+- Exception: `---` that carries meaning stays (YAML front matter, document separators inside code fences)
+
 ### Kotlin / Compose (`conventions/kmp-conventions.md`)
 - Kotlin only; Jetpack/Compose Multiplatform — no XML layouts, no View-system APIs
 - MVVM + Unidirectional Data Flow: `StateFlow` for state, `SharedFlow` (one-shot) for events

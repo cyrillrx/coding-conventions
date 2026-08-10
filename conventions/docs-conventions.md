@@ -9,10 +9,8 @@
 ## Section separators
 
 - Separate sections with a blank line before the heading. The heading is the separator.
-- Do not add a horizontal rule between sections. `\n---\n` renders a line on top of a break the
-  heading already makes, and doubles the visual noise in long documents.
-- The exception is the one place `---` carries meaning: YAML front matter delimiters at the very top
-  of a file.
+- Do not add a horizontal rule between sections. A `---` on its own line renders a line on top of a break the heading already makes, and doubles the visual noise in long documents.
+- The exception is where `---` carries meaning rather than decoration: YAML front matter delimiters, and document separators inside fenced code blocks (a Maestro flow, a multi-document manifest).
 
 ## Markdown tables
 
