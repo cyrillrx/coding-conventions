@@ -22,6 +22,8 @@ conventions/
   bruno-conventions.md                 # Bruno API testing conventions
 configs/
   kotlin/.editorconfig                 # Shared ktlint configuration for Kotlin projects
+.github/
+  pull_request_template.md             # PR description template, copied into other projects
 .claude-plugin/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)

@@ -105,6 +105,7 @@ All commit conventions above also apply to Pull Request titles and descriptions.
 ### Authors
 
 - Keep the diff under 200 lines and 10 files when possible. For mechanical changes (renaming, moving files), exceptions are acceptable.
+- Write the description from the [PR template](../.github/pull_request_template.md): explain the *why*, delete the sections that don't apply, and tick only what the diff proves. Copy the template into a project's own `.github/pull_request_template.md` so GitHub pre-fills it.
 - Proofread your own PR before submitting — check diff, description, and comments.
 - Assign reviewers directly on the hosting platform.
 
