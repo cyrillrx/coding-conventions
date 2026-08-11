@@ -85,47 +85,51 @@ Apply the four axes below to each finding, then the decision grid.
 
 **Severity** — the consequence of shipping as is, not how the code looks:
 
-| Level          | Meaning                                                                                            | Merge      |
-| -------------- | -------------------------------------------------------------------------------------------------- | ---------- |
-| 🔴 **Blocker** | Data loss, security hole, crash, or regression on the path the change touches.                      | Blocked    |
-| 🟠 **Major**   | Wrong behavior in an edge case, broken contract, significant perf cost, untested critical logic.     | Negotiable |
-| 🟡 **Minor**   | Maintainability or convention issue: naming, duplication, missing doc. No behavior change.          | Free       |
-| 🔵 **Nit**     | Pure preference or cosmetics. Never blocking.                                                       | Free       |
+| Level          | Meaning                                                                                          | Blocks the merge? |
+|----------------|--------------------------------------------------------------------------------------------------|-------------------|
+| 🔴 **Blocker** | Data loss, security hole, crash, or regression on the path the change touches.                   | Yes               |
+| 🟠 **Major**   | Wrong behavior in an edge case, broken contract, significant perf cost, untested critical logic. | Negotiable        |
+| 🟡 **Minor**   | Maintainability or convention issue: naming, duplication, missing doc. No behavior change.       | No                |
+| 🔵 **Nit**     | Pure preference or cosmetics. Never blocking.                                                    | No                |
+
+Not blocking is not the same as not addressed. A 🟡 is fixed here or deferred with a trace — never dropped, because letting maintainability and conventions erode is a decision nobody meant to take. Only a 🔵 can end in ❌.
 
 **Impact** — name the dimensions the finding actually touches, plus one line on who pays:
 
 | Dimension      | Borne by   | Typical symptoms                                                              |
-| -------------- | ---------- | ----------------------------------------------------------------------------- |
-| **Functional** | Users      | Wrong result, crash, data corruption, security, perceived slowness, broken UX  |
-| **Technical**  | Developers | Maintainability, readability, testability, coupling, debt, build and CI time   |
-| **Both**       | Everyone   | A design flaw already visible in behavior today                                |
+|----------------|------------|-------------------------------------------------------------------------------|
+| **Functional** | Users      | Wrong result, crash, data corruption, security, perceived slowness, broken UX |
+| **Technical**  | Developers | Maintainability, readability, testability, coupling, debt, build and CI time  |
+| **Both**       | Everyone   | A design flaw already visible in behavior today                               |
 
-**Complexity** — cost to address, test and verification included:
+**Complexity** — two estimates, and one rating that carries them:
 
-| Size  | Rough cost    | Shape of the change                                          |
-| ----- | ------------- | ------------------------------------------------------------ |
-| **S** | Minutes       | Local edit, inside files the change already touches          |
-| **M** | Hours         | Several files or a new test; still one coherent change       |
-| **L** | A day or more | Design decision, cross-cutting change, ADR, or dedicated PR  |
+| Size  | Estimated effort | Estimated diff                                                    |
+|-------|------------------|-------------------------------------------------------------------|
+| **S** | Minutes          | A few lines, inside files the change already touches              |
+| **M** | Hours            | Tens of lines, or one or two files added                          |
+| **L** | A day or more    | Beyond what the change can absorb: many files, a new area, an ADR |
+
+Both estimates cover the test and the verification, not just the edit. When they disagree — a one-line fix sitting behind a day of investigation, a mechanical rename that adds 300 lines in ten minutes — **take the higher of the two as the rating**. The diff says whether the finding fits in this change at all, against the remaining 200 lines / 10 files budget; the effort says whether a deferral is a ticket someone picks up or a PR of its own.
 
 **Recommendation** — exactly three outcomes:
 
-| Outcome          | What it commits us to                                                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------- |
-| ✅ **Fix here**  | Addressed in this change. Must state **how**: the approach and the files, concretely enough to act. |
-| 🕐 **Follow-up** | Deferred, with an owner and a trace (Step 3). Never a verbal "later".                              |
-| ❌ **No action** | Nothing happens, on purpose. The rationale states why.                                             |
+| Outcome          | What it commits us to                                                                               |
+|------------------|-----------------------------------------------------------------------------------------------------|
+| ✅ **Fix here**   | Addressed in this change. Must state **how**: the approach and the files, concretely enough to act. |
+| 🕐 **Follow-up** | Deferred, with an owner and a trace (Step 3). Never a verbal "later".                               |
+| ❌ **No action**  | Nothing happens, on purpose. The rationale states why.                                              |
 
 ❌ is deliberately weak: it spans "this is wrong" through "correct, but not worth its cost", and most of the time it is simply a finding we skip. It is not a verdict on the code and not a refusal — the default reading is "we looked, we decided, we moved on". These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told.
 
 **Default decision grid:**
 
-| Severity   | Complexity S                        | Complexity M | Complexity L                                            |
-| ---------- | ----------------------------------- | ------------ | ------------------------------------------------------- |
-| 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** 🕐 follow-up for the real fix   |
-| 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer        |
-| 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)   | 🕐 Follow-up | 🕐 Follow-up                                             |
-| 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                             |
+| Severity   | Complexity S                        | Complexity M | Complexity L                                           |
+|------------|-------------------------------------|--------------|--------------------------------------------------------|
+| 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** 🕐 follow-up for the real fix |
+| 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer      |
+| 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)   | 🕐 Follow-up | 🕐 Follow-up                                           |
+| 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
 
 Overrides, which win over the grid:
 
@@ -143,9 +147,9 @@ Output these three parts, and **change nothing in this step**.
 
 **1. Summary table** — one row per finding, none omitted, ordered by severity then complexity:
 
-| #  | Finding                                   | Severity | Impact                 | Complexity | Recommendation |
-| -- | ----------------------------------------- | -------- | ---------------------- | ---------- | -------------- |
-| 1  | `SpellRepository.kt:42` — unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here     |
+| # | Finding                                   | Severity | Impact                 | Complexity | Recommendation |
+|---|-------------------------------------------|----------|------------------------|------------|----------------|
+| 1 | `SpellRepository.kt:42` — unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here     |
 
 **2. Detail block per finding**, carrying the rationale of the decision:
 
