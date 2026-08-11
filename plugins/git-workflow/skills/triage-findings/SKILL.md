@@ -4,8 +4,8 @@ description: >-
   Turn code review findings into decisions: severity, impact, complexity, then one outcome per finding
   — fix here, follow-up ticket, or no action — each with its rationale, plus the resulting action plan.
   Reads the findings from the conversation, typically right after a code review, and the change itself
-  from git. Makes no GitHub call: never replies to a reviewer, never resolves a thread. Use when
-  findings exist but no decision does.
+  from git. Use when findings exist but no decision does. When a reviewer is waiting for an answer on
+  an open pull request, use address-review instead.
 # Local reads only. This skill decides; every call that changes something — creating a follow-up
 # ticket, editing a PR description, committing — keeps its permission prompt on purpose.
 # `allowed-tools` merely pre-approves, so listing them here would waive the one check that does not
@@ -28,7 +28,7 @@ The triage grid in this skill is derived from collaboration/code-review-triage.m
 in cyrillrx/coding-conventions. Keep it in sync with /sync-plugins.
 -->
 
-**Scope.** This skill decides; it does not correspond. It reads the **conversation** and the local **git** state — nothing else. It makes no GitHub API call, writes no comment, resolves no thread, and answers no reviewer. If a reviewer has left comments on an open PR and is waiting on you, that is `/git-workflow:address-review`: it reads and writes through the GitHub API, and it is the only one of the two allowed to speak to anybody.
+**Scope.** This skill decides; it does not correspond. Its findings come from the **conversation**, and the change from the local **git** state. If a reviewer has left comments on an open PR and is waiting on you, that is `/git-workflow:address-review`.
 
 ## Context
 

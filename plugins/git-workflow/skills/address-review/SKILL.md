@@ -85,7 +85,7 @@ When a ✅ comment is too costly or too broad to address in this PR, it is not s
 
 **Do not invent severity, impact, or complexity levels here.** This skill decides what to say to the reviewer; `triage-findings` decides what the codebase does about it. Restating its scales from memory is how the two drift apart.
 
-The two are also split by what they touch: this skill works **through the GitHub API** — it reads the threads and writes the replies and resolutions. `triage-findings` never calls the API at all; it reads the conversation and the local git state. If nobody is waiting for an answer, nothing here applies.
+The two are also split by what they touch: this skill works **through the GitHub API** — it reads the threads and writes the replies and resolutions. If nobody is waiting for an answer, nothing here applies.
 
 Wait for the user to confirm, adjust, or override each recommendation before proceeding.
 
