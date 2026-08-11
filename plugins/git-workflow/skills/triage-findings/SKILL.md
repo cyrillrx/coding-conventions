@@ -14,8 +14,7 @@ allowed-tools:
   - Bash(git status:*)
   - Bash(git diff:*)
   - Bash(git log:*)
-  - Bash(git branch:*)
-  - Bash(git remote:*)
+  - Bash(git branch --show-current:*)
   - Read
   - Grep
   - Glob
@@ -72,8 +71,7 @@ A deferral needs an owner and a trace, and the owner is whoever owns the code.
 **On the user's own change** — the deferral is theirs to carry, so a 🕐 needs a real ticket. Work out the tracker **before** producing the plan, from what is already available:
 
 - ticket keys in the branch name or the recent history — `git log --oneline -20` and `git branch --show-current`; a `PROJ-123` pattern points at an external tracker keyed that way,
-- the project's `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md`, which usually names it,
-- `git remote -v` as a fallback hint (a GitHub remote suggests GitHub Issues).
+- the project's `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md`, which usually names it.
 
 If it stays ambiguous, **ask**. Never invent a ticket destination, and do not query the forge to find one — that is not this skill's job.
 
