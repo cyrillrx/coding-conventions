@@ -156,10 +156,9 @@ Output these three parts, and **change nothing in this step**.
 
 - **Severity**: 🟠 Major — the map never evicts, so a long session ends in an OOM
 - **Impact**: functional + technical — users hit a crash; the cache is also untestable as written
-- **Complexity**: M — an LRU policy plus its test, in the two files the change already touches
+- **Complexity**: M — hours for the eviction policy and its test, tens of lines across the two files the change already touches
 - **Recommendation**: ✅ Fix here — cap the map at 100 entries with an LRU eviction
-- **Rationale**: introduced by this change, user-visible failure mode, and the fix stays inside the
-  current diff. Deferring it would ship a known crash.
+- **Rationale**: introduced by this change, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 
 The rationale explains the **trade-off** — why the other two outcomes were rejected — not the finding again.

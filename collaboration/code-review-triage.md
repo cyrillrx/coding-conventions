@@ -159,10 +159,9 @@ A triage produces three things, in this order.
 
 - **Severity**: 🟠 Major — the map never evicts, so a long session ends in an OOM
 - **Impact**: functional + technical — users hit a crash; the cache is also untestable as written
-- **Complexity**: M — an LRU policy plus its test, in the two files the PR already touches
+- **Complexity**: M — hours for the eviction policy and its test, tens of lines across the two files the PR already touches
 - **Recommendation**: ✅ Fix here — cap the map at 100 entries with an LRU eviction
-- **Rationale**: introduced by this PR, user-visible failure mode, and the fix stays inside the
-  current diff. Deferring it would ship a known crash.
+- **Rationale**: introduced by this PR, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 
 **An action plan**, grouped by outcome: the ordered list of fixes to apply, the follow-up tickets to open (title and body ready to submit), and the `## Follow-ups` block to append to the PR description.
