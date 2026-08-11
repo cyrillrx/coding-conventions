@@ -49,7 +49,7 @@ The findings are already here. This skill is normally invoked straight after a c
 - review comments the user pasted in,
 - or findings you produced yourself earlier in the session.
 
-If the conversation holds no findings, **review the change first**: `git diff <base-branch>...HEAD` plus `git diff` for uncommitted work, then triage what you find. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
+If the conversation holds no findings, **review the change first**: `git diff main...HEAD` — resolving the base branch as Step 2 describes — plus `git diff` for uncommitted work, then triage what you find. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
 
 Do not go looking for a PR's review threads. Scoring a reviewer's comment is fine when the user hands it to you, but fetching, replying and resolving belong to `/git-workflow:address-review`. If the PR still has unresolved threads, say so and name that skill.
 
@@ -57,7 +57,7 @@ Do not go looking for a PR's review threads. Scoring a reviewer's comment is fin
 
 ### Step 2 — Establish the change's scope
 
-Read the change from git: `git diff --stat <base-branch>...HEAD`, `git log --oneline <base-branch>..HEAD`. Write down, for your own use:
+Read the change from git, against the branch it targets — the repository's default branch unless the project says otherwise: `git diff --stat main...HEAD`, `git log --oneline main..HEAD`. Those commands fail loudly when the guess is wrong; ask then, and never fall back to another branch name silently. Write down, for your own use:
 
 - What the change is meant to do, and its commit type (`feat`, `fix`, `refactor`, …).
 - Its size against the 200 lines / 10 files budget — this decides how much extra fixing the diff can absorb.
