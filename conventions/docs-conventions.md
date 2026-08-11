@@ -22,11 +22,11 @@
 
 - Always align table columns with spaces so pipes are vertically aligned.
 - Include a separator row (`| --- | --- |`) after the header row.
-- Every table cell must have at least one space of padding on each side.
+- Every table cell must have at least one space of padding on each side. Except for title delimiter.
 
 Example:
 
 | Column A    | Column B         |
-| ----------- | ---------------- |
+|-------------|------------------|
 | short value | a longer value   |
 | another row | yet another cell |
