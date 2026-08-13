@@ -76,9 +76,11 @@ A deferral needs an owner and a trace, and the owner is whoever owns the code.
 - ticket keys in the branch name or the recent history — `git log --oneline -20` and `git branch --show-current`; a `PROJ-123` pattern points at an external tracker keyed that way,
 - the project's `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md`, which usually names it.
 
-If it stays ambiguous, **ask**. Never invent a ticket destination, and do not query the forge to find one — that is not this skill's job.
+If it stays ambiguous, **ask**. Never invent a ticket destination, and do not query the forge to find one — that is not this skill's job. A 🕐 with no ticket is a deferral in name only: when the ticket is not going to be opened, plan the fix here instead, or state plainly that nothing will happen.
 
-**On someone else's change** — the decision to defer is not the user's to make and the tracker is not theirs to fill. A 🕐 is *handed over*, not filed: it is raised as a scored comment for the author to decide on, and a ticket is only opened if the author asks for it. Do not plan tickets in another author's name; plan the comment instead.
+**On someone else's change** — the decision to defer is not the user's to make and the tracker is not theirs to fill. A 🕐 is *handed over*, not filed: it is raised as a scored comment for the author to decide on, and the thread is the trace. A ticket is only opened if the author asks for it. Do not plan tickets in another author's name; plan the comment instead.
+
+Either way, a 🔴 the change introduces never becomes a follow-up: it is fixed, or it blocks the merge.
 
 ### Step 4 — Score every finding
 
