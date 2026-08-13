@@ -26,6 +26,8 @@ When a convention doc changes, the derived skills must be regenerated so the plu
 | ---------------------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------- |
 | `collaboration/git-and-collaboration.md`                               | `plugins/git-workflow/skills/commit/SKILL.md`            | Commit format, types table, authorship rule, grouping       |
 | `collaboration/git-and-collaboration.md`                               | `plugins/git-workflow/skills/address-review/SKILL.md`    | Triage criteria, authorship rule in the commit step         |
+| `collaboration/code-review-triage.md`                                  | `plugins/git-workflow/skills/triage-findings/SKILL.md`   | Four axes, severity/impact/complexity scales, decision grid and overrides, follow-up ownership rules |
+| `collaboration/code-review-triage.md` (§6 and §7)                      | `plugins/git-workflow/skills/address-review/SKILL.md`    | Deferral ownership and trace, the escalation to `triage-findings`. It does not score, so it carries neither the scales nor the grid. |
 | `conventions/kmp-conventions.md`, `conventions/coding-conventions.md`  | `plugins/kmp-conventions/skills/kmp-style/SKILL.md`      | The entire knowledge body                                   |
 | _not yet created_ — `conventions/rust-conventions.md`                  | `plugins/rust-conventions/` (to create)                  | —                                                           |
 | _not yet created_ — `conventions/go-conventions.md`                    | `plugins/go-conventions/` (to create)                    | —                                                           |
@@ -37,10 +39,11 @@ When a convention doc changes, the derived skills must be regenerated so the plu
 2. For each changed source doc, open the derived skill(s) from the mapping above.
 3. Regenerate **only the derived content** — the convention rules, format tables, and knowledge body — to match the current docs. **Preserve the skill-specific mechanics** that are not in the docs: the frontmatter (`name`, `description`, `allowed-tools`, `argument-hint`), the workflow steps (plan-then-execute, GraphQL triage flow), and the generated-from header comment.
 4. Each derived `SKILL.md` keeps its header comment naming its source doc(s) and pointing back to `/sync-plugins`.
-5. If a new convention doc has no plugin yet (rust/go/bruno), either create the plugin (manifest under `.claude-plugin/plugin.json`, skill under `skills/<name>/SKILL.md`, and an entry in `.claude-plugin/marketplace.json`) or leave it — note the decision to the user.
-6. If the set of plugins or skills changed (one added, removed, or renamed), update the plugin table in `README.md` and the structure block in `AGENTS.md` to match — they are maintained by hand and must stay in sync with `marketplace.json`.
-7. Validate the result with `claude plugin validate .` — it must pass (the two advisory `version` warnings are intentional and expected).
-8. Show the resulting `git diff` for the regenerated skills and ask the user to review before committing. Do not commit.
+5. **A rule may be derived into as many skills as need it** — that is what derivation is for, and this procedure keeps the copies in step. What must never happen is a skill carrying a rule no doc owns, or one whose source is not declared in the mapping above: an undeclared derivation is never regenerated, and that is how two skills drift apart. Skills are told apart by their data source and their action perimeter, not by which rules they restate.
+6. If a new convention doc has no plugin yet (rust/go/bruno), either create the plugin (manifest under `.claude-plugin/plugin.json`, skill under `skills/<name>/SKILL.md`, and an entry in `.claude-plugin/marketplace.json`) or leave it — note the decision to the user.
+7. If the set of plugins or skills changed (one added, removed, or renamed), update the plugin table in `README.md`, the structure block in `AGENTS.md`, the `keywords` **and** `description` in the plugin's `plugin.json`, and the plugin `description` in `.claude-plugin/marketplace.json` — all five are maintained by hand and drift silently. The two descriptions say the same thing in two files: `plugin.json` is what Claude Code shows for the installed plugin, `marketplace.json` what it shows in the listing.
+8. Validate the result with `claude plugin validate .` — it must pass (the two advisory `version` warnings are intentional and expected).
+9. Show the resulting `git diff` for the regenerated skills and ask the user to review before committing. Do not commit.
 
 ## Notes
 
