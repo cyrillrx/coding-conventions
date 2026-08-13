@@ -1,6 +1,6 @@
 {
   "name": "git-workflow",
-  "description": "Atomic Conventional Commits and PR review workflow, following this team's git conventions",
+  "description": "Atomic Conventional Commits, triaging review findings into decisions, and answering reviewer comments on a PR",
   "author": {
     "name": "cyrillrx"
   },

@@ -4,6 +4,8 @@ A review that only lists problems moves the work to the reader. This document de
 
 It applies to any finding, whatever its source: a human reviewer, an automated review tool, a linter, or a self-review before opening the PR.
 
+The grid and the overrides in [§5](#5-recommendation) cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale — the four axes apply, and the judgement is yours. This is a shared default, not an exhaustive rulebook.
+
 This document scores a finding; it never speaks to its author. How a comment is answered on a pull request — the reply, its tone, which threads get resolved — belongs to [Code Review Emojis](code-review-emojis.md).
 
 ## 1. Every finding is scored on four axes
@@ -28,7 +30,9 @@ A finding without these four axes is an observation, not a review outcome.
 
 Severity describes the **consequence of shipping**, not how annoying the code looks. A very ugly piece of code with no functional consequence is 🟡, not 🟠.
 
-Not blocking is not the same as not addressed. A 🟡 is fixed here or deferred with a trace — never dropped, because letting maintainability and conventions erode is a decision nobody meant to take. Only a 🔵 can end in ❌.
+Not blocking is not the same as not addressed. A finding that stands is fixed here or deferred with a trace — never dropped, because letting maintainability and conventions erode is a decision nobody meant to take. The 🔵 is the only severity that can be dismissed while still standing: for it alone, "not worth its cost" is a sufficient reason. Dismissing anything heavier means contesting the finding itself, not its priority — say so, and score it again.
+
+A false positive is not a severity followed by a ❌ — invalidating a finding removes its severity. The notion only exists when you triage someone else's claim: when you score your own, you do not raise what you already know to be wrong.
 
 ## 3. Impact
 
@@ -66,13 +70,13 @@ Exactly three outcomes. Each one carries a rationale — the reason the other tw
 
 ❌ is deliberately weak. It spans everything from "this is wrong" to "correct, but not worth its cost", and most of the time it is simply a comment we skip — not a verdict on the code and not a refusal. Reserve heavier wording for the rare case that earns it; the default reading of a ❌ is "we looked, we decided, we moved on".
 
-These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told. A finding that is valid but not worth its cost is a ❌ here — it is never communicated as "your comment is wrong".
+These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told. A 🔵 that is valid but not worth its cost is a ❌ here — it is never communicated as "your comment is wrong".
 
 ### Default decision grid
 
 | Severity   | Complexity S                        | Complexity M | Complexity L                                           |
 |------------|-------------------------------------|--------------|--------------------------------------------------------|
-| 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** 🕐 follow-up for the real fix |
+| 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** dedicated PR for the real fix |
 | 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer      |
 | 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)   | 🕐 Follow-up | 🕐 Follow-up                                           |
 | 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
@@ -80,8 +84,7 @@ These are dispositions of a **finding**, not replies to a **person**: they decid
 The grid is the default, not the verdict. It is overridden by:
 
 - **Out of the PR's scope** → 🕐 or ❌, never ✅. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth (see [PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)).
-- **Pre-existing, not introduced here** → 🕐 by default, whatever its severity — except 🔴, which is fixed or blocks the merge regardless of who wrote it.
-- **A 🔴 too big for this PR** → the merge is blocked and a dedicated PR is opened. It is never a 🕐.
+- **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
 - **The finding is wrong, speculative, or already handled elsewhere** → ❌.
 - **A preference you cannot justify to yourself** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score it. Reviewers owe a justification ([PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)); that duty is not a licence to dismiss them when they forget it.
 
@@ -94,10 +97,10 @@ A deferral needs **an owner and a trace**. Who provides them depends on whose ch
 Self-review, or your own PR after a review. The deferral is yours to carry, so all three exist:
 
 1. **A ticket** in whatever tracker the project actually uses. Its description carries the context: what was found, where (`file:line`), why it was deferred, and a link back to the PR.
-2. **A reference in the PR description**, under a `## Follow-ups` section, so the deferral is visible at merge time and in the merged history:
+2. **A reference in the PR description**, under the `## 🔁 Follow-ups` section of the [PR template](../.github/pull_request_template.md), so the deferral is visible at merge time and in the merged history:
 
    ```markdown
-   ## Follow-ups
+   ## 🔁 Follow-ups
 
    - [#142](https://github.com/org/repo/issues/142) — 🟠 cache has no eviction policy (deferred: needs an ADR on cache sizing)
    - PROJ-318 — 🟡 extract the pagination logic shared with `SpellListScreen`
@@ -105,7 +108,7 @@ Self-review, or your own PR after a review. The deferral is yours to carry, so a
 
 3. **A code reference** when the finding is anchored to a specific place — a `TODO(#142):` naming the ticket, per the [🕐 convention](code-review-emojis.md).
 
-Here, a 🕐 with no ticket is a ❌ that nobody dares to name. If the ticket is not going to be opened, record the honest outcome instead.
+Here, a 🕐 with no ticket is a deferral in name only. If the ticket is not going to be opened, fix the finding here or say plainly that nothing will happen — an unnamed decision is the one that erodes the codebase.
 
 ### On someone else's change — the author is the owner
 
@@ -114,7 +117,7 @@ You are reviewing, so the decision to defer is not yours to make and the tracker
 - Raise it as a 🕐 comment on the thread, scored — severity, impact, complexity — so the author can decide rather than guess. The thread itself is the trace.
 - **Offer** the ticket; never open one in the author's name without asking. If they want it, they own it — or they ask you to open it, and then you do.
 - If the author declines, that is their call and it is recorded in the thread. Do not re-litigate it, and do not open a ticket to work around the answer.
-- The exception is a 🔴: it does not become a follow-up at all, whoever wrote the code. It is fixed or it blocks the merge.
+- The exception is a 🔴 the change introduces: it does not become a follow-up at all. It is fixed, or it blocks the merge.
 
 Deferring your own finding on your own code and deferring someone else's finding on their code are different acts. Only the first one is a promise you can keep.
 
@@ -164,7 +167,7 @@ A triage produces three things, in this order.
 - **Rationale**: introduced by this PR, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 
-**An action plan**, grouped by outcome: the ordered list of fixes to apply, the follow-up tickets to open (title and body ready to submit), and the `## Follow-ups` block to append to the PR description.
+**An action plan**, grouped by outcome: the ordered list of fixes to apply, the follow-up tickets to open (title and body ready to submit), and the `## 🔁 Follow-ups` block to append to the PR description.
 
 ## 9. Non-negotiables
 

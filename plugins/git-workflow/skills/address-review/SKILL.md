@@ -72,16 +72,17 @@ For each unresolved thread, read the file at `path` around the relevant `line`, 
 
 | # | File | Comment summary | Recommendation |
 |---|------|-----------------|----------------|
-| 1 | `path:line` | one-line summary | ✅ Apply / ⚠️ Discuss / ❌ Skip |
+| 1 | `path:line` | one-line summary | ✅ Apply / 🕐 Defer / ⚠️ Discuss / ❌ Skip |
 
 **Recommendation criteria:**
 - ✅ **Apply** — valid, clear, consistent with the project's conventions, and backed by a justification or source.
+- 🕐 **Defer** — valid, but too costly or too broad for this PR. It is not applied here; it needs an owner and a trace.
 - ⚠️ **Discuss** — requires a design decision, is ambiguous, or contradicts existing conventions.
 - ❌ **Skip** — factually wrong, out of scope, already addressed, or not backed by any source or justification.
 
 Per the team's conventions, reviewers are expected to back their requests with sources (docs, articles, benchmarks). A comment that expresses personal preference without justification should be marked ❌ or ⚠️. When in doubt, consult the project's conventions (`CLAUDE.md` / `AGENTS.md` and any linked convention docs).
 
-When a ✅ comment is too costly or too broad to address in this PR, it is not simply applied: it becomes a deferred finding, and the deferral needs an owner and a trace — on the author's own PR, a ticket in the project's tracker referenced under a `## Follow-ups` section of the description. Run `/git-workflow:triage-findings` when the full severity / impact / complexity scoring is needed to decide.
+A 🕐 is never reported as applied. The deferral needs an owner and a trace — on the author's own PR, a ticket in the project's tracker referenced under the `## 🔁 Follow-ups` section of the description. Run `/git-workflow:triage-findings` when the full severity / impact / complexity scoring is needed to decide between ✅ and 🕐.
 
 **Do not invent severity, impact, or complexity levels here.** This skill decides what to say to the reviewer; `triage-findings` decides what the codebase does about it. Restating its scales from memory is how the two drift apart.
 
@@ -110,10 +111,11 @@ gh api repos/<OWNER>/<REPO>/issues/<PR_NUMBER>/comments -X POST -f body="<reply>
 
 **Reply tone per outcome:**
 - ✅ **Apply**: briefly confirm what changed (e.g. "Fixed — renamed `X` to `Y`.").
+- 🕐 **Defer**: agree, say it is not done here, and name the trace (e.g. "Agreed, but out of this PR's scope — tracked in #142."). Never phrase it as fixed.
 - ⚠️ **Discuss**: ask for clarification or a source.
 - ❌ **Skip**: explain concisely why the comment is declined, citing conventions or sources where applicable.
 
-Do not touch code for ⚠️ or ❌ threads.
+Do not touch code for 🕐, ⚠️ or ❌ threads — at most, a 🕐 leaves a `TODO(#142):` naming its ticket.
 
 ### Step 5 — Ask for git permission
 
@@ -130,7 +132,7 @@ Once the user approves:
 
 1. Stage and commit the changes using the approved message.
 2. Push to the current branch.
-3. For each ✅ thread only, resolve it via GraphQL:
+3. Resolve the ✅ threads **only**, via GraphQL. A 🕐 thread stays open: the thread is the trace of the deferral, and resolving it hides the decision.
 
 ```bash
 gh api graphql -f query='

@@ -15,6 +15,7 @@ allowed-tools:
   - Bash(git diff:*)
   - Bash(git log:*)
   - Bash(git branch --show-current:*)
+  - Bash(git symbolic-ref:*)
   - Read
   - Grep
   - Glob
@@ -49,7 +50,7 @@ The findings are already here. This skill is normally invoked straight after a c
 - review comments the user pasted in,
 - or findings you produced yourself earlier in the session.
 
-If the conversation holds no findings, **review the change first**: `git diff main...HEAD` — resolving the base branch as Step 2 describes — plus `git diff` for uncommitted work, then triage what you find. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
+If the conversation holds no findings, **review the change first**: `git diff <base>...HEAD` — resolving the base branch as Step 2 describes — plus `git diff` for uncommitted work, then triage what you find. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
 
 Do not go looking for a PR's review threads. Scoring a reviewer's comment is fine when the user hands it to you, but fetching, replying and resolving belong to `/git-workflow:address-review`. If the PR still has unresolved threads, say so and name that skill.
 
@@ -57,7 +58,9 @@ Do not go looking for a PR's review threads. Scoring a reviewer's comment is fin
 
 ### Step 2 — Establish the change's scope
 
-Read the change from git, against the branch it targets — the repository's default branch unless the project says otherwise: `git diff --stat main...HEAD`, `git log --oneline main..HEAD`. Those commands fail loudly when the guess is wrong; ask then, and never fall back to another branch name silently. Write down, for your own use:
+Read the change from git, against the branch it targets. **Resolve that branch, never assume `main`:** `git symbolic-ref --short refs/remotes/origin/HEAD` gives the remote's default branch (`origin/main`, `origin/develop`, …). If the ref is missing, or the project targets something else — a GitFlow `develop`, a release branch — **ask**. A wrong base does not fail: `git diff main...HEAD` succeeds whenever `main` exists and silently measures the wrong range, which then distorts every size and complexity estimate below.
+
+With `<base>` resolved: `git diff --stat <base>...HEAD`, `git log --oneline <base>..HEAD`. Write down, for your own use:
 
 - What the change is meant to do, and its commit type (`feat`, `fix`, `refactor`, …).
 - Its size against the 200 lines / 10 files budget — this decides how much extra fixing the diff can absorb.
@@ -90,7 +93,7 @@ Apply the four axes below to each finding, then the decision grid.
 | 🟡 **Minor**   | Maintainability or convention issue: naming, duplication, missing doc. No behavior change.       | No                |
 | 🔵 **Nit**     | Pure preference or cosmetics. Never blocking.                                                    | No                |
 
-Not blocking is not the same as not addressed. A 🟡 is fixed here or deferred with a trace — never dropped, because letting maintainability and conventions erode is a decision nobody meant to take. Only a 🔵 can end in ❌.
+Not blocking is not the same as not addressed. A finding that stands is fixed here or deferred with a trace — never dropped, because letting maintainability and conventions erode is a decision nobody meant to take. The 🔵 is the only severity that can be dismissed while still standing: for it alone, "not worth its cost" is a sufficient reason. Dismissing anything heavier means contesting the finding itself, not its priority — say so, and score it again. A false positive is not a severity followed by a ❌: invalidating a claim removes its severity.
 
 **Impact** — name the dimensions the finding actually touches, plus one line on who pays:
 
@@ -124,16 +127,17 @@ Both estimates cover the test and the verification, not just the edit. When they
 
 | Severity   | Complexity S                        | Complexity M | Complexity L                                           |
 |------------|-------------------------------------|--------------|--------------------------------------------------------|
-| 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** 🕐 follow-up for the real fix |
+| 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** dedicated PR for the real fix |
 | 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer      |
 | 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)   | 🕐 Follow-up | 🕐 Follow-up                                           |
 | 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
 
+The grid and the overrides cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale — the four axes apply, and the judgement belongs to whoever owns the code. This is a shared default, not an exhaustive rulebook.
+
 Overrides, which win over the grid:
 
 - **Out of the change's scope** → 🕐 or ❌, never ✅. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth.
-- **Pre-existing, not introduced here** → 🕐 by default, whatever its severity — except 🔴, which is fixed or blocks the merge regardless of who wrote it.
-- **A 🔴 too big for this change** → block the merge and open a dedicated PR. Never a 🕐.
+- **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
 - **Wrong, speculative, or already handled elsewhere** → ❌.
 - **A preference the user cannot justify to themselves** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score the answer. Reviewers owe a justification; that duty is not a licence to dismiss them when they forget it.
 
@@ -177,10 +181,10 @@ Once approved, in this order:
 
 1. **Apply the ✅ fixes.** Verify the project still builds and tests still pass where a command exists.
 2. **Open the 🕐 tickets** — only for the user's own change, only in the tracker identified at Step 3, and only after showing the final title and body. This skill holds no forge permissions by design, so `gh issue create` — or whatever the project's tracker needs — is prompted every time. That prompt is the feature, not the friction. **Never open a ticket in another author's name.**
-3. **Reference the follow-ups in the PR description** — append or update a `## Follow-ups` section:
+3. **Reference the follow-ups in the PR description** — append or update the `## 🔁 Follow-ups` section (the heading the PR template ships; match it exactly rather than adding a second one):
 
    ```markdown
-   ## Follow-ups
+   ## 🔁 Follow-ups
 
    - [#142](https://github.com/org/repo/issues/142) — 🟠 cache has no eviction policy (deferred: needs an ADR on cache sizing)
    - PROJ-318 — 🟡 extract the pagination logic shared with `SpellListScreen`
