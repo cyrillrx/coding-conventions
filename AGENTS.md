@@ -68,6 +68,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Every review finding gets a decision — see [code-review-triage.md](collaboration/code-review-triage.md): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale
 
 ### Documentation (`conventions/docs-conventions.md`)
+- Doc files use `lowercase-with-hyphens.md`; a name imposed by tooling keeps it (`README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, `pull_request_template.md`)
 - Sections are separated by the heading itself — no `---` horizontal rule between sections
 - Exception: `---` that carries meaning stays (YAML front matter, document separators inside code fences)
 - No hard wrap in prose — one line per paragraph, per bullet; column limits apply to code only
