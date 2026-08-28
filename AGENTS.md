@@ -23,6 +23,9 @@ conventions/
   bruno-conventions.md                 # Bruno API testing conventions
 configs/
   kotlin/.editorconfig                 # Shared ktlint configuration for Kotlin projects
+templates/
+  adr-template.md                      # Architecture Decision Record skeleton, copied into a project's docs/adr/
+  prd-template.md                      # Product Requirement Document skeleton, copied into a project's docs/prd/
 .github/
   pull_request_template.md             # PR description template, copied into other projects
 .claude-plugin/
@@ -72,6 +75,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Sections are separated by the heading itself — no `---` horizontal rule between sections
 - Exception: `---` that carries meaning stays (YAML front matter, document separators inside code fences)
 - No hard wrap in prose — one line per paragraph, per bullet; column limits apply to code only
+- ADRs and PRDs start from the skeletons in `templates/`; numbers are never reused, and a superseded document keeps its file
 
 ### Kotlin / Compose (`conventions/kmp-conventions.md`)
 - Kotlin only; Jetpack/Compose Multiplatform — no XML layouts, no View-system APIs

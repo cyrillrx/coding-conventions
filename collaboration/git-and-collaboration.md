@@ -130,6 +130,8 @@ For any change that significantly affects the data model, source format, or tech
 
 ADRs follow the naming convention `adr-###-kebab-case-title.md`. Creating the ADR in a dedicated commit (or early in the implementation PR) before the bulk of the implementation gives reviewers context and prevents costly rework.
 
+Start from [`templates/adr-template.md`](../templates/adr-template.md): Decision, Context, Rationale, Consequences, Alternatives considered. The alternatives section is the one reviewers read first — an ADR that records only the chosen option does not explain the decision.
+
 Changes that typically require an ADR include, but are not limited to:
 - Source format or schema changes
 - Data distribution format changes (JSON structure, API contracts)
