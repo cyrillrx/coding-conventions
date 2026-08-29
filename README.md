@@ -22,6 +22,13 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 - [`configs/kotlin/.editorconfig`](configs/kotlin/.editorconfig) — ktlint configuration for Kotlin projects
 - [`.github/pull_request_template.md`](.github/pull_request_template.md) — PR description template; copy it into a project's own `.github/`
 
+## Templates
+
+Document skeletons to copy into a project when writing a new one. Guidance is in HTML comments — delete them once the document is written.
+
+- [`templates/adr-template.md`](templates/adr-template.md) — Architecture Decision Record; copy to the project's `docs/adr/` as `adr-NNN-kebab-case-title.md`
+- [`templates/prd-template.md`](templates/prd-template.md) — Product Requirement Document; copy to the project's `docs/prd/` as `prd-NNN-kebab-case-title.md`
+
 ## Claude Code plugins
 
 These conventions are also published as a [Claude Code](https://claude.com/claude-code) plugin marketplace, so they can be installed as reusable skills in any project. The docs above stay the source of truth; the plugin skills are **derived** from them (regenerated with the repo-local `/sync-plugins` skill).

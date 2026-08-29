@@ -6,6 +6,20 @@
 - Exception: a file whose name is imposed by tooling keeps it as is — `README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, `.github/pull_request_template.md`. GitHub and Claude Code find them by exact name, so renaming one to fit the rule stops it from being found at all.
 - Structured documents keep their lowercase prefix: `prd-000-vision.md`, `adr-001-data-model.md`.
 
+## Structured documents
+
+Two document types recur across projects and have a shared skeleton to start from:
+
+| Type                         | Lives in    | Named              | Template                                                    |
+|------------------------------|-------------|--------------------|-------------------------------------------------------------|
+| Architecture Decision Record | `docs/adr/` | `adr-NNN-title.md` | [`templates/adr-template.md`](../templates/adr-template.md) |
+| Product Requirement Document | `docs/prd/` | `prd-NNN-title.md` | [`templates/prd-template.md`](../templates/prd-template.md) |
+
+- Numbers are assigned in order and never reused, including for a document that was withdrawn.
+- A superseded document keeps its file and its number; its status line points at the one replacing it. Rewriting or deleting it hides the reasoning that led there.
+- `prd-000` is conventionally the product vision. A feature PRD that outgrows a readable length splits into `prd-001a`, `prd-001b`, … rather than gaining sections.
+- When an ADR settles a PRD's open question, link it from the PRD instead of deleting the question.
+
 ## Section separators
 
 - Separate sections with a blank line before the heading. The heading is the separator.
