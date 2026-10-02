@@ -10,7 +10,7 @@
     {
       "name": "git-workflow",
       "source": "./plugins/git-workflow",
-      "description": "Atomic Conventional Commits, triaging review findings into decisions, and answering reviewer comments on a PR"
+      "description": "Atomic Conventional Commits, pull request descriptions kept in line with their diff, triaging review findings into decisions, and answering reviewer comments on a PR"
     },
     {
       "name": "kmp-conventions",
