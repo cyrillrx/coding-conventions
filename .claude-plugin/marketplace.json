@@ -15,7 +15,7 @@
     {
       "name": "kmp-conventions",
       "source": "./plugins/kmp-conventions",
-      "description": "Kotlin Multiplatform / Compose style and architecture patterns"
+      "description": "Points every session to this team's Kotlin Multiplatform / Compose conventions, to read before writing or reviewing Kotlin"
     },
     {
       "name": "coding-conventions",

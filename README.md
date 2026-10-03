@@ -39,7 +39,7 @@ Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 | Plugin               | Skills                                                            | What it does                                                                                                                  |
 | -------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `git-workflow`       | `/commit`, `/pull-request`, `/triage-findings`, `/address-review` | Atomic Conventional Commits; PR descriptions kept in line with their diff; review-finding triage; answering reviewer comments |
-| `kmp-conventions`    | `kmp-style` (auto-invoked)                                        | Kotlin Multiplatform / Compose style and architecture                                                                         |
+| `kmp-conventions`    | — (SessionStart hook)                                             | Points every session to the Kotlin Multiplatform / Compose conventions                                                        |
 | `coding-conventions` | — (SessionStart hook)                                             | Loads the general coding and documentation conventions into every session                                                     |
 
 ### Install in a project
