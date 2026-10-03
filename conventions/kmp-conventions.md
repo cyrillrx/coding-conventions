@@ -238,31 +238,6 @@ Name in-memory repository implementations after their **strategy**, not after th
 
 These implementations belong to the **main source set** of the data layer (e.g. `shared/core/src/commonMain/.../<feature>/data/`), not to a test source set: Compose previews depend on them too. ViewModel tests reuse these implementations rather than declaring a test double of their own.
 
-### Naming constants
-
-#### Arguments of Activities/Fragments
-
-Activity (and Fragment) argument names should be **prefixed** by `ARG_`, e.g. `ARG_PRODUCT_TAG`:
-
-```kotlin
-companion object {
-    private const val ARG_MIN_PHOTO_COUNT = "min_photo_count"
-    private const val ARG_SELECTION_ID = "selection_id"
-}
-```
-
-#### Keys of key/value pairs
-
-Constants for keys must be **prefixed** by `KEY_` (this does not apply to Activity/Fragment arguments), e.g. `KEY_PRODUCT_TAG`. Group and prefix related keys together:
-
-```kotlin
-const val KEY_PRODUCT_TAG_MAGNET = "product_tag_magnet"
-const val KEY_PRODUCT_TAG_DIBOND = "product_tag_dibond"
-
-const val KEY_ACTION_ADD = "action_add"
-const val KEY_ACTION_DELETE = "action_delete"
-```
-
 ### Naming image resources
 
 - **Icons** (mono-color, defined in the design system): prefixed by `ic_` and suffixed by their size in dp. `ic_activity_24` is the `activity` icon at 24×24. Mono-color icons can be tinted at use.
