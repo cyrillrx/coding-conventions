@@ -101,12 +101,14 @@ Do not include AI-generated attribution anywhere in the history or on the platfo
 
 All commit conventions above also apply to Pull Request titles and descriptions. The title and description must be written in **English**.
 
-**When squashing** commits before merging, do not leave the working commit list as the resulting commit description. Either copy the PR description into the resulting commit's body or rewrite it.
+**When squashing** commits before merging, do not leave the working commit list as the resulting commit description. Copy the PR's **Description section** into the resulting commit's body — only that section: the other sections and the closing `Closes #N` lines stay on the PR.
 
 ### Authors
 
 - Keep the diff under 200 lines and 10 files when possible. For mechanical changes (renaming, moving files), exceptions are acceptable.
-- Write the description from the [PR template](../.github/pull_request_template.md): explain the *why*, delete the sections that don't apply, and tick only what the diff proves. Copy the template into a project's own `.github/pull_request_template.md` so GitHub pre-fills it.
+- Write the description from the [PR template](../.github/pull_request_template.md): delete the sections that don't apply, and tick only what the diff proves. Copy the template into a project's own `.github/pull_request_template.md` so GitHub pre-fills it.
+- Keep the Description to what the squash commit needs: the problem, then what the PR changes, in two short paragraphs at most. Leave out how you got there, reviewer guidance and diff statistics: guidance for the reviewer goes in **Review notes**, the investigation in the linked issue, an architecture decision in an [ADR](#9-architecture-decision-records-adrs).
+- Close issues with `Closes #N` lines at the very end of the description, after the checklist.
 - Proofread your own PR before submitting — check diff, description, and comments.
 - Assign reviewers directly on the hosting platform.
 

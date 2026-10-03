@@ -1,8 +1,11 @@
 ## 📝 Description
 
 <!-- PR title follows Conventional Commits: <type>(<scope>): <subject>. See collaboration/git-and-collaboration.md. -->
-<!-- What does this PR do, and why? The diff already shows the what — explain the why. -->
-<!-- Link the issues it closes: Closes #123. -->
+<!-- Becomes the squash commit body, so write it like one: the problem, then what this PR changes — the diff shows the details. Two short paragraphs at most. Reasoning history and reviewer guidance go elsewhere, not here. -->
+
+## 🔍 Review notes
+
+<!-- Optional, not copied into the commit: where to start, what is mechanical, what deserves attention, alternatives ruled out. Investigation history belongs in the linked issue. Delete this section if not relevant. -->
 
 ## 🖼️ Media
 
@@ -29,3 +32,7 @@
 - [ ] No sensitive data (secrets, credentials, tokens) committed
 - [ ] Documentation updated if public APIs or architecture decisions changed
 - [ ] CI is green
+
+Closes #
+
+<!-- The issues this PR closes, one `Closes #N` each. Delete the line if there are none. -->
