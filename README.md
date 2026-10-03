@@ -36,10 +36,11 @@ These conventions are also published as a [Claude Code](https://claude.com/claud
 
 Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 
-| Plugin            | Skills                                           | What it does                                                                    |
-| ----------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- |
-| `git-workflow`    | `/commit`, `/triage-findings`, `/address-review` | Atomic Conventional Commits; review-finding triage; answering reviewer comments |
-| `kmp-conventions` | `kmp-style` (auto-invoked)                       | Kotlin Multiplatform / Compose style and architecture                           |
+| Plugin               | Skills                                           | What it does                                                                    |
+| -------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- |
+| `git-workflow`       | `/commit`, `/triage-findings`, `/address-review` | Atomic Conventional Commits; review-finding triage; answering reviewer comments |
+| `kmp-conventions`    | `kmp-style` (auto-invoked)                       | Kotlin Multiplatform / Compose style and architecture                           |
+| `coding-conventions` | — (SessionStart hook)                            | Loads the general coding and documentation conventions into every session       |
 
 ### Install in a project
 
@@ -61,7 +62,8 @@ For a team project, commit this to the project's `.claude/settings.json` so the 
   },
   "enabledPlugins": {
     "git-workflow@cyrillrx-conventions": true,
-    "kmp-conventions@cyrillrx-conventions": true
+    "kmp-conventions@cyrillrx-conventions": true,
+    "coding-conventions@cyrillrx-conventions": true
   }
 }
 ```
