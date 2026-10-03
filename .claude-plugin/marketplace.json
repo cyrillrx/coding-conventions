@@ -20,7 +20,7 @@
     {
       "name": "coding-conventions",
       "source": "./plugins/coding-conventions",
-      "description": "Loads this team's general coding conventions into every session, so they apply without being asked for"
+      "description": "Loads this team's general coding and documentation conventions into every session, so they apply without being asked for"
     }
   ]
 }

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/conventions/coding-conventions.md\""
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}\"/conventions/*.md"
           }
         ]
       }
