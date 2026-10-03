@@ -37,12 +37,12 @@ When a convention doc changes, the derived skills must be regenerated so the plu
 | _not yet created_ — `conventions/go-conventions.md`                           | `plugins/go-conventions/` (to create)                          | —                                                                                                                                                                                                                     |
 | _not yet created_ — `conventions/bruno-conventions.md`                        | `plugins/bruno-conventions/` (to create)                       | —                                                                                                                                                                                                                     |
 
-`conventions/docs-conventions.md` has no row on purpose — step 2 of the procedure covers it.
+Beyond its verbatim copy above, `conventions/docs-conventions.md` governs every Markdown file in the repository — step 2 of the procedure covers that.
 
 ## Procedure
 
 1. Run `git diff` (and `git status`) to see which convention docs changed since the last sync.
-2. For each changed source doc, open the derived skill(s) from the mapping above. If `conventions/docs-conventions.md` changed, also re-check every Markdown file in the repository (`git ls-files '*.md'`) against its current rules, and fix what no longer complies. Its rules govern how every `.md` file is written, derived or not — repo-local skills, `AGENTS.md` and `README.md` included — so no single skill derives from it.
+2. For each changed source doc, open the derived skill(s) from the mapping above. If `conventions/docs-conventions.md` changed, also re-check every Markdown file in the repository (`git ls-files '*.md'`) against its current rules, and fix what no longer complies. Its rules govern how every `.md` file is written, derived or not — repo-local skills, `AGENTS.md` and `README.md` included — so its mapping row alone does not cover it.
 3. Regenerate **only the derived content** — the convention rules, format tables, and knowledge body — to match the current docs. **Preserve the skill-specific mechanics** that are not in the docs: the frontmatter (`name`, `description`, `allowed-tools`, `argument-hint`), the workflow steps (plan-then-execute, GraphQL triage flow), and the generated-from header comment.
 4. Each derived `SKILL.md` keeps its header comment naming its source doc(s) and pointing back to `/sync-plugins`.
 5. **A rule may be derived into as many skills as need it** — that is what derivation is for, and this procedure keeps the copies in step. What must never happen is a skill carrying a rule no doc owns, or one whose source is not declared in the mapping above: an undeclared derivation is never regenerated, and that is how two skills drift apart. Skills are told apart by their data source and their action perimeter, not by which rules they restate.
