@@ -1,6 +1,6 @@
 {
   "name": "kmp-conventions",
-  "description": "Points every session to this team's Kotlin Multiplatform / Compose conventions, to read before writing or reviewing Kotlin",
+  "description": "Points every session to this team's Kotlin Multiplatform / Compose conventions, to read before writing or reviewing Kotlin. Pair it with coding-conventions for the general Clean Code rules",
   "author": {
     "name": "cyrillrx"
   },
