@@ -103,7 +103,7 @@ All commit conventions above also apply to Pull Request titles and descriptions.
 
 **When squashing** commits before merging, do not leave the working commit list as the resulting commit description. Copy the PR's **Description section** into the resulting commit's body — only that section: the other sections and the closing `Closes #N` lines stay on the PR.
 
-Because that text becomes the commit message, it has to stay true as the branch moves. [Pull Request Descriptions](pull-request-descriptions.md) covers how to keep a title and a description in line with their diff.
+Because that section becomes the commit body, it has to stay true as the branch moves. [Pull Request Descriptions](pull-request-descriptions.md) covers how to keep a title and a description in line with their diff.
 
 ### Authors
 

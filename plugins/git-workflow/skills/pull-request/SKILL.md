@@ -72,6 +72,8 @@ Three dots for the diff: `..` would also show what the base gained since the bra
 
 Note the size against the 200 lines / 10 files budget. Over it, the description must earn the exception — a mechanical rename, a generated file — or the PR wants splitting, which is the first line of the checklist.
 
+**Check whether the base itself moved.** `git log --oneline <merge-base>..origin/<base>` shows what the base gained since the branch left it. A merge into the base can change the PR template or the conventions a description is written against, leaving a text that is accurate about its diff and wrong about the convention — a drift neither direction of Step 4 detects. When the base moved, re-read the template and the conventions before judging the prose.
+
 ### Step 3 — Read what exists
 
 In **refresh** mode, read the current description before writing anything:
@@ -82,7 +84,7 @@ gh pr view <number> --json title,body --jq '.body'
 
 Never regenerate a description from the diff alone. The prose holds decisions the diff cannot show — why an approach was chosen, what a reviewer already asked and got answered. Rewriting from scratch throws those away and asks the reviewer to re-read a text they had already approved. Splice; do not replace.
 
-In **create** mode, read the project's `.github/pull_request_template.md`. Use the project's copy, not a remembered one — projects adapt it. If there is none, fall back to the sections of the shared template: Description, Media, Follow-ups, Considered and not addressed, Checklist.
+In **create** mode, read the project's `.github/pull_request_template.md`. Use the project's copy, not a remembered one — projects adapt it, and the shared one changes. If there is none, fall back to the sections of the shared template: Description, Review notes, Media, Follow-ups, Considered and not addressed, Checklist, then the closing `Closes #N` lines.
 
 Also read, in both modes, `AGENTS.md` / `CLAUDE.md` and any convention doc they point at. A project may impose its own commit scopes, a label convention for agent-related changes, or a language rule.
 
@@ -96,11 +98,14 @@ This is the step that exists. Run it in both directions and record the result; d
 
 Then re-examine each section for a lifecycle change:
 
+- **📝 Description** — still two short paragraphs at most. This is the only section the squash keeps, so it is the one to weigh hardest. A refresh is where the budget is lost: each commit invites one more sentence. What no longer fits moves to **Review notes**, to the linked issue or to an ADR — it is relocated, not deleted.
+- **🔍 Review notes** — guidance for a state the branch has left is worse than none. A "start with the parser" pointing at a file that was since renamed sends the reviewer looking for it.
 - **🔁 Follow-ups** — verify each referenced issue exists and is open (`gh issue view <n> --json state`). Drop the ones fixed in the end; add the deferrals decided since. A follow-up with no issue is not a follow-up.
 - **🤔 Considered and not addressed** — a suggestion that was eventually applied leaves this section.
 - **🖼️ Media** — a screenshot of a screen the branch has since changed is worse than none. Flag it for the author; you cannot retake it.
 - **✅ Checklist** — tick only what the diff proves. Annotate the inapplicable as `(N/A, <reason>)`. Verify "CI is green" with `gh pr checks` rather than assuming it. **Never tick "The author has proofread the PR"** — that box is the author's.
-- **Any section the project added** to explain a transient problem — a failing quality gate, a known regression, a workaround — must be removed once the problem is gone. It was addressed to reviewers of a state that no longer exists, and the squash would carry it into the permanent history as a live caveat.
+- **`Closes #N`** — the last lines, after the checklist. Check each one still describes what the branch does: merging a PR that kept a stale line silently closes work that is still open.
+- **Any section the project added** to explain a transient problem — a failing quality gate, a known regression, a workaround — must be removed once the problem is gone. It was addressed to reviewers of a state that no longer exists.
 
 ### Step 5 — Check the title
 
