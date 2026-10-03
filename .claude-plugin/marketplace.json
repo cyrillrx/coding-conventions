@@ -16,6 +16,11 @@
       "name": "kmp-conventions",
       "source": "./plugins/kmp-conventions",
       "description": "Kotlin Multiplatform / Compose style and architecture patterns"
+    },
+    {
+      "name": "coding-conventions",
+      "source": "./plugins/coding-conventions",
+      "description": "Loads this team's general coding conventions into every session, so they apply without being asked for"
     }
   ]
 }

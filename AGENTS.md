@@ -34,6 +34,7 @@ templates/
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
   git-workflow/                        # /commit, /pr, /triage-findings, /address-review
   kmp-conventions/                     # kmp-style knowledge skill
+  coding-conventions/                  # SessionStart hook injecting a copy of conventions/coding-conventions.md
 .claude/skills/
   sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs
 ```
