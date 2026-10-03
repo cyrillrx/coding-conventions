@@ -12,8 +12,8 @@ Two document types recur across projects and have a shared skeleton to start fro
 
 | Type                         | Lives in    | Named              | Template                                                    |
 |------------------------------|-------------|--------------------|-------------------------------------------------------------|
-| Architecture Decision Record | `docs/adr/` | `adr-NNN-title.md` | [`templates/adr-template.md`](../templates/adr-template.md) |
-| Product Requirement Document | `docs/prd/` | `prd-NNN-title.md` | [`templates/prd-template.md`](../templates/prd-template.md) |
+| Architecture Decision Record | `docs/adr/` | `adr-NNN-title.md` | [`templates/adr-template.md`](https://github.com/cyrillrx/coding-conventions/blob/main/templates/adr-template.md) |
+| Product Requirement Document | `docs/prd/` | `prd-NNN-title.md` | [`templates/prd-template.md`](https://github.com/cyrillrx/coding-conventions/blob/main/templates/prd-template.md) |
 
 - Numbers are assigned in order and never reused, including for a document that was withdrawn.
 - A superseded document keeps its file and its number; its status line points at the one replacing it. Rewriting or deleting it hides the reasoning that led there.
