@@ -32,7 +32,7 @@ templates/
 .claude-plugin/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
-  git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review
+  git-workflow/                        # /commit, /pr, /triage-findings, /address-review
   kmp-conventions/                     # kmp-style knowledge skill
 .claude/skills/
   sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs

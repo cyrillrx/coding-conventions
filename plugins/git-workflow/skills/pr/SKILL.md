@@ -1,5 +1,5 @@
 ---
-name: pull-request
+name: pr
 description: >-
   Open a pull request, or bring an existing one's title and description back in line with its diff.
   Reconciles both ways — every claim in the prose against the diff, and every change in the diff
