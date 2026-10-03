@@ -14,6 +14,7 @@ collaboration/
   git-and-collaboration.md             # Conventional Commits, branching, PR etiquette, ADRs
   code-review-emojis.md                # Emoji legend for code review comments
   code-review-triage.md                # Severity/impact/complexity grid, fix-here vs follow-up vs no-action
+  pull-request-descriptions.md         # Keeping a PR title and description true to its diff as the branch moves
 conventions/
   coding-conventions.md                # Clean Code principles (all languages)
   docs-conventions.md                  # Documentation file naming, section separators, line wrapping, Markdown tables
@@ -31,7 +32,7 @@ templates/
 .claude-plugin/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
-  git-workflow/                        # /commit, /triage-findings, /address-review
+  git-workflow/                        # /commit, /pr, /triage-findings, /address-review
   kmp-conventions/                     # kmp-style knowledge skill
 .claude/skills/
   sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs
