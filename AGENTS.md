@@ -12,7 +12,7 @@ Documentation-only repository containing coding conventions and collaboration gu
 README.md                              # Index linking to all documents
 collaboration/
   git-and-collaboration.md             # Conventional Commits, branching, PR etiquette, ADRs
-  code-review-emojis.md                # Emoji legend for code review comments
+  code-review-comments.md              # Emoji legend for review comments, and the protocol for answering them
   code-review-triage.md                # Severity/impact/complexity grid, fix-here vs follow-up vs no-action
   pull-request-descriptions.md         # Keeping a PR title and description true to its diff as the branch moves
 conventions/
@@ -71,7 +71,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - PRs: ≤200 lines, ≤10 files; exceptions for mechanical changes
 - Reviewers must be constructive and back comments with sources
 - Trunk-based development; short-lived feature branches named after commit types
-- Use [code-review-emojis.md](collaboration/code-review-emojis.md) to signal blocking vs. non-blocking comments
+- Use [code-review-comments.md](collaboration/code-review-comments.md) to signal blocking vs. non-blocking comments; every comment gets a reply, and a request with no stated reason is discussed, never dismissed
 - Every review finding gets a decision — see [code-review-triage.md](collaboration/code-review-triage.md): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale
 
 ### Documentation (`conventions/docs-conventions.md`)

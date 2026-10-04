@@ -5,7 +5,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 ## Collaboration
 
 - [Git & Collaboration](collaboration/git-and-collaboration.md) — Conventional Commits, branching, PR etiquette, ADRs
-- [Code Review Emojis](collaboration/code-review-emojis.md) — emoji legend for review comments
+- [Code Review Comments](collaboration/code-review-comments.md) — emoji legend for review comments, and how to answer them
 - [Code Review Triage](collaboration/code-review-triage.md) — turning findings into decisions: severity, impact, complexity, recommendation
 - [Pull Request Descriptions](collaboration/pull-request-descriptions.md) — keeping a title and description true to the diff as the branch moves
 
