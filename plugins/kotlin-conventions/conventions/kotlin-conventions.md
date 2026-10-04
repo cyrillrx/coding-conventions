@@ -74,7 +74,7 @@ class MyTestCase {
 }
 ```
 
-A backtick name must not contain a comma: Kotlin/Native rejects it (`Name contains illegal characters: ","`), while `jvmTest` compiles and passes without a word. Only a full build that compiles the iOS test targets catches it, minutes later or on CI. Reformulate rather than punctuate: `reads the clock once so it is never redeemed before it was created`. Apostrophes are fine.
+A backtick name must not contain a comma: Kotlin/Native rejects it (`Name contains illegal characters: ","`), while `jvmTest` compiles and passes without a word. Only a full build that compiles the Kotlin/Native test targets (iOS, macOS, …) catches it, minutes later or on CI. Reformulate rather than punctuate: `reads the clock once so it is never redeemed before it was created`. Apostrophes are fine.
 
 ### Name call arguments
 
