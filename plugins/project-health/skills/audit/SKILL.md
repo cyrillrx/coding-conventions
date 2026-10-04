@@ -73,7 +73,7 @@ The audit reads **one pinned commit**: the tip of the default branch above, `<sh
 - **Consumers.** The consumer projects are the arguments, as local paths or `owner/repo`. Without any, the Consumers section reads "Not assessed: no consumer project was given". Never search for consumers, never guess them.
 - **Previous audit.** When a `docs/audit-*.md` exists, at the pinned revision or in the working tree, read the latest one by date: its finding IDs, its grades and its grid version feed Step 3. A report that was never pushed still counts, or its IDs would be reused. Previous reports are the one exception to the pinned commit: they are the audit's history, not the audited code.
 
-Then **always** show the scope — each module included, excluded or attached, with its reason — and the cost: five subagents each read a large part of the repository. Wait for the user to confirm or adjust it. A module they leave out is graded `—`, "not assessed".
+Then **always** show the scope — each module included, excluded or attached, with its reason — and the cost: five subagents each read a large part of the repository. Say that the subagents do not inherit this skill's permissions, so each of their `git cat-file -p` and `git ls-tree` calls is prompted, hundreds on a medium project, and denied outright in a mode that cannot prompt. Offer the one-time fix: add `Bash(git cat-file -p:*)` and `Bash(git ls-tree:*)` to `permissions.allow` in the project's or the user's Claude Code settings. Wait for the user to confirm or adjust it. A module they leave out is graded `—`, "not assessed".
 
 ### Step 2 — Fan out, five subagents
 
