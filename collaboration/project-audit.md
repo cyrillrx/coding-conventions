@@ -113,7 +113,7 @@ The verdict line also states the total effort, in person-days.
 
 ## 8. Following a project over time
 
-- A report is written to `docs/audit-YYYY-MM-DD.md` in the audited project. The previous audit is the latest such file. When the working tree is not on the default branch, or holds uncommitted changes, the person running the audit chooses where the report goes, so it never lands in unrelated work.
+- A report is written to `docs/audit-YYYY-MM-DD.md` in the audited project. The previous audit is the latest such file, whether it is already on the default branch or still local: a report that was never pushed still holds IDs that must not be reused, so previous reports are the one thing read outside the pinned commit. When the working tree is not on the default branch, or holds uncommitted changes, the person running the audit chooses where the report goes, so it never lands in unrelated work.
 - When a previous audit exists, the report opens with its progress: both grade tables side by side, then the finding IDs fixed, still open, and new.
 - When the grid version changed since the previous audit, the previous grades are recomputed with the current grid from that report's findings, so the comparison holds.
 - A previous audit with no grid, or whose findings name no module, cannot be regraded. Its grades are marked not comparable, and only its findings are compared: fixed, still open, or corrected.

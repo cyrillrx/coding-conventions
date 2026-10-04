@@ -24,8 +24,9 @@ allowed-tools:
   - Bash(git ls-tree:*)
   - Bash(git grep:*)
   - Bash(git rev-parse:*)
-  - Bash(git branch:*)
-  - Bash(git symbolic-ref:*)
+  - Bash(git ls-files:*)
+  - Bash(git branch --show-current)
+  - Bash(git symbolic-ref --short refs/remotes/origin/HEAD)
 ---
 
 <!--
@@ -37,12 +38,13 @@ referenced from collaboration/code-review-triage.md, and the obsolescence refere
 
 ## Context
 
-- Default branch: !`git symbolic-ref --short refs/remotes/origin/HEAD`
-- Audited revision (tip of the default branch, as last fetched): !`git log -1 --format='%h (%cs)' refs/remotes/origin/HEAD`
+- Default branch, as its remote-tracking ref: !`git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
+- Audited revision (tip of the default branch, as last fetched): !`git log -1 --format='%h (%cs)' refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
 - Current branch: !`git branch --show-current`
 - Uncommitted changes: !`git status --short`
-- Build files at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD | grep -E '(^|/)(settings\.gradle\.kts|build\.gradle\.kts|Cargo\.toml|go\.mod|bruno\.json)$'`
-- Previous audits at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD docs/ | grep -E '^docs/audit-.*\.md$'`
+- Build files at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD 2>/dev/null | grep -E '(^|/)(settings\.gradle\.kts|build\.gradle\.kts|Cargo\.toml|go\.mod|bruno\.json)$' || echo "none"`
+- Previous audits at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD docs/ 2>/dev/null | grep -E '^docs/audit-.*\.md$' || echo "none"`
+- Previous audits in the working tree, committed or not: !`git ls-files --cached --others --exclude-standard 'docs/audit-*.md' 2>/dev/null | grep . || echo "none"`
 - Consumer projects given: $ARGUMENTS
 
 ## Your task
@@ -51,7 +53,7 @@ Audit the project in the current directory and write the result to `docs/audit-Y
 
 ### Step 0 — Pin the revision
 
-The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit — `git show <sha>:<path>`, `git ls-tree -r <sha>`, `git grep <pattern> <sha>`, `git log <sha>` — never from the working tree, which may sit on another branch or change while the audit runs. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself.
+The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit — `git show <sha>:<path>`, `git ls-tree -r <sha>`, `git grep <pattern> <sha>`, `git log <sha>` — never from the working tree, which may sit on another branch or change while the audit runs. If the default branch reads "unresolved", ask the user to run `git remote set-head origin --auto`, or to name the branch to audit. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself.
 
 ### Step 1 — Frame the scope, and confirm it
 
@@ -65,9 +67,9 @@ The audit reads **one pinned commit**: the tip of the default branch above, `<sh
 | Sample or demo apps (`sample/`, `demo/`)                       | Graded on Security and on Dependencies and obsolescence only   |
 | Dedicated test modules                                         | Attached to the module they test                               |
 
-- **Per-stack checklists.** When `checklists/<stack>.md` exists next to this skill, hand it to the subagents with the common base. None ships yet: they will be derived from `conventions/<stack>-conventions.md` through `/sync-plugins`. Until then, the subagents read that convention doc from GitHub directly, and the report says the stack checklist was not applied.
+- **Per-stack checklists.** When `checklists/<stack>.md` exists next to this skill, hand it to the subagents with the common base. None ships yet: they will be derived from `conventions/<stack>-conventions.md` through `/sync-plugins`. Until then, the subagents read that convention doc from GitHub directly, and the report says the stack checklist was not applied. A Kotlin module reads `kotlin-conventions.md`, and `compose-conventions.md` as well when it uses Compose.
 - **Consumers.** The consumer projects are the arguments, as local paths or `owner/repo`. Without any, the Consumers section reads "Not assessed: no consumer project was given". Never search for consumers, never guess them.
-- **Previous audit.** When a `docs/audit-*.md` exists, read the latest one: its finding IDs, its grades and its grid version feed Step 3.
+- **Previous audit.** When a `docs/audit-*.md` exists, at the pinned revision or in the working tree, read the latest one by date: its finding IDs, its grades and its grid version feed Step 3. A report that was never pushed still counts, or its IDs would be reused. Previous reports are the one exception to the pinned commit: they are the audit's history, not the audited code.
 
 Then **always** show the scope — each module included, excluded or attached, with its reason — and the cost: five subagents each read a large part of the repository. Wait for the user to confirm or adjust it. A module they leave out is graded `—`, "not assessed".
 
@@ -88,7 +90,7 @@ Launch the five subagents below in parallel, each with the `Explore` type, which
 | Build, CI and docs       | Build and CI, Docs and conventions | Build configuration and its deprecations, targets, publishing and signing, CI workflows and what they check, release process. README and module docs, doc comments, stale files, git history against Conventional Commits, ADRs, formatter config, against [coding-conventions](https://github.com/cyrillrx/coding-conventions) and the stack's convention doc. |
 | Dependencies and context | Dependencies and obsolescence      | Every toolchain and dependency version against its latest stable release, with the release page as source. Deprecated, end-of-life or abandoned SDKs. Each consumer given: targets, toolchain, what it would need. Gaps to the market's reference libraries. |
 
-Only the dependencies and context subagent searches the web. The security and the build, CI and docs subagents may read the forge's repository settings with read-only `gh api` calls — alerts, rulesets, branch protection — and mark those facts as today's state, not the commit's. Its obsolescence reference is the "latest stable" line of each stack's convention doc — [Kotlin](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md), [Go](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/go-conventions.md), [Rust](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/rust-conventions.md). Market gaps and consumer needs are **reported, not graded**: each market comparison cites its source and carries a "verify" marker.
+Only the dependencies and context subagent searches the web; every subagent may fetch the `cyrillrx/coding-conventions` docs it needs. The dependencies subagent's obsolescence reference is the "latest stable" line of each stack's convention doc — [Kotlin](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md), [Go](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/go-conventions.md), [Rust](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/rust-conventions.md). The security and the build, CI and docs subagents may read the forge's repository settings with read-only `gh api` calls — alerts, rulesets, branch protection — and mark those facts as today's state, not the commit's. Market gaps and consumer needs are **reported, not graded**: each market comparison cites its source and carries a "verify" marker.
 
 ### Step 3 — Identify and grade
 
@@ -139,7 +141,7 @@ The cells are the modules × Code, Architecture, Tests, Dependencies and obsoles
 
 ### Step 4 — Write the report
 
-When the current branch is not the default branch, or there are uncommitted changes, ask the user where to write the report rather than adding it to unrelated work. Otherwise write `docs/audit-YYYY-MM-DD.md` from the template below, in English, following the [documentation conventions](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/docs-conventions.md): no hard wrap, no `---` between sections, aligned tables. Delete the HTML comments and any section that does not apply, except Consumers, which says "Not assessed" instead. If the file already exists, ask before overwriting it.
+The default branch is the remote-tracking ref above without its `origin/` prefix: `origin/main` is `main`. When the current branch is not the default branch, or there are uncommitted changes, ask the user where to write the report rather than adding it to unrelated work. Otherwise write `docs/audit-YYYY-MM-DD.md` from the template below, in English, following the [documentation conventions](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/docs-conventions.md): no hard wrap, no `---` between sections, aligned tables. Delete the HTML comments and any section that does not apply, except Consumers, which says "Not assessed" instead. If the file already exists, ask before overwriting it.
 
 ```markdown
 # Project Audit — YYYY-MM-DD
@@ -210,7 +212,7 @@ Summarise the verdict, the worst cells and the total effort in a few lines, and 
 - The report is the only write. No fix, no commit, no branch, no ticket, no checkout, no fetch.
 - The scope is always confirmed before the fan-out.
 - Static by default: nothing is built or run without the user's consent.
-- Every file is read at the pinned commit, never from the working tree.
+- Every file is read at the pinned commit, never from the working tree — previous audit reports excepted.
 - One fix is one finding, filed where its fix is made, with a stable ID and its evidence. You set the severity.
 - Consumers are given, never guessed. Market gaps and consumer needs are reported, never graded.
 - Grades follow Grid v1 exactly; the verdict follows the worst cell, never a mean.
