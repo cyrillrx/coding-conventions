@@ -150,7 +150,7 @@ When a ViewModel must navigate **after async work** (e.g. save before navigate),
 - **State Hoisting**: Hoist state to the lowest common parent. Composables should be as stateless as possible.
 - **Previews**: Write `@Preview` functions for all UI components. Use `androidx.compose.ui.tooling.preview.Preview` from the Multiplatform `ui-tooling-preview` module.
 - **Resources**: Use the generated KMP resources (`Res.string.xxx`, `Res.drawable.xxx`).
-- **Apostrophes in Compose resources**: Write them plain (`J'ai un code`), never escaped: unlike Android resources, a `strings.xml` under `composeResources/` keeps the backslash of `\'` and shows it on screen. Nothing warns — the build stays green, and only the rendered screen, or the base64 in `build/generated/compose/resourceGenerator/preparedResources/**/values-*/strings.*.cvr`, shows it.
+- **Apostrophes in Compose resources**: Write them plain (`J'ai un code`), never escaped: unlike Android resources, a `strings.xml` under `composeResources/` keeps the backslash of `\'` and shows it on screen. Nothing warns — the build stays green, and only the rendered screen, or the base64 in `build/generated/compose/resourceGenerator/preparedResources/**/values*/strings.*.cvr`, shows it.
 
 ### List state
 
