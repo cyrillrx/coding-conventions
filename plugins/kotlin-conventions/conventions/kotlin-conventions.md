@@ -120,7 +120,7 @@ These implementations belong to the **main source set** of the data layer (e.g. 
 
 ## Formatting
 
-Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/kotlin/.editorconfig`](https://github.com/cyrillrx/coding-conventions/blob/main/configs/kotlin/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
+Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/.editorconfig`](https://github.com/cyrillrx/coding-conventions/blob/main/configs/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
 
 The rules below describe what that configuration enforces, for reference.
 

@@ -24,7 +24,7 @@ conventions/
   go-conventions.md                    # Go backend conventions
   bruno-conventions.md                 # Bruno API testing conventions
 configs/
-  kotlin/.editorconfig                 # Shared ktlint configuration for Kotlin projects
+  .editorconfig                        # Shared editor settings for every file, plus the ktlint configuration for Kotlin
 templates/
   adr-template.md                      # Architecture Decision Record skeleton, copied into a project's docs/adr/
   prd-template.md                      # Product Requirement Document skeleton, copied into a project's docs/prd/
@@ -86,7 +86,7 @@ Use `git mv` for any file rename or move, to preserve history.
 ### Kotlin / Compose (`conventions/kotlin-conventions.md`, `conventions/compose-conventions.md`)
 - Kotlin only; Jetpack/Compose Multiplatform — no XML layouts, no View-system APIs
 - MVVM + Unidirectional Data Flow: `StateFlow` for state, `SharedFlow` (one-shot) for events
-- Formatting 100% delegated to ktlint via `configs/kotlin/.editorconfig` (4-space indent, 120 cols, trailing commas)
+- Formatting 100% delegated to ktlint via `configs/.editorconfig` (4-space indent, 120 cols, trailing commas)
 - Prefer early returns over deep nesting; prefer affirmative conditions
 - Image resources: `ic_` prefix + size suffix for icons, `img_` prefix + size suffix for multicolor images
 

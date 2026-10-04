@@ -21,7 +21,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 
 ## Shared configs
 
-- [`configs/kotlin/.editorconfig`](configs/kotlin/.editorconfig) — ktlint configuration for Kotlin projects
+- [`configs/.editorconfig`](configs/.editorconfig) — editor settings for every project (UTF-8, LF, final newline, no trailing whitespace), plus the ktlint configuration for Kotlin; copy it to the project root
 - [`.github/pull_request_template.md`](.github/pull_request_template.md) — PR description template; copy it into a project's own `.github/`
 
 ## Templates
