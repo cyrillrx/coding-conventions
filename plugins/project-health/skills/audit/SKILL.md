@@ -9,8 +9,9 @@ argument-hint: "[consumer-project ...]"
 disable-model-invocation: true
 # Read-only on the audited project. Write is left out on purpose: the report is the one write,
 # and its prompt is the check that nothing else gets written. Building, running the tests and any
-# forge call are prompted too. Subagents do not inherit this list: they run as Explore, which
-# cannot edit, under the session's own permissions.
+# forge call are prompted too. Subagents do not inherit this list: they run as this plugin's
+# auditor agent, which has no Edit or Write tool, and keeps Bash for git, under the session's own
+# permissions.
 allowed-tools:
   - Read
   - Grep
@@ -75,7 +76,7 @@ Then **always** show the scope — each module included, excluded or attached, w
 
 ### Step 2 — Fan out, five subagents
 
-Launch the five subagents below in parallel, each with the `Explore` type, which can read and search the web but not edit. Ask each for a very thorough pass over the whole scope. Each one receives the project root, the confirmed scope, the detected stacks, its checklist below, any per-stack checklist, and these rules:
+Launch the five subagents below in parallel, each with the `project-health:auditor` type: it reads whole files rather than excerpts, and cannot edit. Never use `Explore` here — it locates code, it does not review it. Ask each for a very thorough pass over the whole scope. Each one receives the project root, the confirmed scope, the detected stacks, its checklist below, any per-stack checklist, and these rules:
 
 - Read only. Do not edit, build, run tests, or install anything.
 - Read every file at the pinned commit with `git show <sha>:<path>`, never from the working tree.
