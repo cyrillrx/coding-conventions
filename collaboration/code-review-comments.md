@@ -1,6 +1,6 @@
-# 📘 Code Review Emoji Guide
+# 📘 Code Review Comments
 
-A simple emoji legend to help convey intention and added meaning in code review comments.
+How a review comment is written so its intent is clear, and how it is answered. The emoji legend below is for the reviewer; [Responding to a comment](#responding-to-a-comment) is for the author.
 
 > ~~A picture is worth 1,000 words.~~ _An emoji is worth 20 words._
 
@@ -45,6 +45,38 @@ Prepend comments with the appropriate emoji to convey the meaning associated wit
 > 💭🕐 I've been meaning to explore library X which claims to solve this exact problem. That could be worth exploring and peeking under the hood to see what concerns they are specifically addressing.
 
 > 🕐 We really need to invest some time in refactoring out our use of this deprecated library. _Issue created: [LINK TO ISSUE]_.
+
+## Reading an emoji
+
+The emoji is an **intent** signal: it tells the author what the reviewer expects, and nothing more. It never sets the severity of a finding nor the response it gets — a 🔧 can be factually wrong, a 💭 can uncover a real crash, and a comment with no emoji at all (an external reviewer, a bot) is read the same way. Scoring a finding belongs to [Code Review Triage](code-review-triage.md#7-coming-from-a-review-comment).
+
+## Responding to a comment
+
+Every comment gets a reply before the merge, the declined ones included: a silent thread reads as ignored, not as declined.
+
+Each comment gets one outcome, and its rationale is stated alongside it — to the reviewer in the reply, and in any table proposing the outcomes before they are posted:
+
+| Outcome    | When                                                                                                 |
+|------------|------------------------------------------------------------------------------------------------------|
+| ✅ Apply   | The comment stands: valid, clear, and consistent with the project's conventions                      |
+| 🕐 Defer   | The comment stands, but is too costly or too broad for this PR; it needs an owner and a trace        |
+| ⚠️ Discuss | It needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason |
+| ❌ Skip    | It is factually wrong, out of scope, or already addressed                                            |
+| 💬 Answer  | It needs no code change: a note, a compliment, or a question that an answer settles                  |
+
+A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link — a team convention, a precedent already in the codebase, or a stated line of reasoning all count. Backing a comment is the reviewer's duty ([Git & Collaboration §7](git-and-collaboration.md#reviewers)); it is not the price of being heard.
+
+How the code is decided — severity, impact, complexity, and when a 🕐 is the right call — belongs to [Code Review Triage](code-review-triage.md). A 🕐 is never reported as applied: its owner and its trace follow [§6 of that document](code-review-triage.md#6-follow-ups).
+
+**Reply tone per outcome:**
+
+- ✅ **Apply**: briefly confirm what changed ("Fixed — renamed `X` to `Y`.").
+- 🕐 **Defer**: agree, say it is not done here, and name the trace ("Agreed, but out of this PR's scope — tracked in #142."). Never phrase it as fixed.
+- ⚠️ **Discuss**: ask for the missing decision, clarification, or reason.
+- ❌ **Skip**: explain concisely why the comment is declined, citing the conventions or sources that apply.
+- 💬 **Answer**: answer the question, or acknowledge the note.
+
+**Resolving threads:** resolve only what was addressed or acknowledged — the ✅ threads, and the 💬 threads that ask nothing back. A 🕐 thread stays open, since it is the trace of the deferral; ⚠️, ❌ and an answered question stay open for the reviewer to follow up.
 
 ### Credits
 

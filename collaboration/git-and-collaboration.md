@@ -119,7 +119,8 @@ Because that section becomes the commit body, it has to stay true as the branch 
 - Review PRs within 24 hours when possible. If you're short on time, don't rush — an unreviewed PR is better than a rubber-stamped one.
 - Be constructive and kind: critique the code, not the author.
 - Back your comments with sources (docs, articles, benchmarks) rather than personal preference. Avoid arguments from authority. Don't request changes you can't justify.
-- Use [Code Review Emojis](code-review-emojis.md) to add meaning to your comments (blocking vs. non-blocking, suggestion vs. question, etc.).
+- That duty is the reviewer's, not a filter for the author: a request whose reason is missing gets a question, not a dismissal. A reason need not be a link — a team convention, a precedent in the codebase, or a stated line of reasoning count.
+- Use the [Code Review Comments](code-review-comments.md) emoji legend to add meaning to your comments (blocking vs. non-blocking, suggestion vs. question, etc.). The same document covers how the author answers them.
 
 ## 8. CI & Policies
 

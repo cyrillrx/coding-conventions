@@ -6,7 +6,7 @@ It applies to any finding, whatever its source: a human reviewer, an automated r
 
 The grid and the overrides in [§5](#5-recommendation) cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale — the four axes apply, and the judgement is yours. This is a shared default, not an exhaustive rulebook.
 
-This document scores a finding; it never speaks to its author. How a comment is answered on a pull request — the reply, its tone, which threads get resolved — belongs to [Code Review Emojis](code-review-emojis.md).
+This document scores a finding; it never speaks to its author. How a comment is answered on a pull request — the reply, its tone, which threads get resolved — belongs to [Code Review Comments](code-review-comments.md#responding-to-a-comment).
 
 ## 1. Every finding is scored on four axes
 
@@ -106,7 +106,7 @@ Self-review, or your own PR after a review. The deferral is yours to carry, so a
    - PROJ-318 — 🟡 extract the pagination logic shared with `SpellListScreen`
    ```
 
-3. **A code reference** when the finding is anchored to a specific place — a `TODO(#142):` naming the ticket, per the [🕐 convention](code-review-emojis.md).
+3. **A code reference** when the finding is anchored to a specific place — a `TODO(#142):` naming the ticket, per the [🕐 convention](code-review-comments.md#emoji-legend).
 
 Here, a 🕐 with no ticket is a deferral in name only. If the ticket is not going to be opened, fix the finding here or say plainly that nothing will happen — an unnamed decision is the one that erodes the codebase.
 
@@ -123,7 +123,7 @@ Deferring your own finding on your own code and deferring someone else's finding
 
 ## 7. Coming from a review comment
 
-The [Code Review Emoji Guide](code-review-emojis.md) is how a finding is *communicated*; this document is how it is *decided*. The emoji tells you what the reviewer **expects** — nothing more:
+The [Code Review Comments](code-review-comments.md) guide is how a finding is *communicated*; this document is how it is *decided*. The emoji tells you what the reviewer **expects** — nothing more:
 
 | Emoji | What the reviewer expects                                     |
 |-------|---------------------------------------------------------------|

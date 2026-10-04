@@ -3,9 +3,9 @@ name: address-review
 description: Address open review comments on a PR, reply to each thread, resolve approved ones, then optionally re-run review. Use when asked to handle, address, or respond to PR review comments.
 argument-hint: <pr-number>
 allowed-tools:
-  - Bash(gh api:*)
-  - Bash(gh pr:*)
-  - Bash(gh repo:*)
+  - Bash(gh pr list:*)
+  - Bash(gh pr view:*)
+  - Bash(gh repo view:*)
   - Bash(git status:*)
   - Bash(git diff:*)
   - Bash(git log:*)
@@ -16,8 +16,11 @@ allowed-tools:
 ---
 
 <!--
-Triage criteria in this skill reference collaboration/git-and-collaboration.md
-in cyrillrx/coding-conventions. Keep them in sync with /sync-plugins.
+Response outcomes, reply tone and thread resolution in this skill derive from
+collaboration/code-review-comments.md; the authorship rule from
+collaboration/git-and-collaboration.md; deferral ownership from
+collaboration/code-review-triage.md (§6 and §7), all in cyrillrx/coding-conventions.
+Keep them in sync with /sync-plugins.
 -->
 
 ## Context
@@ -66,21 +69,22 @@ Filter for `isResolved: false` threads. If there are none, inform the user and s
 
 > The query caps at 100 threads and 10 comments per thread. This covers normal PRs; the first comment (needed for `in_reply_to`) is always present. If a thread count of exactly 100 is returned, warn the user that older threads may be truncated rather than silently treating the batch as complete.
 
-### Step 3 — Triage comments
+### Step 3 — Propose a response per comment
 
-For each unresolved thread, read the file at `path` around the relevant `line`, then present a triage table:
+For each unresolved thread, read the file at `path` around the relevant `line`, then present one row per thread, none omitted:
 
-| #   | File        | Comment summary  | Recommendation                             |
-|-----|-------------|------------------|--------------------------------------------|
-| 1   | `path:line` | one-line summary | ✅ Apply / 🕐 Defer / ⚠️ Discuss / ❌ Skip |
+| #   | File        | Comment summary  | Response                                               | Rationale         |
+|-----|-------------|------------------|--------------------------------------------------------|-------------------|
+| 1   | `path:line` | one-line summary | ✅ Apply / 🕐 Defer / ⚠️ Discuss / ❌ Skip / 💬 Answer | why this response |
 
-**Recommendation criteria:**
-- ✅ **Apply** — valid, clear, consistent with the project's conventions, and backed by a justification or source.
-- 🕐 **Defer** — valid, but too costly or too broad for this PR. It is not applied here; it needs an owner and a trace.
-- ⚠️ **Discuss** — requires a design decision, is ambiguous, or contradicts existing conventions.
-- ❌ **Skip** — factually wrong, out of scope, already addressed, or not backed by any source or justification.
+**Response criteria:**
+- ✅ **Apply** — the comment stands: valid, clear, and consistent with the project's conventions.
+- 🕐 **Defer** — the comment stands, but is too costly or too broad for this PR. It is not applied here; it needs an owner and a trace.
+- ⚠️ **Discuss** — it needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason.
+- ❌ **Skip** — it is factually wrong, out of scope, or already addressed.
+- 💬 **Answer** — it needs no code change: a note, a compliment, or a question that an answer settles.
 
-Per the team's conventions, reviewers are expected to back their requests with sources (docs, articles, benchmarks). A comment that expresses personal preference without justification should be marked ❌ or ⚠️. When in doubt, consult the project's conventions (`CLAUDE.md` / `AGENTS.md` and any linked convention docs).
+A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link — a team convention, a precedent already in the codebase, or a stated line of reasoning all count. The emoji the reviewer used never sets the response. When in doubt, consult the project's conventions (`CLAUDE.md` / `AGENTS.md` and any linked convention docs).
 
 A 🕐 is never reported as applied. The deferral needs an owner and a trace — on the author's own PR, a ticket in the project's tracker referenced under the `## 🔁 Follow-ups` section of the description. Run `/git-workflow:triage-findings` when the full severity / impact / complexity scoring is needed to decide between ✅ and 🕐.
 
@@ -88,11 +92,11 @@ A 🕐 is never reported as applied. The deferral needs an owner and a trace —
 
 The two are also split by what they touch: this skill works **through the GitHub API** — it reads the threads and writes the replies and resolutions. If nobody is waiting for an answer, nothing here applies.
 
-Wait for the user to confirm, adjust, or override each recommendation before proceeding.
+Wait for the user to confirm, adjust, or override each response before proceeding.
 
 ### Step 4 — Apply fixes and reply to all threads
 
-For each thread, apply the outcome and post a reply via the REST API.
+For each thread, apply the response and post a reply via the REST API. `gh api` is deliberately absent from `allowed-tools`: each reply and each resolution leaves the machine, so each one goes through a permission prompt.
 
 For **inline** review comments (attached to a file and line), use `in_reply_to` with the `databaseId` of the **first** comment in the thread:
 
@@ -109,13 +113,16 @@ The `reviewThreads` query in Step 2 only surfaces inline review threads, so the 
 gh api repos/<OWNER>/<REPO>/issues/<PR_NUMBER>/comments -X POST -f body="<reply>"
 ```
 
-**Reply tone per outcome:**
+Every thread gets a reply, the declined ones included.
+
+**Reply tone per response:**
 - ✅ **Apply**: briefly confirm what changed (e.g. "Fixed — renamed `X` to `Y`.").
 - 🕐 **Defer**: agree, say it is not done here, and name the trace (e.g. "Agreed, but out of this PR's scope — tracked in #142."). Never phrase it as fixed.
-- ⚠️ **Discuss**: ask for clarification or a source.
-- ❌ **Skip**: explain concisely why the comment is declined, citing conventions or sources where applicable.
+- ⚠️ **Discuss**: ask for the missing decision, clarification, or reason.
+- ❌ **Skip**: explain concisely why the comment is declined, citing the conventions or sources that apply.
+- 💬 **Answer**: answer the question, or acknowledge the note.
 
-Do not touch code for 🕐, ⚠️ or ❌ threads — at most, a 🕐 leaves a `TODO(#142):` naming its ticket.
+Do not touch code for 🕐, ⚠️, ❌ or 💬 threads — at most, a 🕐 leaves a `TODO(#142):` naming its ticket.
 
 ### Step 5 — Ask for git permission
 
@@ -132,7 +139,7 @@ Once the user approves:
 
 1. Stage and commit the changes using the approved message.
 2. Push to the current branch.
-3. Resolve the ✅ threads **only**, via GraphQL. A 🕐 thread stays open: the thread is the trace of the deferral, and resolving it hides the decision.
+3. Resolve only what was addressed or acknowledged — the ✅ threads, and the 💬 threads that ask nothing back — via GraphQL. A 🕐 thread stays open: the thread is the trace of the deferral, and resolving it hides the decision.
 
 ```bash
 gh api graphql -f query='
@@ -141,7 +148,7 @@ mutation($threadId:ID!) {
 }' -f threadId=<THREAD_ID>
 ```
 
-⚠️ and ❌ threads are left open for the reviewer to follow up.
+⚠️, ❌ and answered-question 💬 threads are left open for the reviewer to follow up.
 
 ### Step 7 — Re-run review (if available)
 
