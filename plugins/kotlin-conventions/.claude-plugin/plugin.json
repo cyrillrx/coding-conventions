@@ -1,0 +1,10 @@
+{
+  "name": "kotlin-conventions",
+  "description": "Points every session to this team's Kotlin conventions (style, idioms, testing, multiplatform), to read before writing or reviewing Kotlin. Pair it with coding-conventions for the general Clean Code rules, and with compose-conventions in an app with screens",
+  "author": {
+    "name": "cyrillrx"
+  },
+  "homepage": "https://github.com/cyrillrx/coding-conventions",
+  "repository": "https://github.com/cyrillrx/coding-conventions",
+  "keywords": ["kotlin", "kmp", "multiplatform", "code-style", "testing", "session-start"]
+}

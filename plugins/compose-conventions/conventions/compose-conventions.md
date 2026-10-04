@@ -1,57 +1,26 @@
-# Kotlin Multiplatform & Compose Conventions
+# Compose Conventions
 
-This document details the architectural patterns, style rules, and testing guidelines for Kotlin Multiplatform (KMP) and Compose Multiplatform (CMP) code. It also covers Android-specific Kotlin/Compose style.
+This document details the architectural patterns, style rules, and testing guidelines for the UI layer of Kotlin Multiplatform apps built with Compose Multiplatform (CMP). It also covers Android-specific Compose style.
 
-It builds on [Kotlin's coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) and the general [Clean Code principles](coding-conventions.md).
+It builds on the [Kotlin conventions](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md), which apply to every module of the app, and the general [Clean Code principles](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/coding-conventions.md).
 
 ## Table of Contents
 
-- [Tech Stack & Dependency Management](#tech-stack--dependency-management)
-- [Source Code Organization](#source-code-organization)
+- [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
 - [Naming Rules](#naming-rules)
-- [Formatting](#formatting)
-- [Code Idioms](#code-idioms)
 - [Compose Guidelines](#compose-guidelines)
 - [Lifecycle-aware Refresh](#lifecycle-aware-refresh)
 - [Testing](#testing)
 - [CI & Policies](#ci--policies)
 
-## Tech Stack & Dependency Management
+## Tech Stack
 
-- **Language**: Kotlin (latest stable version).
-- **Multiplatform**: Kotlin Multiplatform (KMP) targeting Android, iOS, and Desktop (JVM).
 - **UI Framework**: Compose Multiplatform — no XML layouts, no View-system APIs.
-- **Local Database**: SQLDelight (when persistence is needed).
-- **Dependency Management**:
-    - Gradle Version Catalogs (`gradle/libs.versions.toml`) + `buildSrc`.
-    - *Never hardcode dependency versions in build scripts.*
-
-## Source Code Organization
-
-### Class layout
-
-Generally, the contents of a class is sorted in the following order:
-
-- Property declarations and initializer blocks
-- Secondary constructors
-- Method declarations
-- Companion object
-- Nested classes
-
-For framework classes (e.g. an `Activity`), put framework methods first. Put related stuff together, so that someone reading the class from top to bottom can follow the logic. Higher-level stuff goes first (after framework methods if any).
-
-### Interface implementation layout
-
-When implementing an interface, keep the implementing members in the same order as the members of the interface.
-
-### Overload layout
-
-Always put overloads next to each other in a class.
 
 ## Architecture
 
-The application follows a **Clean Architecture** and **Layered** approach adapted for Kotlin Multiplatform. Pure Kotlin domain/data code lives in shared modules; the presentation layer (Compose + ViewModels) lives in the app module.
+The presentation layer (Compose + ViewModels) lives in the app module, on top of the domain and data layers described in the [Kotlin conventions](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md#architecture).
 
 ### Presentation Layer (MVVM + UDF)
 
@@ -167,215 +136,12 @@ fun CharacterListScreen(viewModel: CharacterListViewModel, router: CharacterRout
 
 When a ViewModel must navigate **after async work** (e.g. save before navigate), expose a `SharedFlow<NavigationEvent>` and collect it in a `LaunchedEffect(viewModel)` in the primary composable.
 
-### Domain & Data Layers
-
-- **Domain**: Pure Kotlin. Contains entities and use cases. Independent of any framework.
-- **Data**: Repositories abstract the data sources. Return Kotlin `Flow` for reactive data streams and `suspend` functions for one-shot operations.
-
 ## Naming Rules
-
-### Naming modules
-
-Names of modules are **always lower case** (`app`). Multi-word names are discouraged, but when needed use **snake case** (`selection-store`). Do not prefix module names with a company name (e.g. `cz-app`).
-
-### Naming packages
-
-Names of packages are **always lower case** and do NOT use underscores (`com.example.network`). Multi-word names are discouraged; if needed, simply concatenate them (`com.example.mypackage`).
-
-### Naming test methods
-
-In tests (and only in tests), it's acceptable to use method names with spaces enclosed in backticks. Underscores in method names are also allowed in test code.
-
-```kotlin
-class MyTestCase {
-    @Test fun `ensure everything works`() { /* ... */ }
-
-    @Test fun ensureEverythingWorks_onAndroid() { /* ... */ }
-}
-```
-
-### Name call arguments
-
-When passing arguments that are not named in a property (`null`, a magic string, or a magic number), add argument names. It adds context and makes review easier.
-
-```kotlin
-val draft = DraftItem(
-    existingDraftMetadata.id,
-    null,                // bad
-    "",                  // bad
-    dateOfCreation,
-)
-```
-
-```kotlin
-val draft = DraftItem(
-    existingDraftMetadata.id,
-    imageUrl = null,     // good
-    title = "",          // good
-    dateOfCreation,
-)
-```
-
-### Choosing good names
-
-**Names should be meaningful and concise.** Make it clear what the entity's purpose is; avoid generic words (`Manager`, `Wrapper`, etc.).
-
-- A class name is usually a noun or noun phrase explaining what the class _is_: `List`, `PersonReader`.
-- A method name is usually a verb or verb phrase saying what the method _does_: `close`, `readPersons`. The name should suggest whether the method mutates the object or returns a new one (`sort` sorts in place; `sorted` returns a sorted copy).
-
-When using an acronym in a declaration name, capitalize it if it consists of two letters (`IOStream`); capitalize only the first letter if it is longer (`XmlFormatter`, `HttpInputStream`).
-
-### Naming in-memory repositories
-
-Name in-memory repository implementations after their **strategy**, not after their role as a test double — never `FakeXxxRepository` or `MockXxxRepository`.
-
-| Prefix   | Strategy                                 | Example                 |
-| -------- | ---------------------------------------- | ----------------------- |
-| `Ram`    | Mutable in-memory store; writes are kept | `RamUserListRepository` |
-| `Sample` | Fixed sample data; effectively read-only | `SampleSpellRepository` |
-
-`Ram` keeps only its first letter capitalized, per the acronym rule above.
-
-These implementations belong to the **main source set** of the data layer (e.g. `shared/core/src/commonMain/.../<feature>/data/`), not to a test source set: Compose previews depend on them too. ViewModel tests reuse these implementations rather than declaring a test double of their own.
 
 ### Naming image resources
 
 - **Icons** (mono-color, defined in the design system): prefixed by `ic_` and suffixed by their size in dp. `ic_activity_24` is the `activity` icon at 24×24. Mono-color icons can be tinted at use.
 - **Multicolor images** (design-system vectors): prefixed by `img_` and suffixed by their size in dp. `img_package_72` is the `package` image at 72×72. These cannot be tinted at use; define colors via the design-system theme rather than hardcoding, and import both light and dark variants.
-
-## Formatting
-
-Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/kotlin/.editorconfig`](../configs/kotlin/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
-
-The rules below describe what that configuration enforces, for reference.
-
-### Indentation
-
-Use 4 spaces for indentation. Do not use tabs.
-
-### Line length
-
-Keep lines to fewer than `120` characters unless there is a good reason not to.
-
-### Horizontal whitespace
-
-- Put spaces around binary operators (`a + b`). Exception: no spaces around the range operator (`0..i`).
-- No spaces around unary operators (`a++`).
-- Put a space between control-flow keywords (`if`, `when`, `for`, `while`) and the opening parenthesis.
-- No space before the opening parenthesis in a primary constructor, method declaration, or method call.
-- Never put a space after `(`, `[`, or before `]`, `)`.
-- Never put a space around `.` or `?.`: `foo.bar().filter { it > 2 }`, `foo?.bar()`.
-- Put a space after `//`.
-- No spaces around angle brackets for type parameters (`Map<K, V>`), around `::` (`Foo::class`), or before `?` on a nullable type (`String?`).
-- Avoid horizontal alignment of any kind: renaming an identifier should not force reformatting of surrounding lines.
-
-### Function and expression body formatting
-
-Prefer an expression body for functions whose body is a single expression:
-
-```kotlin
-fun foo(): Int { return 1 }  // bad
-fun foo() = 1                // good
-```
-
-If the expression body doesn't fit on the declaration line, put `=` on the first line and indent the body by 4 spaces:
-
-```kotlin
-fun f(x: String) =
-    x.length
-```
-
-### Control-flow formatting
-
-If an `if`/`when` condition is multiline, use curly braces and put the closing parenthesis with the opening brace on a separate line:
-
-```kotlin
-if (!component.isSyncing &&
-    !hasAnyKotlinRuntimeInScope(module)
-) {
-    return createKotlinNotConfiguredPanel(module)
-}
-```
-
-Prefer affirmative conditions to negative ones:
-
-```kotlin
-if (statement) {   // good
-    doIfTrue()
-} else {
-    doIfFalse()
-}
-```
-
-Put `else`, `catch`, `finally`, and the `while` of a do/while on the same line as the preceding closing brace.
-
-### Chained call wrapping
-
-When wrapping chained calls, put `.` or `?.` on the next line with a single indent:
-
-```kotlin
-val anchor = owner
-    ?.firstChild
-    .siblings(forward = true)
-    .dropWhile { it is PsiComment || it is PsiWhiteSpace }
-```
-
-### New lines
-
-Add a new line after conditionals and blocks. Include exactly one blank line between methods — no more.
-
-### Trailing commas
-
-Add a trailing comma after function, constructor, and lambda parameters when there is more than one parameter. It simplifies diffs when adding parameters.
-
-```kotlin
-// good
-class YesCommas(
-    val foo: Int,
-    val bar: Int,
-)
-
-// good — single param, no comma
-class OneLineNoComma(val foo: Int)
-```
-
-## Code Idioms
-
-### Kotlin idioms
-
-- Favor immutability: use `val` over `var` and immutable collections (`List`, `Set`, `Map`) by default.
-- Use Kotlin Coroutines and Flows for asynchronous programming.
-- Use `require()`, `check()`, and `error()` for preconditions and state validation.
-- Avoid nullable types where possible. Use sealed classes/interfaces for exhaustive states (`Loading`, `Success`, `Error`).
-- Prefer method references (`::`) over explicit lambdas when signatures match: `router::openDetail` rather than `{ router.openDetail(it) }`.
-
-### Early return
-
-Prefer early-return syntax over deeply nested `if`/`else` blocks. It reduces nesting, keeps related branches close, reads linearly, and often spares the reader from scanning the whole method.
-
-```kotlin
-// Good
-fun doSomething(someCondition: Boolean, name: String?, intValue: Int): String {
-
-    if (!someCondition) {
-        return "BAD_CONDITION"
-    }
-
-    if (name.isNullOrBlank()) {
-        return "BAD_NAME"
-    }
-
-    if (intValue == 0) {
-        return "BAD_VALUE"
-    }
-
-    // Do something
-
-    return "SUCCESS"
-}
-```
-
-Leave a blank line after a return statement to improve readability.
 
 ## Compose Guidelines
 
@@ -466,14 +232,13 @@ Never call a load function from `ON_RESUME`: the `init` block already handles th
 
 - Every ViewModel must have a test file in the common test source set.
 - Every new public method on an existing ViewModel must be covered by at least one test.
-- Every bug fix must be accompanied by a regression test that fails before the fix and passes after.
 - Critical user journeys **should** be covered by an end-to-end flow — a strong recommendation, not a hard rule, since E2E runs locally rather than in CI (see [End-to-end tests](#end-to-end-tests)).
 
 ### ViewModel tests
 
 - **Coroutines**: `StandardTestDispatcher` + `runTest`.
 - **Dependencies**: inject repositories through the ViewModel constructor.
-- **In-memory repositories**: reuse the `Ram`/`Sample` implementations described in [Naming in-memory repositories](#naming-in-memory-repositories) rather than declaring a new test double for each test.
+- **In-memory repositories**: reuse the `Ram`/`Sample` implementations described in [Naming in-memory repositories](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md#naming-in-memory-repositories) rather than declaring a new test double for each test.
 
 Required cases:
 
@@ -487,30 +252,6 @@ Required cases:
 | `silentRefresh` no-op when `Loading`    | Early call has no effect                                 |
 
 For ViewModels with mutations (delete, rename, add): test optimistic mutation, undo, commit, and repository persistence.
-
-### Domain tests
-
-- Use `kotlin.test` (`kotlin.test.Test`, `kotlin.test.assertEquals`, …) — no JUnit dependency needed for pure-function tests.
-- One test file per function or class under test (e.g. `isValidWalkSpeed` → `IsValidWalkSpeedTest.kt`).
-- Method names are backtick strings describing the expected behaviour in plain English.
-- No setup, test doubles, or coroutines needed for pure functions — just call and assert.
-
-```kotlin
-class IsValidWalkSpeedTest {
-
-    @Test
-    fun `returns false for values below 25`() {
-        assertFalse(isValidWalkSpeed(0))
-        assertFalse(isValidWalkSpeed(24))
-    }
-
-    @Test
-    fun `returns true for valid speeds`() {
-        assertTrue(isValidWalkSpeed(25))
-        assertTrue(isValidWalkSpeed(30))
-    }
-}
-```
 
 ### End-to-end tests
 
@@ -609,9 +350,6 @@ Maestro covers the Android and iOS apps only; the Desktop (JVM) target has no E2
 
 ## CI & Policies
 
-Refer to [`git-and-collaboration.md`](../collaboration/git-and-collaboration.md) for general CI policies (warnings as errors, PR requirements, security scans).
+Refer to the [Kotlin conventions](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md#ci--policies) for the ktlint and build requirements.
 
-KMP-specific CI requirements:
-- PRs must pass `ktlintCheck` and the project must build successfully for all targets (Android, iOS, Desktop).
-- Maestro E2E flows are **not** a PR gate — they need a device or simulator; run them locally (see [End-to-end tests](#end-to-end-tests)).
-- Use KDoc for public APIs in shared modules to clearly define their contracts.
+Maestro E2E flows are **not** a PR gate — they need a device or simulator; run them locally (see [End-to-end tests](#end-to-end-tests)).

@@ -4,7 +4,7 @@
     "name": "cyrillrx"
   },
   "metadata": {
-    "description": "Coding conventions, git workflow and KMP skills derived from this repository's documentation"
+    "description": "Git workflow plus coding, Kotlin and Compose conventions, derived from this repository's documentation"
   },
   "plugins": [
     {
@@ -13,9 +13,14 @@
       "description": "Atomic Conventional Commits, pull request descriptions kept in line with their diff, triaging review findings into decisions, and answering reviewer comments on a PR"
     },
     {
-      "name": "kmp-conventions",
-      "source": "./plugins/kmp-conventions",
-      "description": "Points every session to this team's Kotlin Multiplatform / Compose conventions, to read before writing or reviewing Kotlin. Pair it with coding-conventions for the general Clean Code rules"
+      "name": "kotlin-conventions",
+      "source": "./plugins/kotlin-conventions",
+      "description": "Points every session to this team's Kotlin conventions (style, idioms, testing, multiplatform), to read before writing or reviewing Kotlin. Pair it with coding-conventions for the general Clean Code rules, and with compose-conventions in an app with screens"
+    },
+    {
+      "name": "compose-conventions",
+      "source": "./plugins/compose-conventions",
+      "description": "Points every session to this team's Compose Multiplatform UI conventions (MVVM, state and events, Compose, Maestro), to read before writing or reviewing the UI layer. Pair it with kotlin-conventions, which it builds on"
     },
     {
       "name": "coding-conventions",
