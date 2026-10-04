@@ -1,0 +1,10 @@
+{
+  "name": "project-health",
+  "description": "A manual /audit of a project's health: A–E state and effort grades per module and axis, blockers, bugs, debt and obsolescence, gaps to the conventions and a workload estimate, written to docs/audit-YYYY-MM-DD.md",
+  "author": {
+    "name": "cyrillrx"
+  },
+  "homepage": "https://github.com/cyrillrx/coding-conventions",
+  "repository": "https://github.com/cyrillrx/coding-conventions",
+  "keywords": ["audit", "project-health", "tech-debt", "obsolescence", "dependencies", "workload", "conventions"]
+}
