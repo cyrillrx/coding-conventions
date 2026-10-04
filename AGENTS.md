@@ -77,6 +77,8 @@ Use `git mv` for any file rename or move, to preserve history.
 - Sections are separated by the heading itself — no `---` horizontal rule between sections
 - Exception: `---` that carries meaning stays (YAML front matter, document separators inside code fences)
 - No hard wrap in prose — one line per paragraph, per bullet; column limits apply to code only
+- Table pipes align in display columns as Python `wcwidth`'s `wcswidth()` (and Prettier 3) measures them: `W`/`F` characters count 2, `U+FE0F` widens the one before it to 2, so `⚠️` = 2 but `⛏` and `🏕` = 1
+- Table columns are at least 3 columns wide (a formatting choice); a column whose widest cell exceeds 120 columns, and every column to its right, is left unpadded
 - ADRs and PRDs start from the skeletons in `templates/`; numbers are never reused, and a superseded document keeps its file
 
 ### Kotlin / Compose (`conventions/kmp-conventions.md`)

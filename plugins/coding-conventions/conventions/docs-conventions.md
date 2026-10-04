@@ -10,8 +10,8 @@
 
 Two document types recur across projects and have a shared skeleton to start from:
 
-| Type                         | Lives in    | Named              | Template                                                    |
-|------------------------------|-------------|--------------------|-------------------------------------------------------------|
+| Type                         | Lives in    | Named              | Template                                                                                                          |
+|------------------------------|-------------|--------------------|-------------------------------------------------------------------------------------------------------------------|
 | Architecture Decision Record | `docs/adr/` | `adr-NNN-title.md` | [`templates/adr-template.md`](https://github.com/cyrillrx/coding-conventions/blob/main/templates/adr-template.md) |
 | Product Requirement Document | `docs/prd/` | `prd-NNN-title.md` | [`templates/prd-template.md`](https://github.com/cyrillrx/coding-conventions/blob/main/templates/prd-template.md) |
 
@@ -37,6 +37,10 @@ Two document types recur across projects and have a shared skeleton to start fro
 - Always align table columns with spaces so pipes are vertically aligned.
 - Include a separator row (`| --- | --- |`) after the header row.
 - Every table cell must have at least one space of padding on each side. Except for title delimiter.
+- Alignment is measured in display columns, as `wcswidth()` from Python's `wcwidth` package computes them. Prettier 3 measures the same way, so a formatter and a reviewer reach the same file. A Wide or Fullwidth character (Unicode `East_Asian_Width` `W` or `F`) counts two, a combining mark or zero-width character counts zero, any other character counts one. A variation selector `U+FE0F` counts zero itself but makes the character before it count two.
+- The reference wins over any renderer. `🔧`, `🕐` and `✅` count two, and so does `⚠️` (`U+26A0` `U+FE0F`). `⛏` (`U+26CF`) and `🏕` (`U+1F3D5`) count one, even where GitHub draws them two columns wide.
+- Pad every column to at least three display columns, so a one-character column such as `#` reads `| #   |`. This is a formatting choice for a steady look, not a syntax requirement: GFM accepts a single dash.
+- Exception for long prose cells: a column whose widest cell exceeds 120 display columns is not padded, and neither is any column to its right. Each of their cells holds its content with one space on either side, and their separator cells are three dashes; the columns to the left stay aligned. Put a long prose column last so that it is the only one to run free. Padding every row to such a cell pushes the closing pipe off-screen, where alignment helps nobody.
 
 Example:
 
