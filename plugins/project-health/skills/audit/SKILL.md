@@ -9,7 +9,8 @@ argument-hint: "[consumer-project ...]"
 disable-model-invocation: true
 # Read-only on the audited project. Write is left out on purpose: the report is the one write,
 # and its prompt is the check that nothing else gets written. Building, running the tests and any
-# forge call are prompted too. Subagents do not inherit this list: they run as this plugin's
+# forge call are prompted too, and so are git grep, git log and git show: their -O and --output
+# options run a command or write a file, so they are never pre-approved. Subagents do not inherit this list: they run as this plugin's
 # auditor agent, which has no Edit or Write tool, and keeps Bash for git, under the session's own
 # permissions.
 allowed-tools:
@@ -20,13 +21,12 @@ allowed-tools:
   - WebSearch
   - WebFetch
   - Bash(git status:*)
-  - Bash(git log:*)
-  - Bash(git show:*)
+  - Bash(git cat-file -p:*)
   - Bash(git ls-tree:*)
-  - Bash(git grep:*)
   - Bash(git rev-parse:*)
   - Bash(git ls-files:*)
   - Bash(git branch --show-current)
+  - Bash(git log -1 --format=%cs refs/remotes/origin/HEAD)
   - Bash(git symbolic-ref --short refs/remotes/origin/HEAD)
 ---
 
@@ -40,7 +40,8 @@ referenced from collaboration/code-review-triage.md, and the obsolescence refere
 ## Context
 
 - Default branch, as its remote-tracking ref: !`git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
-- Audited revision (tip of the default branch, as last fetched): !`git log -1 --format='%h (%cs)' refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
+- Audited revision (tip of the default branch, as last fetched): !`git rev-parse --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
+- Date of that revision: !`git log -1 --format=%cs refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved"`
 - Current branch: !`git branch --show-current`
 - Uncommitted changes: !`git status --short`
 - Build files at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD 2>/dev/null | grep -E '(^|/)(settings\.gradle\.kts|build\.gradle\.kts|Cargo\.toml|go\.mod|bruno\.json)$' || echo "none"`
@@ -54,7 +55,7 @@ Audit the project in the current directory and write the result to `docs/audit-Y
 
 ### Step 0 — Pin the revision
 
-The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit — `git show <sha>:<path>`, `git ls-tree -r <sha>`, `git grep <pattern> <sha>`, `git log <sha>` — never from the working tree, which may sit on another branch or change while the audit runs. If the default branch reads "unresolved", ask the user to run `git remote set-head origin --auto`, or to name the branch to audit. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself.
+The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit — `git cat-file -p <sha>:<path>`, `git ls-tree -r <sha>` — never from the working tree, which may sit on another branch or change while the audit runs. If the default branch reads "unresolved", ask the user to run `git remote set-head origin --auto`, or to name the branch to audit. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself. `git grep <pattern> <sha>` and `git log <sha>` work at the pinned commit too, but each call is prompted: read files with `git cat-file -p`, never with `git show`.
 
 ### Step 1 — Frame the scope, and confirm it
 
@@ -79,7 +80,7 @@ Then **always** show the scope — each module included, excluded or attached, w
 Launch the five subagents below in parallel, each with the `project-health:auditor` type: it reads whole files rather than excerpts, and cannot edit. Never use `Explore` here — it locates code, it does not review it. Ask each for a very thorough pass over the whole scope. Each one receives the project root, the confirmed scope, the detected stacks, its checklist below, any per-stack checklist, and these rules:
 
 - Read only. Do not edit, build, run tests, or install anything.
-- Read every file at the pinned commit with `git show <sha>:<path>`, never from the working tree.
+- Read every file at the pinned commit with `git cat-file -p <sha>:<path>`, never from the working tree.
 - Return findings, not prose. **One fix is one finding**, listing all its occurrences. Each finding has: the module it belongs to (or "repository"), its axis, a proposed severity from the table in Step 3, its evidence (`file:line`, or a cited source), and _likely_ when only a build or a run would confirm it — together with any existing evidence that settles it, such as a build report or a CI log.
 - Every claim is checked in the repository. Never report a finding inferred from a file name alone.
 
