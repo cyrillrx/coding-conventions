@@ -21,7 +21,7 @@ For example:
 | 🔧       | `:wrench:`                           | Mandatory change that impacts the behavior of the code. <br /><br /> I feel this might lead to a bug or crash and I think this needs to be changed. |
 | ⛏        | `:pick:`                             | This is a nitpick. <br /><br /> This is a small adjustment I think should be made in order to improve readability, coherence with the codebase or compliance to the guidelines. Might also be an organization suggestion. |
 | 💭       | `:thought_balloon:`                  | Let me think out loud here for a minute. <br /><br /> I might express concern, suggest an alternative solution, or walk through the code in my own words to make sure I understand. |
-| 🕐       | `:clock1:`                           | The comment may be addressed in later. A Jira ticket has to be created (and referenced in the code). |
+| 🕐       | `:clock1:`                           | The comment may be addressed later. Filing a ticket in the project's tracker, and referencing it in the code, is recommended. |
 | 🏕        | `:camping:`                          | Here is an opportunity, not directly related to your changes, for us to leave the campground [code] cleaner than we found it. Most of the time such a cleanup belongs in its own PR — keep it in the current one only when it is a couple of lines in a file that PR already touches. |
 | ❓       | `:question:`                         | I have a question. <br /><br /> This should be a fully formed question with sufficient information and context that requires a response. |
 | 📝       | `:memo:`                             | This is an explanatory note, fun fact, or relevant commentary that does not require any action. |
