@@ -64,9 +64,14 @@ For a team project, commit this to the project's `.claude/settings.json` so the 
     "git-workflow@cyrillrx-conventions": true,
     "kmp-conventions@cyrillrx-conventions": true,
     "coding-conventions@cyrillrx-conventions": true
+  },
+  "permissions": {
+    "allow": ["Read(~/.claude/plugins/cache/cyrillrx-conventions/**)"]
   }
 }
 ```
+
+The `permissions` rule lets the agent read the KMP conventions without a prompt: the `kmp-conventions` hook points to a file in the plugin cache, outside the project folder. Without it, every session asks for that read, and a non-interactive `claude -p` run is refused it and works without the conventions.
 
 > **Heads up:** `enabledPlugins` installs and enables these plugins for anyone who trusts the project folder, without an explicit `/plugin install` prompt. Only commit this once your team is comfortable trusting `cyrillrx/coding-conventions` as a code source — the skills can run git and `gh` commands on contributors' machines.
 
