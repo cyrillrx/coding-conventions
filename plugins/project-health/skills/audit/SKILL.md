@@ -134,7 +134,7 @@ The cells are the modules × Code, Architecture, Tests, Dependencies and obsoles
 | D     | 7 to under 15 person-days |
 | E     | 15 person-days or more    |
 
-**Verdict.** Never average. **Blocked** when a cell's state is E, **Needs work** when one is C or D, **Healthy** when all are A or B — followed by the total effort in person-days.
+**Verdict.** Never average. **Blocked** when a cell's state is E, **Needs work** when one is C or D, **Healthy** when all are A or B — read on the assessed cells only, and marked **partial**, naming the `—` cells, when any cell is not assessed — followed by the total effort in person-days.
 
 **Progress.** With a previous audit, put both grade tables side by side, then list the IDs fixed, still open and new. If the previous audit used another grid version, recompute its grades with Grid v1 from its findings first. If it has no grid, or its findings name no module, mark its grades not comparable and compare its findings only: fixed, still open, or corrected.
 
@@ -162,7 +162,7 @@ The default branch is the remote-tracking ref above without its `origin/` prefix
 
 <!-- Same shape as State; each cell reads `<person-days> (<grade>)`, such as `3.75 (C)`. -->
 
-**Verdict**: <Blocked | Needs work | Healthy> — <the cells that drive it>. Total effort: <N> person-days.
+**Verdict**: <Blocked | Needs work | Healthy><, partial — not assessed: <the `—` cells>> — <the cells that drive it>. Total effort: <N> person-days.
 
 **Last IDs**: <`CODE-NN`, `ARCH-NN`, … — the highest ID ever used on each axis, fixed ones included; `—` for an axis never used>.
 

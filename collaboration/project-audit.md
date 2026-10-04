@@ -109,6 +109,8 @@ The state grades are never averaged. The verdict follows the worst cell:
 - **Needs work** — at least one cell is graded C or D.
 - **Healthy** — every cell is graded A or B.
 
+The verdict is read on the assessed cells only. When any cell reads `—`, the verdict is marked **partial** and names those cells: a module nobody looked at never counts as healthy.
+
 The verdict line also states the total effort, in person-days.
 
 ## 8. Following a project over time
