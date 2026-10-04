@@ -3,9 +3,9 @@ name: address-review
 description: Address open review comments on a PR, reply to each thread, resolve approved ones, then optionally re-run review. Use when asked to handle, address, or respond to PR review comments.
 argument-hint: <pr-number>
 allowed-tools:
-  - Bash(gh api:*)
-  - Bash(gh pr:*)
-  - Bash(gh repo:*)
+  - Bash(gh pr list:*)
+  - Bash(gh pr view:*)
+  - Bash(gh repo view:*)
   - Bash(git status:*)
   - Bash(git diff:*)
   - Bash(git log:*)
@@ -96,7 +96,7 @@ Wait for the user to confirm, adjust, or override each response before proceedin
 
 ### Step 4 — Apply fixes and reply to all threads
 
-For each thread, apply the outcome and post a reply via the REST API.
+For each thread, apply the response and post a reply via the REST API. `gh api` is deliberately absent from `allowed-tools`: each reply and each resolution leaves the machine, so each one goes through a permission prompt.
 
 For **inline** review comments (attached to a file and line), use `in_reply_to` with the `databaseId` of the **first** comment in the thread:
 
