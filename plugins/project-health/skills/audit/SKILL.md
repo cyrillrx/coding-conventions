@@ -32,9 +32,9 @@ allowed-tools:
 
 <!--
 The scope rules, axes, severities, grids and verdict in this skill are derived from
-collaboration/project-audit.md in cyrillrx/coding-conventions (Grid v1). The S/M/L sizes are
-referenced from collaboration/code-review-triage.md, and the obsolescence reference from the
-"latest stable" lines of conventions/*-conventions.md. Keep them in sync with /sync-plugins.
+collaboration/project-audit.md in cyrillrx/coding-conventions (Grid v1), and the obsolescence
+reference from the "latest stable" lines of conventions/*-conventions.md. Keep them in sync with
+/sync-plugins.
 -->
 
 ## Context
@@ -125,7 +125,15 @@ The cells are the modules × Code, Architecture, Tests, Dependencies and obsoles
 | B     | Four to ten 🟡                     |
 | A     | Three 🟡 or fewer                  |
 
-**Effort.** Effort is measured in person-days: one focused working day of one person, about six effective hours. Group the findings into **narrow** work items — one cell each where possible; split a cross-cutting change into the items each cell needs — and size each one S, M or L on the [triage complexity scale](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/code-review-triage.md#4-complexity-to-address). S counts 0.25 person-day, M one, L the number its estimate states — an L item always states one. An item that still improves several cells counts in full in each; the total effort counts it once. Each cell shows its person-days and the matching grade, such as `3.75 (C)`:
+**Effort.** Effort is measured in person-days: one focused working day of one person, about six effective hours. Group the findings into **narrow** work items — one cell each where possible; split a cross-cutting change into the items each cell needs — and size each one on the audit's scale below, never on the triage complexity scale, which sizes a change about to merge. The estimate covers the test and the verification. Fixes of a few minutes each in the same cell form **one** item: ten ten-minute fixes are one S, not ten.
+
+| Size  | Estimated effort                 | Counts as                                                         |
+|-------|----------------------------------|-------------------------------------------------------------------|
+| **S** | Up to about two hours            | 0.25 person-day                                                   |
+| **M** | More than two hours, up to a day | 1 person-day                                                      |
+| **L** | More than a day                  | The person-days its estimate states — an L item always states one |
+
+An item that still improves several cells counts in full in each; the total effort counts it once. Each cell shows its person-days and the matching grade, such as `3.75 (C)`:
 
 | Grade | Effort of the cell        |
 |-------|---------------------------|

@@ -85,7 +85,15 @@ Examples: no finding → A; eleven 🟡 → C; one 🟠 and no 🟡 → C; three
 
 Effort is measured in **person-days**: one person-day is one focused working day of one person, about six effective hours, whenever it is actually done.
 
-The findings are grouped into **work items**, and each item is sized S, M or L on the [triage complexity scale](code-review-triage.md#4-complexity-to-address). For the sums, S counts 0.25 person-day, M one, and L the number its estimate states — an L item always states one.
+The findings are grouped into **work items**, and each item is sized S, M or L on the audit's own scale below. It is not the [triage complexity scale](code-review-triage.md#4-complexity-to-address): that one sizes a change about to merge, this one sizes work on a project at rest. The estimate covers the test and the verification, not just the edit.
+
+| Size  | Estimated effort                 | Counts as                                                         |
+|-------|----------------------------------|-------------------------------------------------------------------|
+| **S** | Up to about two hours            | 0.25 person-day                                                   |
+| **M** | More than two hours, up to a day | 1 person-day                                                      |
+| **L** | More than a day                  | The person-days its estimate states — an L item always states one |
+
+Fixes of a few minutes each in the same cell form **one** item: ten ten-minute fixes are one S, not ten.
 
 Work items are kept **narrow**: an item should improve one cell where it can. A cross-cutting change is split into the items each cell needs — a redesign that also enables API validation and writes the KDoc becomes three items, filed under Code, Build and CI, and Docs. An item that still improves several cells counts in full in each of them; the total effort counts each item once.
 
