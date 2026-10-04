@@ -44,7 +44,7 @@ reference from the "latest stable" lines of conventions/*-conventions.md. Keep t
 - Date of that revision: !`git log -1 --format=%cs refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved"`
 - Current branch: !`git branch --show-current`
 - Uncommitted changes: !`git status --short`
-- Build files at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD 2>/dev/null | grep -E '(^|/)(settings\.gradle\.kts|build\.gradle\.kts|Cargo\.toml|go\.mod|bruno\.json)$' || echo "none"`
+- Build files at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD 2>/dev/null | grep -E '(^|/)((settings|build)\.gradle(\.kts)?|Cargo\.toml|go\.mod|bruno\.json)$' || echo "none"`
 - Previous audits at that revision: !`git ls-tree -r --name-only refs/remotes/origin/HEAD docs/ 2>/dev/null | grep -E '^docs/audit-.*\.md$' || echo "none"`
 - Previous audits in the working tree, committed or not: !`git ls-files --cached --others --exclude-standard 'docs/audit-*.md' 2>/dev/null | grep . || echo "none"`
 - Consumer projects given: $ARGUMENTS
@@ -59,7 +59,7 @@ The audit reads **one pinned commit**: the tip of the default branch above, `<sh
 
 ### Step 1 — Frame the scope, and confirm it
 
-- **Modules.** A module is one build unit: a Gradle module (from `settings.gradle.kts`), a Cargo workspace member, a Go module (`go.mod`), or a Bruno collection (`bruno.json`). A single-module project has one module row.
+- **Modules.** A module is one build unit: a Gradle module, a Cargo workspace member, a Go module (`go.mod`), or a Bruno collection (`bruno.json`). A single-module project has one module row.
 - **Default rules:**
 
 | Path                                                           | Treatment                                                      |

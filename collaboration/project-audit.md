@@ -10,7 +10,7 @@ The current grading is **Grid v1**. Every report states the grid version it was 
 
 An audit reads **one pinned commit**: the tip of the project's default branch. Every file is read at that commit, never from the working tree, which may sit on another branch or change while the audit runs. Facts that only exist outside the history, such as the forge's repository settings, are read as they are today and marked so.
 
-The unit of grading is the **module**, meaning one build unit: a Gradle module (`settings.gradle.kts`), a Cargo workspace member, a Go module (`go.mod`), or a Bruno collection (`bruno.json`). A single-module project has one module row.
+The unit of grading is the **module**, meaning one build unit: a Gradle module, a Cargo workspace member, a Go module (`go.mod`), or a Bruno collection (`bruno.json`). A single-module project has one module row.
 
 Default rules decide what is graded:
 
