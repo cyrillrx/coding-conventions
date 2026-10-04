@@ -15,6 +15,7 @@ collaboration/
   code-review-comments.md              # Emoji legend for review comments, and the protocol for answering them
   code-review-triage.md                # Severity/impact/complexity grid, fix-here vs follow-up vs no-action
   pull-request-descriptions.md         # Keeping a PR title and description true to its diff as the branch moves
+  project-audit.md                     # Project health audit: scope, axes, audit severities, A–E state and effort grids
 conventions/
   coding-conventions.md                # Clean Code principles (all languages)
   docs-conventions.md                  # Documentation file naming, section separators, line wrapping, Markdown tables
@@ -74,6 +75,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Use [code-review-comments.md](collaboration/code-review-comments.md) to signal blocking vs. non-blocking comments; every comment gets a reply, and a request with no stated reason is discussed, never dismissed
 - Every review finding gets a decision — see [code-review-triage.md](collaboration/code-review-triage.md): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale
 
+- Project audits follow [project-audit.md](collaboration/project-audit.md): one cause per finding with a stable ID, A–E state and effort grades per module and axis, a verdict from the worst cell and never an average; changing the grading bumps the grid version
 ### Documentation (`conventions/docs-conventions.md`)
 - Doc files use `lowercase-with-hyphens.md`; a name imposed by tooling keeps it (`README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, `pull_request_template.md`)
 - Sections are separated by the heading itself — no `---` horizontal rule between sections
