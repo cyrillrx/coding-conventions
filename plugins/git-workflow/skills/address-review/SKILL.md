@@ -70,9 +70,9 @@ Filter for `isResolved: false` threads. If there are none, inform the user and s
 
 For each unresolved thread, read the file at `path` around the relevant `line`, then present a triage table:
 
-| # | File | Comment summary | Recommendation |
-|---|------|-----------------|----------------|
-| 1 | `path:line` | one-line summary | ✅ Apply / 🕐 Defer / ⚠️ Discuss / ❌ Skip |
+| #   | File        | Comment summary  | Recommendation                             |
+|-----|-------------|------------------|--------------------------------------------|
+| 1   | `path:line` | one-line summary | ✅ Apply / 🕐 Defer / ⚠️ Discuss / ❌ Skip |
 
 **Recommendation criteria:**
 - ✅ **Apply** — valid, clear, consistent with the project's conventions, and backed by a justification or source.

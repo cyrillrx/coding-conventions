@@ -122,10 +122,10 @@ Output, in this order:
 1. **Mode, target and range** — one line: `refresh #273 · origin/main...origin/feat/x · 17 files, +315/−42`.
 2. **What drifted** — one row per finding, with its direction.
 
-   | # | Section      | Direction          | What is wrong                                     |
-   |---|--------------|--------------------|---------------------------------------------------|
-   | 1 | Description  | diff → description | The extraction in `core/` is in no bullet         |
-   | 2 | Quality gate | lifecycle          | The gate it explains now passes; section is stale |
+   | #   | Section      | Direction          | What is wrong                                     |
+   |-----|--------------|--------------------|---------------------------------------------------|
+   | 1   | Description  | diff → description | The extraction in `core/` is in no bullet         |
+   | 2   | Quality gate | lifecycle          | The gate it explains now passes; section is stale |
 
 3. **The proposed title and body in full**, as they would be written. Not a patch, not a summary — the text, so it can be read as the reviewer will read it and as the squash will record it.
 
