@@ -18,7 +18,8 @@ collaboration/
 conventions/
   coding-conventions.md                # Clean Code principles (all languages)
   docs-conventions.md                  # Documentation file naming, section separators, line wrapping, Markdown tables
-  kmp-conventions.md                   # Kotlin Multiplatform / Compose style, architecture, testing
+  kotlin-conventions.md                # Kotlin style, idioms, testing, multiplatform (any Kotlin project)
+  compose-conventions.md               # Compose UI layer: MVVM, state and events, Compose, Maestro
   rust-conventions.md                  # Rust backend conventions
   go-conventions.md                    # Go backend conventions
   bruno-conventions.md                 # Bruno API testing conventions
@@ -33,7 +34,8 @@ templates/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
   git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review
-  kmp-conventions/                     # SessionStart hook pointing to a copy of conventions/kmp-conventions.md
+  kotlin-conventions/                  # SessionStart hook pointing to a copy of conventions/kotlin-conventions.md
+  compose-conventions/                 # SessionStart hook pointing to a copy of conventions/compose-conventions.md
   coding-conventions/                  # SessionStart hook injecting copies of conventions/coding-conventions.md and docs-conventions.md
 .claude/skills/
   sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs
@@ -81,7 +83,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Table columns are at least 3 columns wide (a formatting choice); a column whose widest cell exceeds 120 columns, and every column to its right, is left unpadded
 - ADRs and PRDs start from the skeletons in `templates/`; numbers are never reused, and a superseded document keeps its file
 
-### Kotlin / Compose (`conventions/kmp-conventions.md`)
+### Kotlin / Compose (`conventions/kotlin-conventions.md`, `conventions/compose-conventions.md`)
 - Kotlin only; Jetpack/Compose Multiplatform — no XML layouts, no View-system APIs
 - MVVM + Unidirectional Data Flow: `StateFlow` for state, `SharedFlow` (one-shot) for events
 - Formatting 100% delegated to ktlint via `configs/kotlin/.editorconfig` (4-space indent, 120 cols, trailing commas)

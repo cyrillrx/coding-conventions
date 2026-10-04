@@ -23,19 +23,20 @@ When a convention doc changes, the derived skills must be regenerated so the plu
 
 ## Source → derived mapping
 
-| Source doc(s)                                                                 | Derived skill                                                  | What is derived |
-|-------------------------------------------------------------------------------|----------------------------------------------------------------|---|
-| `collaboration/git-and-collaboration.md`                                      | `plugins/git-workflow/skills/commit/SKILL.md`                  | Commit format, types table, authorship rule, grouping |
-| `collaboration/git-and-collaboration.md`                                      | `plugins/git-workflow/skills/address-review/SKILL.md`          | Triage criteria, authorship rule in the commit step |
-| `collaboration/code-review-triage.md`                                         | `plugins/git-workflow/skills/triage-findings/SKILL.md`         | Four axes, severity/impact/complexity scales, decision grid and overrides, follow-up ownership rules |
-| `collaboration/code-review-triage.md` (§6 and §7)                             | `plugins/git-workflow/skills/address-review/SKILL.md`          | Deferral ownership and trace, the escalation to `triage-findings`. It does not score, so it carries neither the scales nor the grid. |
-| `collaboration/pull-request-descriptions.md`, `git-and-collaboration.md` (§7) | `plugins/git-workflow/skills/pull-request/SKILL.md`            | The diff-of-record rules, the two-way reconciliation, the section lifecycle, the title rules, and the template's section list. It does not score findings; the 🔁 section only records what `triage-findings` decided. |
-| `conventions/kmp-conventions.md`                                              | `plugins/kmp-conventions/conventions/kmp-conventions.md`       | A verbatim copy the plugin's SessionStart hook points the agent to, rather than prints: it exceeds what a hook can inject (see Notes). `coding-conventions.md` comes from the `coding-conventions` plugin, which the plugin descriptions tell users to pair it with |
-| `conventions/coding-conventions.md`                                           | `plugins/coding-conventions/conventions/coding-conventions.md` | A verbatim copy, injected by the plugin's SessionStart hook: the installed plugin cannot read files outside its own folder |
-| `conventions/docs-conventions.md`                                             | `plugins/coding-conventions/conventions/docs-conventions.md`   | A verbatim copy, injected by the same hook |
-| _not yet created_ — `conventions/rust-conventions.md`                         | `plugins/rust-conventions/` (to create)                        | — |
-| _not yet created_ — `conventions/go-conventions.md`                           | `plugins/go-conventions/` (to create)                          | — |
-| _not yet created_ — `conventions/bruno-conventions.md`                        | `plugins/bruno-conventions/` (to create)                       | — |
+| Source doc(s)                                                                 | Derived skill                                                    | What is derived |
+|-------------------------------------------------------------------------------|------------------------------------------------------------------|---|
+| `collaboration/git-and-collaboration.md`                                      | `plugins/git-workflow/skills/commit/SKILL.md`                    | Commit format, types table, authorship rule, grouping |
+| `collaboration/git-and-collaboration.md`                                      | `plugins/git-workflow/skills/address-review/SKILL.md`            | Triage criteria, authorship rule in the commit step |
+| `collaboration/code-review-triage.md`                                         | `plugins/git-workflow/skills/triage-findings/SKILL.md`           | Four axes, severity/impact/complexity scales, decision grid and overrides, follow-up ownership rules |
+| `collaboration/code-review-triage.md` (§6 and §7)                             | `plugins/git-workflow/skills/address-review/SKILL.md`            | Deferral ownership and trace, the escalation to `triage-findings`. It does not score, so it carries neither the scales nor the grid. |
+| `collaboration/pull-request-descriptions.md`, `git-and-collaboration.md` (§7) | `plugins/git-workflow/skills/pull-request/SKILL.md`              | The diff-of-record rules, the two-way reconciliation, the section lifecycle, the title rules, and the template's section list. It does not score findings; the 🔁 section only records what `triage-findings` decided. |
+| `conventions/kotlin-conventions.md`                                           | `plugins/kotlin-conventions/conventions/kotlin-conventions.md`   | A verbatim copy the plugin's SessionStart hook points the agent to, rather than prints: it exceeds what a hook can inject (see Notes). `coding-conventions.md` comes from the `coding-conventions` plugin, which the plugin descriptions tell users to pair it with |
+| `conventions/compose-conventions.md`                                          | `plugins/compose-conventions/conventions/compose-conventions.md` | A verbatim copy, pointed to the same way. It builds on `kotlin-conventions.md`, which comes from the `kotlin-conventions` plugin, never from a second copy here |
+| `conventions/coding-conventions.md`                                           | `plugins/coding-conventions/conventions/coding-conventions.md`   | A verbatim copy, injected by the plugin's SessionStart hook: the installed plugin cannot read files outside its own folder |
+| `conventions/docs-conventions.md`                                             | `plugins/coding-conventions/conventions/docs-conventions.md`     | A verbatim copy, injected by the same hook |
+| _not yet created_ — `conventions/rust-conventions.md`                         | `plugins/rust-conventions/` (to create)                          | — |
+| _not yet created_ — `conventions/go-conventions.md`                           | `plugins/go-conventions/` (to create)                            | — |
+| _not yet created_ — `conventions/bruno-conventions.md`                        | `plugins/bruno-conventions/` (to create)                         | — |
 
 Beyond its verbatim copy above, `conventions/docs-conventions.md` governs every Markdown file in the repository — step 2 of the procedure covers that.
 
@@ -53,7 +54,7 @@ Beyond its verbatim copy above, `conventions/docs-conventions.md` governs every 
 
 ## Notes
 
-- Claude Code injects at most 10,000 characters per SessionStart hook command, and truncates the rest to a short preview. A copy above that limit is pointed to rather than printed, as `kmp-conventions` does; check a copy's size whenever its source grows.
+- Claude Code injects at most 10,000 characters per SessionStart hook command, and truncates the rest to a short preview. A copy above that limit is pointed to rather than printed, as `kotlin-conventions` and `compose-conventions` do; check a copy's size whenever its source grows.
 - A verbatim copy is verbatim except for its relative links: rewrite each one to an absolute `https://github.com/cyrillrx/coding-conventions/blob/main/<path>` URL. The installed plugin holds only its own folder, so a relative link points to nothing. A rewritten link widens its table cell: realign any table it sits in, as `conventions/docs-conventions.md` measures alignment.
 - Never invent rules not present in the source docs. If a doc is ambiguous, ask rather than guess.
 - If a skill's mechanics need to change (not just its convention content), that is a manual edit — flag it explicitly rather than silently rewriting it here.

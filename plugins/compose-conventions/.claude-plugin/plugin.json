@@ -1,0 +1,10 @@
+{
+  "name": "compose-conventions",
+  "description": "Points every session to this team's Compose Multiplatform UI conventions (MVVM, state and events, Compose, Maestro), to read before writing or reviewing the UI layer. Pair it with kotlin-conventions, which it builds on",
+  "author": {
+    "name": "cyrillrx"
+  },
+  "homepage": "https://github.com/cyrillrx/coding-conventions",
+  "repository": "https://github.com/cyrillrx/coding-conventions",
+  "keywords": ["kotlin", "compose", "android", "mvvm", "maestro", "session-start"]
+}

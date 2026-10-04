@@ -13,7 +13,8 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 
 - [General Coding Conventions](conventions/coding-conventions.md) — Clean Code principles (all languages)
 - [Documentation Conventions](conventions/docs-conventions.md) — file naming, section separators, line wrapping, Markdown tables
-- [Kotlin Multiplatform & Compose](conventions/kmp-conventions.md) — architecture, style, testing (Android / KMP / CMP)
+- [Kotlin](conventions/kotlin-conventions.md) — style, idioms, testing, multiplatform (any Kotlin project)
+- [Compose](conventions/compose-conventions.md) — UI architecture, Compose, end-to-end tests (Android / KMP / CMP apps)
 - [Rust Backend](conventions/rust-conventions.md)
 - [Go Backend](conventions/go-conventions.md)
 - [Bruno API Testing](conventions/bruno-conventions.md)
@@ -36,11 +37,12 @@ These conventions are also published as a [Claude Code](https://claude.com/claud
 
 Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 
-| Plugin               | Skills                                                            | What it does |
-| -------------------- | ----------------------------------------------------------------- | --- |
-| `git-workflow`       | `/commit`, `/pull-request`, `/triage-findings`, `/address-review` | Atomic Conventional Commits; PR descriptions kept in line with their diff; review-finding triage; answering reviewer comments |
-| `kmp-conventions`    | — (SessionStart hook)                                             | Points every session to the Kotlin Multiplatform / Compose conventions; pair it with `coding-conventions` for Clean Code |
-| `coding-conventions` | — (SessionStart hook)                                             | Loads the general coding and documentation conventions into every session |
+| Plugin                | Skills                                                            | What it does |
+| --------------------- | ----------------------------------------------------------------- | --- |
+| `git-workflow`        | `/commit`, `/pull-request`, `/triage-findings`, `/address-review` | Atomic Conventional Commits; PR descriptions kept in line with their diff; review-finding triage; answering reviewer comments |
+| `kotlin-conventions`  | — (SessionStart hook)                                             | Points every session to the Kotlin conventions; pair it with `coding-conventions` for Clean Code |
+| `compose-conventions` | — (SessionStart hook)                                             | Points every session to the Compose UI conventions; enable it with `kotlin-conventions` in an app with screens |
+| `coding-conventions`  | — (SessionStart hook)                                             | Loads the general coding and documentation conventions into every session |
 
 ### Install in a project
 
@@ -62,7 +64,8 @@ For a team project, commit this to the project's `.claude/settings.json` so the 
   },
   "enabledPlugins": {
     "git-workflow@cyrillrx-conventions": true,
-    "kmp-conventions@cyrillrx-conventions": true,
+    "kotlin-conventions@cyrillrx-conventions": true,
+    "compose-conventions@cyrillrx-conventions": true,
     "coding-conventions@cyrillrx-conventions": true
   },
   "permissions": {
@@ -71,7 +74,7 @@ For a team project, commit this to the project's `.claude/settings.json` so the 
 }
 ```
 
-The `permissions` rule lets the agent read the KMP conventions without a prompt: the `kmp-conventions` hook points to a file in the plugin cache, outside the project folder. Without it, every session asks for that read, and a non-interactive `claude -p` run is refused it and works without the conventions.
+Enable `compose-conventions` only in a project with screens: a server or a library leaves it out. The `permissions` rule lets the agent read the Kotlin and Compose conventions without a prompt: their hooks point to files in the plugin cache, outside the project folder. Without it, every session asks for that read, and a non-interactive `claude -p` run is refused it and works without the conventions.
 
 > **Heads up:** `enabledPlugins` installs and enables these plugins for anyone who trusts the project folder, without an explicit `/plugin install` prompt. Only commit this once your team is comfortable trusting `cyrillrx/coding-conventions` as a code source — the skills can run git and `gh` commands on contributors' machines.
 
