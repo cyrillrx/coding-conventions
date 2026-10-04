@@ -54,6 +54,6 @@ Beyond its verbatim copy above, `conventions/docs-conventions.md` governs every 
 ## Notes
 
 - Claude Code injects at most 10,000 characters per SessionStart hook command, and truncates the rest to a short preview. A copy above that limit is pointed to rather than printed, as `kmp-conventions` does; check a copy's size whenever its source grows.
-- A verbatim copy is verbatim except for its relative links: rewrite each one to an absolute `https://github.com/cyrillrx/coding-conventions/blob/main/<path>` URL. The installed plugin holds only its own folder, so a relative link points to nothing.
+- A verbatim copy is verbatim except for its relative links: rewrite each one to an absolute `https://github.com/cyrillrx/coding-conventions/blob/main/<path>` URL. The installed plugin holds only its own folder, so a relative link points to nothing. A rewritten link widens its table cell: realign any table it sits in, as `conventions/docs-conventions.md` measures alignment.
 - Never invent rules not present in the source docs. If a doc is ambiguous, ask rather than guess.
 - If a skill's mechanics need to change (not just its convention content), that is a manual edit — flag it explicitly rather than silently rewriting it here.
