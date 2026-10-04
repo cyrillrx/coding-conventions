@@ -98,7 +98,7 @@ Collect the findings and merge them: **one fix is one finding**, so the same pro
 
 **Set every severity yourself** against the table below and its examples: the subagent's severity is a proposal. **Settle the _likely_ findings** with any evidence already at hand, such as a build report or a CI log, in either direction.
 
-Give each finding a stable ID, `<AXIS>-NN` — `CODE`, `ARCH`, `TEST`, `DEPS`, `SEC`, `BUILD`, `DOCS`: a finding that matches one of the previous audit keeps its ID; a new one takes the next free number; a fixed ID is never reused.
+Give each finding a stable ID, `<AXIS>-NN` — `CODE`, `ARCH`, `TEST`, `DEPS`, `SEC`, `BUILD`, `DOCS`: a finding that matches one of the previous audit keeps its ID; a new one numbers on from the previous report's **Last IDs** line on its axis — or, when that report has none, from the highest ID it mentions — and never from a gap; a fixed ID is never reused.
 
 Severities, read for a project at rest:
 
@@ -162,6 +162,8 @@ The default branch is the remote-tracking ref above without its `origin/` prefix
 <!-- Same shape as State; each cell reads `<person-days> (<grade>)`, such as `3.75 (C)`. -->
 
 **Verdict**: <Blocked | Needs work | Healthy> — <the cells that drive it>. Total effort: <N> person-days.
+
+**Last IDs**: <`CODE-NN`, `ARCH-NN`, … — the highest ID ever used on each axis, fixed ones included; `—` for an axis never used>.
 
 ## Progress since the last audit
 
