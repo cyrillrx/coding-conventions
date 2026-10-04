@@ -62,11 +62,11 @@ They can disagree — a one-line fix sitting behind a day of investigation, a me
 
 Exactly three outcomes. Each one carries a rationale — the reason the other two were rejected.
 
-| Outcome          | What it commits us to                                                                                                     |
-|------------------|---------------------------------------------------------------------------------------------------------------------------|
-| ✅ **Fix here**   | Addressed in this PR. The recommendation must say **how**: the approach and the files involved, concretely enough to act. |
-| 🕐 **Follow-up** | Deferred, with an owner and a trace — see [§6](#6-follow-ups). Never a verbal "later".                                    |
-| ❌ **No action**  | Nothing happens, on purpose. The rationale states why.                                                                    |
+| Outcome          | What it commits us to |
+|------------------|---|
+| ✅ **Fix here**  | Addressed in this PR. The recommendation must say **how**: the approach and the files involved, concretely enough to act. |
+| 🕐 **Follow-up** | Deferred, with an owner and a trace — see [§6](#6-follow-ups). Never a verbal "later". |
+| ❌ **No action** | Nothing happens, on purpose. The rationale states why. |
 
 ❌ is deliberately weak. It spans everything from "this is wrong" to "correct, but not worth its cost", and most of the time it is simply a comment we skip — not a verdict on the code and not a refusal. Reserve heavier wording for the rare case that earns it; the default reading of a ❌ is "we looked, we decided, we moved on".
 
@@ -74,11 +74,11 @@ These are dispositions of a **finding**, not replies to a **person**: they decid
 
 ### Default decision grid
 
-| Severity   | Complexity S                        | Complexity M | Complexity L                                           |
-|------------|-------------------------------------|--------------|--------------------------------------------------------|
+| Severity   | Complexity S                         | Complexity M  | Complexity L                                            |
+|------------|--------------------------------------|---------------|---------------------------------------------------------|
 | 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** dedicated PR for the real fix |
-| 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer      |
-| 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)   | 🕐 Follow-up | 🕐 Follow-up                                           |
+| 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer       |
+| 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)    | 🕐 Follow-up  | 🕐 Follow-up                                            |
 | 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
 
 The grid is the default, not the verdict. It is overridden by:
@@ -130,19 +130,19 @@ The [Code Review Emoji Guide](code-review-emojis.md) is how a finding is *commun
 | 🔧    | A change; they believe the behavior is wrong                  |
 | ⛏     | A small improvement, explicitly not worth arguing over        |
 | 🕐    | To defer this rather than grow the PR                         |
-| 🏕    | An opportunistic cleanup next to the change, not caused by it |
-| 💭 ❓  | An answer, or a discussion — not a change, yet                |
+| 🏕     | An opportunistic cleanup next to the change, not caused by it |
+| 💭 ❓ | An answer, or a discussion — not a change, yet                |
 | 📝 👍 | Nothing; it is a note or a compliment                         |
 
 **The emoji never sets the severity and never sets the outcome.** Score on substance: a 🔧 can be factually wrong (→ ❌), a 💭 can uncover a real crash (→ 🔴 ✅), and a comment with no emoji at all — external reviewers, bots — is scored exactly the same way.
 
 What the comment asks for maps to a disposition like this:
 
-| The comment…                                           | Disposition                                                  |
-|--------------------------------------------------------|--------------------------------------------------------------|
+| The comment…                                           | Disposition                                                   |
+|--------------------------------------------------------|---------------------------------------------------------------|
 | asks for a change, and it stands                       | Score it: ✅ Fix here, or 🕐 when complexity and scope say so |
-| needs no code change — note, praise, answered question | Not a finding. Nothing to score                              |
-| is unclear, or arrives with no stated reason           | Not a finding yet. Ask, then score the answer                |
+| needs no code change — note, praise, answered question | Not a finding. Nothing to score                               |
+| is unclear, or arrives with no stated reason           | Not a finding yet. Ask, then score the answer                 |
 | does not stand                                         | ❌ No action, with the reason stated to the reviewer          |
 
 ## 8. Expected output
@@ -151,9 +151,9 @@ A triage produces three things, in this order.
 
 **A summary table** — one row per finding, none omitted:
 
-| # | Finding                                   | Severity | Impact                 | Complexity | Recommendation |
-|---|-------------------------------------------|----------|------------------------|------------|----------------|
-| 1 | `SpellRepository.kt:42` — unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here     |
+| #   | Finding                                   | Severity | Impact                 | Complexity | Recommendation |
+|-----|-------------------------------------------|----------|------------------------|------------|----------------|
+| 1   | `SpellRepository.kt:42` — unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
 
 **A detail block per finding**, carrying the rationale:
 

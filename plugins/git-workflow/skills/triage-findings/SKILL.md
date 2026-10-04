@@ -119,19 +119,19 @@ Both estimates cover the test and the verification, not just the edit. When they
 
 | Outcome          | What it commits us to                                                                               |
 |------------------|-----------------------------------------------------------------------------------------------------|
-| ✅ **Fix here**   | Addressed in this change. Must state **how**: the approach and the files, concretely enough to act. |
+| ✅ **Fix here**  | Addressed in this change. Must state **how**: the approach and the files, concretely enough to act. |
 | 🕐 **Follow-up** | Deferred, with an owner and a trace (Step 3). Never a verbal "later".                               |
-| ❌ **No action**  | Nothing happens, on purpose. The rationale states why.                                              |
+| ❌ **No action** | Nothing happens, on purpose. The rationale states why.                                              |
 
 ❌ is deliberately weak: it spans "this is wrong" through "correct, but not worth its cost", and most of the time it is simply a finding we skip. It is not a verdict on the code and not a refusal — the default reading is "we looked, we decided, we moved on". These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told.
 
 **Default decision grid:**
 
-| Severity   | Complexity S                        | Complexity M | Complexity L                                           |
-|------------|-------------------------------------|--------------|--------------------------------------------------------|
+| Severity   | Complexity S                         | Complexity M  | Complexity L                                            |
+|------------|--------------------------------------|---------------|---------------------------------------------------------|
 | 🔴 Blocker | ✅ Fix here                          | ✅ Fix here   | ✅ Minimal fix here **+** dedicated PR for the real fix |
-| 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer      |
-| 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)   | 🕐 Follow-up | 🕐 Follow-up                                           |
+| 🟠 Major   | ✅ Fix here                          | ✅ Fix here   | 🕐 Follow-up, explicitly agreed with the reviewer       |
+| 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)    | 🕐 Follow-up  | 🕐 Follow-up                                            |
 | 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
 
 The grid and the overrides cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale — the four axes apply, and the judgement belongs to whoever owns the code. This is a shared default, not an exhaustive rulebook.
@@ -151,9 +151,9 @@ Output these three parts, and **change nothing in this step**.
 
 **1. Summary table** — one row per finding, none omitted, ordered by severity then complexity:
 
-| # | Finding                                   | Severity | Impact                 | Complexity | Recommendation |
-|---|-------------------------------------------|----------|------------------------|------------|----------------|
-| 1 | `SpellRepository.kt:42` — unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here     |
+| #   | Finding                                   | Severity | Impact                 | Complexity | Recommendation |
+|-----|-------------------------------------------|----------|------------------------|------------|----------------|
+| 1   | `SpellRepository.kt:42` — unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
 
 **2. Detail block per finding**, carrying the rationale of the decision:
 
