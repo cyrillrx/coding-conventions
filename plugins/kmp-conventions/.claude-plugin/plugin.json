@@ -1,10 +1,10 @@
 {
   "name": "kmp-conventions",
-  "description": "Kotlin Multiplatform / Compose style and architecture patterns from this team's conventions",
+  "description": "Points every session to this team's Kotlin Multiplatform / Compose conventions, to read before writing or reviewing Kotlin. Pair it with coding-conventions for the general Clean Code rules",
   "author": {
     "name": "cyrillrx"
   },
   "homepage": "https://github.com/cyrillrx/coding-conventions",
   "repository": "https://github.com/cyrillrx/coding-conventions",
-  "keywords": ["kotlin", "kmp", "compose", "android", "mvvm", "code-style"]
+  "keywords": ["kotlin", "kmp", "compose", "android", "mvvm", "code-style", "session-start"]
 }

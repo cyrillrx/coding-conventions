@@ -33,7 +33,7 @@ templates/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
   git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review
-  kmp-conventions/                     # kmp-style knowledge skill
+  kmp-conventions/                     # SessionStart hook pointing to a copy of conventions/kmp-conventions.md
   coding-conventions/                  # SessionStart hook injecting copies of conventions/coding-conventions.md and docs-conventions.md
 .claude/skills/
   sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs

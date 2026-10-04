@@ -2,7 +2,7 @@
 
 This document details the architectural patterns, style rules, and testing guidelines for Kotlin Multiplatform (KMP) and Compose Multiplatform (CMP) code. It also covers Android-specific Kotlin/Compose style.
 
-It builds on [Kotlin's coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) and the general [Clean Code principles](coding-conventions.md).
+It builds on [Kotlin's coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) and the general [Clean Code principles](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/coding-conventions.md).
 
 ## Table of Contents
 
@@ -245,7 +245,7 @@ These implementations belong to the **main source set** of the data layer (e.g. 
 
 ## Formatting
 
-Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/kotlin/.editorconfig`](../configs/kotlin/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
+Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/kotlin/.editorconfig`](https://github.com/cyrillrx/coding-conventions/blob/main/configs/kotlin/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
 
 The rules below describe what that configuration enforces, for reference.
 
@@ -609,7 +609,7 @@ Maestro covers the Android and iOS apps only; the Desktop (JVM) target has no E2
 
 ## CI & Policies
 
-Refer to [`git-and-collaboration.md`](../collaboration/git-and-collaboration.md) for general CI policies (warnings as errors, PR requirements, security scans).
+Refer to [`git-and-collaboration.md`](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/git-and-collaboration.md) for general CI policies (warnings as errors, PR requirements, security scans).
 
 KMP-specific CI requirements:
 - PRs must pass `ktlintCheck` and the project must build successfully for all targets (Android, iOS, Desktop).
