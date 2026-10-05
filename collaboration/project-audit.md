@@ -81,6 +81,8 @@ A single 🔴 is enough for an E: the module cannot be used or released as it st
 
 Examples: no finding → A; eleven 🟡 → C; one 🟠 and no 🟡 → C; three 🟠 → D; one 🔴 → E.
 
+The volume is meant to count: each dependency behind its latest stable release is its own 🟡, so up to three lagging dependencies leave a module at A, four to ten bring it to B, and more than ten to C. A dependency past its end of life is a 🟠 on its own.
+
 ## 6. Effort and workload
 
 Effort is measured in **person-days**: one person-day is one focused working day of one person, about six effective hours, whenever it is actually done.

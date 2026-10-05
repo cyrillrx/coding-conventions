@@ -125,6 +125,8 @@ The cells are the modules × Code, Architecture, Tests, Dependencies and obsoles
 | B     | Four to ten 🟡                     |
 | A     | Three 🟡 or fewer                  |
 
+The volume is meant to count: each dependency behind its latest stable release is its own 🟡, so up to three lagging dependencies leave a module at A, four to ten bring it to B, and more than ten to C. A dependency past its end of life is a 🟠 on its own.
+
 **Effort.** Effort is measured in person-days: one focused working day of one person, about six effective hours. Group the findings into **narrow** work items — one cell each where possible; split a cross-cutting change into the items each cell needs — and size each one on the audit's scale below, never on the triage complexity scale, which sizes a change about to merge. The estimate covers the test and the verification. Fixes of a few minutes each in the same cell form **one** item: ten ten-minute fixes are one S, not ten.
 
 | Size  | Estimated effort                 | Counts as                                                         |
