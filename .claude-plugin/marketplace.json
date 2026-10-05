@@ -10,7 +10,7 @@
     {
       "name": "git-workflow",
       "source": "./plugins/git-workflow",
-      "description": "Atomic Conventional Commits, pull request descriptions kept in line with their diff, triaging review findings into decisions, and answering reviewer comments on a PR"
+      "description": "Atomic Conventional Commits, pull request descriptions kept in line with their diff, triaging review findings into decisions, answering reviewer comments on a PR, and review rounds until a PR converges"
     },
     {
       "name": "kotlin-conventions",

@@ -4,8 +4,10 @@ description: >-
   Turn code review findings into decisions: severity, impact, complexity, then one outcome per finding
   — fix here, follow-up ticket, or no action — each with its rationale, plus the resulting action plan.
   Reads the findings from the conversation, typically right after a code review, and the change itself
-  from git. Use when findings exist but no decision does. When a reviewer is waiting for an answer on
-  an open pull request, use address-review instead.
+  from git; when there are none, or with --review, it runs a fresh code review first. Use when
+  findings exist but no decision does, or to review then triage a change. When a reviewer is waiting
+  for an answer on an open pull request, use address-review instead.
+argument-hint: "[--review] [low|medium|high]"
 # Local reads only. This skill decides; every call that changes something — creating a follow-up
 # ticket, editing a PR description, committing — keeps its permission prompt on purpose.
 # `allowed-tools` merely pre-approves, so listing them here would waive the one check that does not
@@ -32,6 +34,7 @@ in cyrillrx/coding-conventions. Keep it in sync with /sync-plugins.
 
 ## Context
 
+- Arguments: $ARGUMENTS
 - Current branch: !`git branch --show-current`
 - Uncommitted changes: !`git status --short`
 
@@ -50,7 +53,14 @@ The findings are already here. This skill is normally invoked straight after a c
 - review comments the user pasted in,
 - or findings you produced yourself earlier in the session.
 
-If the conversation holds no findings, **review the change first**: `git diff <base>...HEAD` — resolving the base branch as Step 2 describes — plus `git diff` for uncommitted work, then triage what you find. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
+If the conversation holds no findings, or `--review` is passed, **review the change first**, on a fresh context:
+
+- Resolve the base branch as Step 2 describes.
+- Launch a subagent to run `/code-review <effort>` on `<base>...HEAD` — `<effort>` is the `low`, `medium` or `high` argument, `high` by default — and to return its findings verbatim, changing nothing. Where `/code-review` is not available, the subagent reviews `git diff <base>...HEAD` itself, and says so.
+- With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over.
+- Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
+
+Findings already in the conversation come first otherwise — a linter's output, pasted comments, an earlier review: do not run a second review on top of them. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
 
 Do not go looking for a PR's review threads. Scoring a reviewer's comment is fine when the user hands it to you, but fetching, replying and resolving belong to `/git-workflow:address-review`. If the PR still has unresolved threads, say so and name that skill.
 
@@ -203,6 +213,8 @@ Once approved, in this order:
 > "May I commit and push these changes? Branch: `<branch>`, suggested commit message: `<conventional-commit-message>`"
 
 The commit message follows Conventional Commits and carries **no AI attribution** — no `Co-Authored-By` for AI assistants, no `🤖 Generated with` footer. If the project provides a `/commit` skill, use it to split the fixes into atomic commits.
+
+The one exception is a round run by `/git-workflow:review-loop`: invoking that skill is the approval for its local commits, and it pushes once, at the end. Follow its steps instead of this one.
 
 ## Rules
 

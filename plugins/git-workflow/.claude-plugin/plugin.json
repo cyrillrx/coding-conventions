@@ -1,10 +1,10 @@
 {
   "name": "git-workflow",
-  "description": "Atomic Conventional Commits, pull request descriptions kept in line with their diff, triaging review findings into decisions, and answering reviewer comments on a PR",
+  "description": "Atomic Conventional Commits, pull request descriptions kept in line with their diff, triaging review findings into decisions, answering reviewer comments on a PR, and review rounds until a PR converges",
   "author": {
     "name": "cyrillrx"
   },
   "homepage": "https://github.com/cyrillrx/coding-conventions",
   "repository": "https://github.com/cyrillrx/coding-conventions",
-  "keywords": ["git", "commit", "conventional-commits", "code-review", "triage", "findings", "pull-request", "pr-description"]
+  "keywords": ["git", "commit", "conventional-commits", "code-review", "triage", "findings", "pull-request", "pr-description", "review-loop"]
 }
