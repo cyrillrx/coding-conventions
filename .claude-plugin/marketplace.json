@@ -4,7 +4,7 @@
     "name": "cyrillrx"
   },
   "metadata": {
-    "description": "Git workflow plus coding, Kotlin and Compose conventions, derived from this repository's documentation"
+    "description": "Git workflow and project audit skills, plus coding, Kotlin and Compose conventions, derived from this repository's documentation"
   },
   "plugins": [
     {
@@ -26,6 +26,11 @@
       "name": "coding-conventions",
       "source": "./plugins/coding-conventions",
       "description": "Loads this team's general coding and documentation conventions into every session, so they apply without being asked for"
+    },
+    {
+      "name": "project-health",
+      "source": "./plugins/project-health",
+      "description": "A manual /audit of a project's health: A–E state and effort grades per module and axis, blockers, bugs, debt and obsolescence, gaps to the conventions and a workload estimate, written to docs/audit-YYYY-MM-DD.md"
     }
   ]
 }
