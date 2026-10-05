@@ -17,6 +17,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 - [Documentation Conventions](conventions/docs-conventions.md) — file naming, section separators, line wrapping, Markdown tables
 - [Kotlin](conventions/kotlin-conventions.md) — style, idioms, testing, multiplatform (any Kotlin project)
 - [Compose](conventions/compose-conventions.md) — UI architecture, Compose, end-to-end tests (Android / KMP / CMP apps)
+- [Desktop Distribution](conventions/desktop-distribution-conventions.md) — single instance, packaging, versioning, releases, signing and updates (Compose Desktop apps)
 - [Rust Backend](conventions/rust-conventions.md)
 - [Go Backend](conventions/go-conventions.md)
 - [Bruno API Testing](conventions/bruno-conventions.md)
