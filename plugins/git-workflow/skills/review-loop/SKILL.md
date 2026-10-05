@@ -61,7 +61,7 @@ Fetch the PR's unresolved review threads with the query in `address-review` Step
 
 Otherwise, follow `address-review` Step 3: one proposed response per thread, then **wait for the author's approval, even with `--auto`** — a person is waiting, and the reply goes out in the author's name. Then:
 
-- apply the ✅ responses, run the verification commands, and commit, per `/git-workflow:commit`;
+- apply the ✅ responses, run the verification commands, and commit with `/git-workflow:commit --auto`;
 - **hold every reply and every resolution**: they are posted in Step 4, after the push, so no "Fixed" points at code the reviewer cannot see yet;
 - record any ⚠️ Discuss thread: it stays open, and it decides the status label;
 - add each 🕐 Defer thread's ticket to the follow-up list Step 4 opens: its held reply names that ticket once it exists.
@@ -79,7 +79,7 @@ For round `i` from 1 to the cap:
 3. **Collect the 🕐** — keep each ready-to-submit ticket from the plan in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
 4. **Converged?** If the approved plan holds no ✅, the loop has converged: go to Step 4.
 5. **Apply** the ✅ fixes, as `triage-findings` Step 6.1 does. Run the verification commands; if they fail, fix the failure within the round, or stop the loop as blocked — then stash the round's uncommitted fixes so no later commit picks them up, and name the stash in the report. **Never commit a red build.**
-6. **Commit** the round, per `/git-workflow:commit` — atomic Conventional Commits, no AI attribution. Do not ask first: invoking this skill was the approval. Do not push.
+6. **Commit** the round with `/git-workflow:commit --auto` — atomic Conventional Commits, no AI attribution. `--auto`, because invoking this skill was the approval. Do not push.
 
 If round `cap` committed fixes, the loop stops at the cap: say so, and go to Step 4. Never run an extra round to round things off.
 
