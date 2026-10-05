@@ -51,7 +51,7 @@ reference from the "latest stable" lines of conventions/*-conventions.md. Keep t
 
 ## Your task
 
-Audit the project in the current directory and write the result to `docs/audit-YYYY-MM-DD.md`, for today. The audit is **read-only**: the report is the only file you write, and you never commit it. The grading below is **Grid v1** of the [Project Audit](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/project-audit.md) guide; apply it exactly, so that two audits of the same project compare.
+Audit the project in the current directory and write the result to `docs/audit-YYYY-MM-DD.md`, for today. The audit is **read-only**: the report is the only file you write, and you commit it only if the user asks (Step 5). The grading below is **Grid v1** of the [Project Audit](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/project-audit.md) guide; apply it exactly, so that two audits of the same project compare.
 
 ### Step 0 — Pin the revision
 
@@ -223,7 +223,7 @@ Summarise the verdict, the worst cells and the total effort in a few lines, and 
 
 ## Rules
 
-- The report is the only write. No fix, no commit, no branch, no ticket, no checkout, no fetch.
+- The report is the only write, and it is committed only on request. No fix, no branch, no ticket, no checkout, no fetch.
 - The scope is always confirmed before the fan-out.
 - Static by default: nothing is built or run without the user's consent.
 - Every file is read at the pinned commit, never from the working tree — previous audit reports excepted.
