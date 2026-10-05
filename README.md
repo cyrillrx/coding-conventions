@@ -20,6 +20,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 - [Compose](conventions/compose-conventions.md) — UI architecture and composables (Android / KMP / CMP apps)
 - [Compose ViewModels](conventions/compose-viewmodel-conventions.md) — ViewModel naming, state, events, lifecycle-aware refresh
 - [Compose testing](conventions/compose-testing-conventions.md) — ViewModel tests and Maestro end-to-end flows
+- [Desktop Distribution](conventions/desktop-distribution-conventions.md) — single instance, packaging, versioning, releases, signing and updates (Compose Desktop apps)
 - [Rust Backend](conventions/rust-conventions.md)
 - [Go Backend](conventions/go-conventions.md)
 - [Bruno API Testing](conventions/bruno-conventions.md)
