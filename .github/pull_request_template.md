@@ -1,11 +1,11 @@
 ## 📝 Description
 
 <!-- PR title follows Conventional Commits: <type>(<scope>): <subject>. See collaboration/git-and-collaboration.md. -->
-<!-- Becomes the squash commit body, so write it like one: the problem, then what this PR changes — the diff shows the details. Two short paragraphs at most. Reasoning history and reviewer guidance go elsewhere, not here. -->
+<!-- Becomes the squash commit body, so write it like one: the problem, then what this PR changes — the diff shows the details. One paragraph, three sentences at most. Reasoning history and reviewer guidance go elsewhere, not here. -->
 
 ## 🔍 Review notes
 
-<!-- Optional, not copied into the commit: where to start, what is mechanical, what deserves attention, alternatives ruled out. Investigation history belongs in the linked issue. Delete this section if not relevant. -->
+<!-- Optional, not copied into the commit: where to start, what is mechanical, what deserves attention, alternatives ruled out, one line per item. Investigation history belongs in the linked issue. Delete this section if not relevant. -->
 
 ## 🖼️ Media
 
@@ -13,11 +13,11 @@
 
 ## 🔁 Follow-ups
 
-<!-- Problems this work surfaced but deliberately left out, each with its issue. Delete this section if there are none. -->
+<!-- Problems this work surfaced but deliberately left out, one line each, with its issue. Delete this section if there are none. -->
 
 ## 🤔 Considered and not addressed
 
-<!-- Review suggestions rejected on purpose, with the reason. Delete this section if there are none. -->
+<!-- Review suggestions rejected on purpose, one line each, with the reason. Delete this section if there are none. -->
 
 ## ✅ Checklist
 
