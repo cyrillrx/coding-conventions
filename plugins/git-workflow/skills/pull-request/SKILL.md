@@ -17,6 +17,8 @@ allowed-tools:
   - Bash(gh pr diff:*)
   - Bash(gh pr list:*)
   - Bash(gh pr checks:*)
+  - Bash(gh pr create:*)
+  - Bash(gh pr edit:*)
   - Bash(gh issue view:*)
   - Bash(gh issue list:*)
   - Bash(gh repo view:*)
@@ -28,8 +30,8 @@ The reconciliation procedure, section lifecycle and title rules in this skill ar
 collaboration/pull-request-descriptions.md, and the authoring rules from git-and-collaboration.md §7,
 in cyrillrx/coding-conventions. Keep them in sync with /sync-plugins.
 
-`gh pr create` and `gh pr edit` are deliberately absent from allowed-tools: they are what publishes
-the text, and that prompt is the last checkpoint before the author's prose reaches the forge.
+The skill writes the PR directly, without asking: the author proofreads the published PR, and the
+checklist box for that stays theirs.
 -->
 
 ## Context
@@ -54,7 +56,7 @@ Follow these steps in order.
 | empty, PR exists | refresh     | the PR of the current branch           |
 | empty, no PR     | create      | a new PR from the current branch       |
 
-An empty argument on a branch that already has a PR is a refresh, never a second PR. Say which mode you picked before going further, so a misread is caught in one line rather than at the end.
+An empty argument on a branch that already has a PR is a refresh, never a second PR. Say which mode you picked in one line before going further, so a misread shows early — then carry on without waiting.
 
 In **create** mode, stop and say so if the branch is `main` or the resolved default: there is nothing to open a PR from. Check for unpushed commits (`git log origin/<head>..HEAD`) and push before creating, or the PR opens on an incomplete diff.
 
@@ -98,10 +100,10 @@ This is the step that exists. Run it in both directions and record the result; d
 
 Then re-examine each section for a lifecycle change:
 
-- **📝 Description** — still two short paragraphs at most. This is the only section the squash keeps, so it is the one to weigh hardest. A refresh is where the budget is lost: each commit invites one more sentence. What no longer fits moves to **Review notes**, to the linked issue or to an ADR — it is relocated, not deleted.
-- **🔍 Review notes** — guidance for a state the branch has left is worse than none. A "start with the parser" pointing at a file that was since renamed sends the reviewer looking for it.
-- **🔁 Follow-ups** — verify each referenced issue exists and is open (`gh issue view <n> --json state`). Drop the ones fixed in the end; add the deferrals decided since. A follow-up with no issue is not a follow-up.
-- **🤔 Considered and not addressed** — a suggestion that was eventually applied leaves this section.
+- **📝 Description** — still one paragraph of three sentences at most, leading with the why and never restating the diff. This is the only section the squash keeps, so it is the one to weigh hardest. A refresh is where the budget is lost: each commit invites one more sentence. What no longer fits moves to **Review notes**, to the linked issue or to an ADR — it is relocated, not deleted.
+- **🔍 Review notes** — one line per item. Guidance for a state the branch has left is worse than none. A "start with the parser" pointing at a file that was since renamed sends the reviewer looking for it.
+- **🔁 Follow-ups** — one line per item. Verify each referenced issue exists and is open (`gh issue view <n> --json state`). Drop the ones fixed in the end; add the deferrals decided since. A follow-up with no issue is not a follow-up.
+- **🤔 Considered and not addressed** — one line per item. A suggestion that was eventually applied leaves this section.
 - **🖼️ Media** — a screenshot of a screen the branch has since changed is worse than none. Flag it for the author; you cannot retake it.
 - **✅ Checklist** — tick only what the diff proves. Annotate the inapplicable as `(N/A, <reason>)`. Verify "CI is green" with `gh pr checks` rather than assuming it. **Never tick "The author has proofread the PR"** — that box is the author's.
 - **`Closes #N`** — the last lines, after the checklist. Check each one still describes what the branch does: merging a PR that kept a stale line silently closes work that is still open.
@@ -115,9 +117,23 @@ The title is a Conventional Commit, so its type and scope are claims that expire
 - The scope follows the files actually touched.
 - Leave the title alone when it still fits. Renaming for style churns notifications for nothing.
 
-### Step 6 — Present, then stop
+### Step 6 — Apply, then report
 
-Output, in this order:
+If nothing drifted, say exactly that and stop without writing. A refresh that finds nothing is a successful refresh, not a reason to rewrite prose for its own sake.
+
+Otherwise, write it now — no confirmation question.
+
+In refresh mode, write back the body **you read in Step 3 with your edits spliced in** — never a body you did not read. Re-read it immediately before writing, so an edit made on the forge in the meantime is kept:
+
+```bash
+body="$(mktemp)"
+gh pr view <number> --json body --jq '.body' > "$body"   # splice, then:
+gh pr edit <number> --body-file "$body"                  # add --title "<title>" if Step 5 changed it
+```
+
+In create mode, `gh pr create --title "<conventional-commit-title>" --body-file <file>`. Do not add reviewers — per the conventions, the author assigns them on the platform. Carry **no AI attribution**: no `Co-Authored-By` for an assistant, no generated-with footer.
+
+Then report, briefly:
 
 1. **Mode, target and range** — one line: `refresh #273 · origin/main...origin/feat/x · 17 files, +315/−42`.
 2. **What drifted** — one row per finding, with its direction.
@@ -127,26 +143,7 @@ Output, in this order:
    | 1   | Description  | diff → description | The extraction in `core/` is in no bullet         |
    | 2   | Quality gate | lifecycle          | The gate it explains now passes; section is stale |
 
-3. **The proposed title and body in full**, as they would be written. Not a patch, not a summary — the text, so it can be read as the reviewer will read it and as the squash will record it.
-
-If nothing drifted, say exactly that and stop. A refresh that finds nothing is a successful refresh, not a reason to rewrite prose for its own sake.
-
-End the turn with a question — "Shall I apply this?" — and wait. The description is the author's voice; the recommendations are proposals.
-
-### Step 7 — Apply after approval
-
-`gh pr create` and `gh pr edit` are absent from `allowed-tools` on purpose, so each one prompts. That prompt is the feature.
-
-In refresh mode, write back the body **you read in Step 3 with your edits spliced in** — never a body you did not read, and never one fetched before the user's last change. Re-read immediately before writing if any time has passed:
-
-```bash
-gh pr view <number> --json body --jq '.body' > /tmp/pr-body.md   # splice, then:
-gh pr edit <number> --body-file /tmp/pr-body.md
-```
-
-In create mode, `gh pr create --title "<conventional-commit-title>" --body-file <file>`. Do not add reviewers — per the conventions, the author assigns them on the platform. Carry **no AI attribution**: no `Co-Authored-By` for an assistant, no generated-with footer.
-
-Then report what changed, and leave the proofreading checkbox for the author.
+3. **The PR URL**, and a reminder that the proofreading checkbox is the author's. Do not reprint the body: it is on the forge.
 
 ## Related skills
 
