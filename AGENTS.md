@@ -14,6 +14,7 @@ collaboration/
   git-and-collaboration.md             # Conventional Commits, branching, PR etiquette, ADRs
   code-review-comments.md              # Emoji legend for review comments, and the protocol for answering them
   code-review-triage.md                # Severity/impact/complexity grid, fix-here vs follow-up vs no-action
+  code-review-loop.md                  # Review → triage → fix rounds until a review leaves nothing to fix, and the status label
   pull-request-descriptions.md         # Keeping a PR title and description true to its diff as the branch moves
   project-audit.md                     # Project health audit: scope, axes, audit severities, A–E state and effort grids
 conventions/
@@ -34,7 +35,7 @@ templates/
 .claude-plugin/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
-  git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review
+  git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review, /review-loop
   kotlin-conventions/                  # SessionStart hook pointing to a copy of conventions/kotlin-conventions.md
   compose-conventions/                 # SessionStart hook pointing to a copy of conventions/compose-conventions.md
   coding-conventions/                  # SessionStart hook injecting copies of conventions/coding-conventions.md and docs-conventions.md
@@ -76,6 +77,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Trunk-based development; short-lived feature branches named after commit types
 - Use [code-review-comments.md](collaboration/code-review-comments.md) to signal blocking vs. non-blocking comments; every comment gets a reply, and a request with no stated reason is discussed, never dismissed
 - Every review finding gets a decision — see [code-review-triage.md](collaboration/code-review-triage.md): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale
+- Iterate review rounds per [code-review-loop.md](collaboration/code-review-loop.md): open comments first, a fresh review each round, one push at the end, stop when a round has no ✅ or at the cap (4 by default, 10 at most)
 - Project audits follow [project-audit.md](collaboration/project-audit.md): one cause per finding with a stable ID, A–E state and effort grades per module and axis, a verdict from the worst cell and never an average; changing the grading bumps the grid version
 
 ### Documentation (`conventions/docs-conventions.md`)

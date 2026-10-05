@@ -1,6 +1,7 @@
 ---
 name: commit
 description: Stage and commit changes as multiple atomic Conventional Commits, one per logical unit. Use when the user asks to commit, or to split working changes into clean commits.
+argument-hint: "[--auto]"
 allowed-tools:
   - Bash(git add:*)
   - Bash(git status:*)
@@ -18,6 +19,7 @@ in cyrillrx/coding-conventions. Keep them in sync with /sync-plugins.
 
 ## Context
 
+- Arguments: $ARGUMENTS
 - Current git status: !`git status`
 - Current git diff (staged and unstaged): !`git diff HEAD`
 - Current branch: !`git branch --show-current`
@@ -29,6 +31,8 @@ in cyrillrx/coding-conventions. Keep them in sync with /sync-plugins.
 Analyse the diff and produce an explicit commit plan: a numbered list where each entry shows the commit message and the exact files it covers. Split as finely as possible (see grouping strategy below).
 
 Output the plan, then end your turn with a confirmation question such as "Does this plan look good?". **Do not run any `git add` or `git commit` command in this step.** Your response must contain only the plan and the question — no tool calls that modify the repo.
+
+With `--auto`, the approval was given before the call — by a skill that runs this one, such as `/git-workflow:review-loop`. Output the plan, then go straight to Step 2 without asking.
 
 **Step 2 — Execute after approval.**
 Only once the user has explicitly approved the plan (e.g. "yes", "go ahead", "ok"), execute each commit in the listed order without asking for confirmation again. Stage only the files for each commit, commit, then move to the next. The project must compile after each individual commit.

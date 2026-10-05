@@ -153,3 +153,5 @@ mutation($threadId:ID!) {
 ### Step 7 — Re-run review (if available)
 
 If the project provides a `/review` skill or command, suggest running `/clear` first (to start a fresh context — review reads the full diff and all touched files), then invoke `/review <PR_NUMBER>`. Do **not** run `/clear` yourself. If no review skill exists, skip this step.
+
+To repeat review, triage and fix until a review leaves nothing to fix, suggest `/git-workflow:review-loop` instead: it runs each review on a fresh context, so no `/clear` is needed between rounds.
