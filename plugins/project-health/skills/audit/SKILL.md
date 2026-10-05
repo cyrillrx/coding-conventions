@@ -7,12 +7,9 @@ description: >-
   before resuming or realigning a project.
 argument-hint: "[consumer-project ...]"
 disable-model-invocation: true
-# Read-only on the audited project. Write is left out on purpose: the report is the one write,
-# and its prompt is the check that nothing else gets written. Building, running the tests and any
-# forge call are prompted too, and so are git grep, git log and git show: their -O and --output
-# options run a command or write a file, so they are never pre-approved. Subagents do not inherit this list: they run as this plugin's
-# auditor agent, which has no Edit or Write tool, and keeps Bash for git, under the session's own
-# permissions.
+# Read-only: Write is left out so the report's prompt checks the one write. git grep, git log and
+# git show stay prompted, since -O and --output run a command or write a file. Subagents do not
+# inherit this list; they run as this plugin's auditor agent, which cannot edit.
 allowed-tools:
   - Read
   - Grep
@@ -55,7 +52,7 @@ Audit the project in the current directory and write the result to `docs/audit-Y
 
 ### Step 0 — Pin the revision
 
-The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit — `git cat-file -p <sha>:<path>`, `git ls-tree -r <sha>` — never from the working tree, which may sit on another branch or change while the audit runs. If the default branch reads "unresolved", ask the user to run `git remote set-head origin --auto`, or to name the branch to audit. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself. `git grep <pattern> <sha>` and `git log <sha>` work at the pinned commit too, but each call is prompted: read files with `git cat-file -p`, never with `git show`.
+The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit — `git cat-file -p <sha>:<path>`, `git ls-tree -r <sha>` — never from the working tree, which may sit on another branch or change while the audit runs. If the default branch reads "unresolved", ask the user to run `git remote set-head origin --auto`, or to name the branch to audit. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself. Read files with `git cat-file -p`, which is pre-approved, rather than `git show`, which prompts at every call.
 
 ### Step 1 — Frame the scope, and confirm it
 
@@ -69,20 +66,17 @@ The audit reads **one pinned commit**: the tip of the default branch above, `<sh
 | Sample or demo apps (`sample/`, `demo/`)                       | Graded on Security and on Dependencies and obsolescence only   |
 | Dedicated test modules                                         | Attached to the module they test                               |
 
-- **Per-stack checklists.** When `checklists/<stack>.md` exists next to this skill, hand it to the subagents with the common base. None ships yet: they will be derived from `conventions/<stack>-conventions.md` through `/sync-plugins`. Until then, the subagents read that convention doc from GitHub directly, and the report says the stack checklist was not applied. A Kotlin module reads `kotlin-conventions.md`, and `compose-conventions.md` as well when it uses Compose.
+- **Per-stack checklists.** When `checklists/<stack>.md` exists next to this skill, hand it to the subagents with the common base. Otherwise the subagents read the stack's convention doc from GitHub directly, and the report says the stack checklist was not applied. A Kotlin module reads `kotlin-conventions.md`, and `compose-conventions.md` as well when it uses Compose.
 - **Consumers.** The consumer projects are the arguments, as local paths or `owner/repo`. Without any, the Consumers section reads "Not assessed: no consumer project was given". Never search for consumers, never guess them.
 - **Previous audit.** When a `docs/audit-*.md` exists, at the pinned revision or in the working tree, read the latest one by date: its finding IDs, its grades and its grid version feed Step 3. A report that was never pushed still counts, or its IDs would be reused. Previous reports are the one exception to the pinned commit: they are the audit's history, not the audited code.
 
-Then **always** show the scope — each module included, excluded or attached, with its reason — and the cost: five subagents each read a large part of the repository. Say that the subagents do not inherit this skill's permissions, so each of their `git cat-file -p` and `git ls-tree` calls is prompted, hundreds on a medium project, and denied outright in a mode that cannot prompt. Offer the one-time fix: add `Bash(git cat-file -p:*)` and `Bash(git ls-tree:*)` to `permissions.allow` in the project's or the user's Claude Code settings. Wait for the user to confirm or adjust it. A module they leave out is graded `—`, "not assessed".
+Then **always** show the scope — each module included, excluded or attached, with its reason — and the cost: five subagents each read a large part of the repository. Say that the subagents do not inherit this skill's permissions, so each of their `git cat-file -p` and `git ls-tree` calls is prompted. Offer the one-time fix: add `Bash(git cat-file -p:*)` and `Bash(git ls-tree:*)` to `permissions.allow` in the project's or the user's Claude Code settings. Wait for the user to confirm or adjust it. A module they leave out is graded `—`, "not assessed".
 
 ### Step 2 — Fan out, five subagents
 
-Launch the five subagents below in parallel, each with the `project-health:auditor` type: it reads whole files rather than excerpts, and cannot edit. Never use `Explore` here — it locates code, it does not review it. Ask each for a very thorough pass over the whole scope. Each one receives the project root, the confirmed scope, the detected stacks, its checklist below, any per-stack checklist, and these rules:
+Launch the five subagents below in parallel, each with the `project-health:auditor` type, which already carries the read-only rules. Never use `Explore` here — it locates code, it does not review it. Ask each for a very thorough pass over the whole scope. Each one receives the project root, the pinned `<sha>`, the confirmed scope, the detected stacks, its checklist below, any per-stack checklist, and the finding format:
 
-- Read only. Do not edit, build, run tests, or install anything.
-- Read every file at the pinned commit with `git cat-file -p <sha>:<path>`, never from the working tree.
-- Return findings, not prose. **One fix is one finding**, listing all its occurrences. Each finding has: the module it belongs to (or "repository"), its axis, a proposed severity from the table in Step 3, its evidence (`file:line`, or a cited source), and _likely_ when only a build or a run would confirm it — together with any existing evidence that settles it, such as a build report or a CI log.
-- Every claim is checked in the repository. Never report a finding inferred from a file name alone.
+- **One fix is one finding**, listing all its occurrences. Each finding has: the module it belongs to (or "repository"), its axis, a proposed severity from the table in Step 3, its evidence (`file:line`, or a cited source), and _likely_ when only a build or a run would confirm it — together with any existing evidence that settles it, such as a build report or a CI log.
 
 | Subagent                 | Axes                               | Checklist |
 |--------------------------|------------------------------------|-----|
