@@ -58,7 +58,7 @@ If the conversation holds no findings, or `--review` is passed, **review the cha
 - Resolve the base branch as Step 2 describes.
 - Launch a subagent to run `/code-review <effort>` on `<base>...HEAD` — `<effort>` is the `low`, `medium` or `high` argument, `high` by default — and to return its findings verbatim, changing nothing. Where `/code-review` is not available, the subagent reviews `git diff <base>...HEAD` itself, and says so.
 - With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over.
-- Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
+- Without `--review`, the review also covers uncommitted work, `git diff`. With `--review`, uncommitted work is outside the reviewed range: if `git status` shows any, say so.
 
 Findings already in the conversation come first otherwise — a linter's output, pasted comments, an earlier review: do not run a second review on top of them. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
 
@@ -214,7 +214,7 @@ Once approved, in this order:
 
 The commit message follows Conventional Commits and carries **no AI attribution** — no `Co-Authored-By` for AI assistants, no `🤖 Generated with` footer. If the project provides a `/commit` skill, use it to split the fixes into atomic commits.
 
-The one exception is a round run by `/git-workflow:review-loop`: invoking that skill is the approval for its local commits, and it pushes once, at the end. Follow its steps instead of this one.
+The one exception is a round run by `/git-workflow:review-loop`: invoking that skill is the approval for its local commits, and it pushes once, at the end. Follow its steps instead of this one — and instead of Step 5's closing question: the loop's Step 3 decides when a round waits for the author.
 
 ## Rules
 

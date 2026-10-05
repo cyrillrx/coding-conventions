@@ -78,7 +78,7 @@ For round `i` from 1 to the cap:
 3. **Converged?** If the approved plan holds no ✅, the loop has converged: go to Step 4.
 4. **Apply** the ✅ fixes, as `triage-findings` Step 6.1 does. Run the verification commands; if they fail, fix the failure within the round, or stop the loop as blocked. **Never commit a red build.**
 5. **Commit** the round, per `/git-workflow:commit` — atomic Conventional Commits, no AI attribution. Do not ask first: invoking this skill was the approval. Do not push.
-6. **Collect the 🕐** — keep each ready-to-submit ticket from the plan in a running list, and do not file it now: `triage-findings` Step 6.2 and 6.3 are deferred to Step 4.
+6. **Collect the 🕐** — keep each ready-to-submit ticket from the plan in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
 
 If round `cap` committed fixes, the loop stops at the cap: say so, and go to Step 4. Never run an extra round to round things off.
 
@@ -90,7 +90,7 @@ In this order:
 2. **Push** the branch, once. This call is prompted.
 3. **Replies** — post the round 0 replies held in Step 2 and resolve the threads `address-review` Step 6 would resolve. Each call is prompted.
 4. **Description** — run `/git-workflow:pull-request` to bring the description back in line with the diff, with the opened follow-ups under `## 🔁 Follow-ups`.
-5. **Status label** — `review: clean` if the loop converged and no round 0 ⚠️ thread is open; `review: findings` otherwise. A 🕐 with its ticket does not count as pending. Check that the label exists with `gh label list`; if not, create it first (`gh label create "review: clean" --color 0E8A16`, `gh label create "review: findings" --color D93F0B`). Then set one and remove the other in a single call: `gh pr edit <n> --add-label "<label>" --remove-label "<other>"`. These calls are prompted.
+5. **Status label** — `review: clean` if the loop converged and no round 0 ⚠️ thread is open; `review: findings` otherwise. A 🕐 with its ticket does not count as pending; a 🕐 left without one does. Check that both labels exist with `gh label list`, and create any that is missing (`gh label create "review: clean" --color 0E8A16`, `gh label create "review: findings" --color D93F0B`). Then set one and remove the other in a single call: `gh pr edit <n> --add-label "<label>" --remove-label "<other>"`. These calls are prompted.
 6. **Report**, for the author's final read:
    - rounds run, and why the loop stopped — converged, cap, or blocked on what;
    - the fixes, round by round, with their commits;
