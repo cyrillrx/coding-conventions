@@ -56,9 +56,8 @@ The findings are already here. This skill is normally invoked straight after a c
 If the conversation holds no findings, or `--review` is passed, **review the change first**, on a fresh context:
 
 - Resolve the base branch as Step 2 describes.
-- Launch a subagent to run `/code-review <effort>` on `<base>...HEAD` — `<effort>` is the `low`, `medium` or `high` argument, `high` by default — and to return its findings verbatim, changing nothing. Where `/code-review` is not available, the subagent reviews `git diff <base>...HEAD` itself, and says so.
-- With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over.
-- Without `--review`, the review also covers uncommitted work, `git diff`. With `--review`, uncommitted work is outside the reviewed range: if `git status` shows any, say so.
+- Launch a subagent to run `/code-review <effort>` on `<base>...HEAD` — plus, without `--review`, the uncommitted work, staged or not (`git diff HEAD`) — with `<effort>` the `low`, `medium` or `high` argument, `high` by default, and to return its findings verbatim, changing nothing. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so.
+- With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over. Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
 
 Findings already in the conversation come first otherwise — a linter's output, pasted comments, an earlier review: do not run a second review on top of them. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
 
