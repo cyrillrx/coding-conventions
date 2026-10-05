@@ -4,9 +4,10 @@ description: >-
   Make an open pull request converge: answer the open review threads first, then run review → triage
   → fix → commit rounds, each on a fresh review, until a round leaves nothing to fix or the round cap
   is reached; then push once, post the replies, open the follow-ups, refresh the description and
-  label the PR with its review status. Use after the first human read of a PR, instead of repeating
-  review, triage and commit by hand.
+  label the PR with its review status. Run manually after the first human read of a PR, instead of
+  repeating review, triage and commit by hand.
 argument-hint: "[--auto] [--max N] [low|medium|high]"
+disable-model-invocation: true
 # Local reads and local commits only. Invoking this skill is the approval for the loop's local
 # commits. Everything that leaves the machine — the push, thread replies and resolutions, tickets,
 # the PR description, labels — keeps its permission prompt on purpose.
