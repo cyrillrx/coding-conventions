@@ -49,12 +49,14 @@ Two instances of the application sharing one data directory corrupt each other's
 ### Taking the lock
 
 - The first instance takes an OS file lock — `FileChannel.tryLock()` — on an `instance.lock` file in the application data directory, **before anything else touches that directory**. Opening the database or reading preferences first defeats the lock.
+- Create the directory if it is missing, right before taking the lock: on a fresh install nothing has created it yet, and opening the lock file in a missing directory fails. Creating the directory is the only thing that comes before the lock.
 - Hold the channel for the whole lifetime of the process. The lock lasts as long as the channel stays open.
 - The OS releases the lock when the process dies, crash included. That is why the lock is a file lock and not a PID file: a PID file left behind by a crash blocks the next launch, or forces guessing whether its process is still alive.
 - `tryLock()` returns `null` when another process holds the lock, and throws `OverlappingFileLockException` when the same JVM already holds it. Treat both as "held".
 
 ```kotlin
 fun tryLockInstance(dataDirectory: Path): FileLock? {
+    Files.createDirectories(dataDirectory)
     val channel = FileChannel.open(dataDirectory / "instance.lock", CREATE, WRITE)
     val lock = try {
         channel.tryLock()
@@ -73,7 +75,8 @@ A user who launches the application again expects the window they already have, 
 - The first instance listens on a Unix domain socket (`UnixDomainSocketAddress`, JDK 16 and later; supported on Windows 10 and later) in the application data directory. It deletes a leftover socket file before binding: that is safe, since only the lock holder reaches this point.
 - A second instance connects to the socket, sends an activation request, and exits.
 - On a request, the first instance brings its window to the front: un-minimize it, then `toFront()` and `requestFocus()`. The request arrives on the socket thread, so hand it over to the UI thread first. On Windows, focus-stealing prevention may flash the taskbar button instead of raising the window; that is the OS's rule, not a bug to work around.
-- **Never run a degraded second instance** — one without sync, or read-only — silently. If the socket is unreachable (the first instance is still starting, or hung), the second instance exits anyway.
+- **Never run a degraded second instance** — one without sync, or read-only — silently. If the socket is unreachable (the first instance is still starting, or hung), the second instance exits anyway: a failed request is reported to the caller, never thrown at it.
+- One failed request never stops the listener. A client that drops its connection must not end the listening thread, or every later launch sends its request to nobody and exits.
 
 ```kotlin
 private const val ACTIVATE: Byte = 1
@@ -84,19 +87,28 @@ fun listenForActivation(dataDirectory: Path, onActivationRequested: () -> Unit) 
     val server = ServerSocketChannel.open(StandardProtocolFamily.UNIX).bind(address)
     thread(isDaemon = true, name = "instance-activation") {
         while (true) {
-            server.accept().use { client ->
-                val request = ByteBuffer.allocate(1)
-                if (client.read(request) > 0 && request.get(0) == ACTIVATE) onActivationRequested()
+            try {
+                server.accept().use { client ->
+                    val request = ByteBuffer.allocate(1)
+                    if (client.read(request) > 0 && request.get(0) == ACTIVATE) onActivationRequested()
+                }
+            } catch (e: IOException) {
+                // A dropped client only loses its own request: keep serving the next ones.
             }
         }
     }
 }
 
-fun requestActivation(dataDirectory: Path) {
-    SocketChannel.open(UnixDomainSocketAddress.of(dataDirectory / "instance.sock")).use { channel ->
-        channel.write(ByteBuffer.wrap(byteArrayOf(ACTIVATE)))
+/** Returns whether the running instance received the request. The caller exits either way. */
+fun requestActivation(dataDirectory: Path): Boolean =
+    try {
+        SocketChannel.open(UnixDomainSocketAddress.of(dataDirectory / "instance.sock")).use { channel ->
+            channel.write(ByteBuffer.wrap(byteArrayOf(ACTIVATE)))
+        }
+        true
+    } catch (e: IOException) {
+        false
     }
-}
 ```
 
 ### Why on every OS
