@@ -45,7 +45,7 @@ Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 | `kotlin-conventions`  | — (SessionStart hook)                                                             | Points every session to the Kotlin conventions; pair it with `coding-conventions` for Clean Code |
 | `compose-conventions` | — (SessionStart hook)                                                             | Points every session to the Compose UI conventions; enable it with `kotlin-conventions` in an app with screens |
 | `coding-conventions`  | — (SessionStart hook)                                                             | Loads the general coding and documentation conventions into every session |
-| `project-health`      | `/audit` (manual only)                                                            | Graded project health audit, following [Project Audit](collaboration/project-audit.md): state and effort grades, blockers, debt, workload |
+| `project-health`      | `/audit`                                                                          | Graded project health audit, following [Project Audit](collaboration/project-audit.md): state and effort grades, blockers, debt, workload |
 
 ### Install in a project
 
