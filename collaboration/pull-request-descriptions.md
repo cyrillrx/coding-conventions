@@ -33,7 +33,7 @@ A section written to explain a problem — a failing quality gate, a known regre
 
 Re-examine, on every refresh:
 
-- **📝 Description** — still two short paragraphs at most. A refresh adds claims; it must not let the section grow into the reviewer guidance and the reasoning history that §7 sends elsewhere.
+- **📝 Description** — still one paragraph of three sentences at most. A refresh adds claims; it must not let the section grow into the reviewer guidance and the reasoning history that §7 sends elsewhere.
 - **🔍 Review notes** — where to start, what is mechanical, what deserves attention. Guidance for a state the branch has left is worse than none: a "start with the parser" that no longer exists sends the reviewer looking for it.
 - **🔁 Follow-ups** — every issue cited must exist and still be open. A deferral that was finally fixed in the PR leaves this list; a new one decided during review joins it. See [Code Review Triage](code-review-triage.md) for what earns a follow-up rather than a fix.
 - **🤔 Considered and not addressed** — a suggestion that was eventually applied no longer belongs here.
@@ -45,8 +45,8 @@ Re-examine, on every refresh:
 
 Because the squash makes it one — that section alone, per §7. Everything below it serves the review and dies with the PR, which is what makes the Description the only part a refresh must weigh against the permanent history.
 
-- The problem, then what the PR changes. Two short paragraphs at most, per §7. A refresh is where this budget is lost: each new commit invites one more sentence, and nothing pushes back.
-- Lead with the *why*. The diff already shows the what.
+- The problem, then what the PR changes. One paragraph of three sentences at most, per §7. A refresh is where this budget is lost: each new commit invites one more sentence, and nothing pushes back.
+- Lead with the *why*. The diff already shows the what: do not restate the diff, the commit list or the file list.
 - Order the changes as a reader needs them, never in commit order. Commit order is an artifact of how the work happened; nobody reading the merged history cares.
 - English, like the commit it becomes. One line per paragraph and per bullet, per the [documentation conventions](../conventions/docs-conventions.md) — the forge soft-wraps, and a hard wrap turns a one-word edit into a reflowed block.
 - What no longer fits has a destination, not a deletion: reviewer guidance to **Review notes**, the investigation to the linked issue, an architecture decision to an [ADR](git-and-collaboration.md#9-architecture-decision-records-adrs).

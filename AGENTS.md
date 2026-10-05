@@ -71,6 +71,7 @@ Use `git mv` for any file rename or move, to preserve history.
 
 ### Collaboration (`collaboration/`)
 - PRs: ≤200 lines, ≤10 files; exceptions for mechanical changes
+- PR descriptions: the Description is one paragraph of three sentences at most; other sections are one line per item, and nothing restates the diff
 - Reviewers must be constructive and back comments with sources
 - Trunk-based development; short-lived feature branches named after commit types
 - Use [code-review-comments.md](collaboration/code-review-comments.md) to signal blocking vs. non-blocking comments; every comment gets a reply, and a request with no stated reason is discussed, never dismissed

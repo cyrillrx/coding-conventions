@@ -109,7 +109,8 @@ Because that section becomes the commit body, it has to stay true as the branch 
 
 - Keep the diff under 200 lines and 10 files when possible. For mechanical changes (renaming, moving files), exceptions are acceptable.
 - Write the description from the [PR template](../.github/pull_request_template.md): delete the sections that don't apply, and tick only what the diff proves. Copy the template into a project's own `.github/pull_request_template.md` so GitHub pre-fills it.
-- Keep the Description to what the squash commit needs: the problem, then what the PR changes, in two short paragraphs at most. Leave out how you got there, reviewer guidance and diff statistics: guidance for the reviewer goes in **Review notes**, the investigation in the linked issue, an architecture decision in an [ADR](#9-architecture-decision-records-adrs).
+- Keep the Description to what the squash commit needs: the problem, then what the PR changes, in one paragraph of three sentences at most. Leave out how you got there, reviewer guidance, diff statistics and anything the diff already shows: guidance for the reviewer goes in **Review notes**, the investigation in the linked issue, an architecture decision in an [ADR](#9-architecture-decision-records-adrs).
+- Keep the other sections terse: one line per item, and never a restatement of the diff, the commit list or the file list.
 - Close issues with `Closes #N` lines at the very end of the description, after the checklist.
 - Proofread your own PR before submitting — check diff, description, and comments.
 - Assign reviewers directly on the hosting platform.
