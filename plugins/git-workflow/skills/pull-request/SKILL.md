@@ -3,8 +3,9 @@ name: pull-request
 description: >-
   Open a pull request, or bring an existing one's title and description back in line with its diff.
   Reconciles both ways — every claim in the prose against the diff, and every change in the diff
-  against the prose — then rewrites only what drifted. Use when asked to create a PR, to update or
-  refresh a PR description, or after pushing commits that the description does not yet mention.
+  against the prose — then writes back only what drifted, directly on the forge. Use when asked to
+  create a PR, to update or refresh a PR description, or after pushing commits that the description
+  does not yet mention.
 argument-hint: "[pr-number | --refresh]"
 allowed-tools:
   - Bash(git branch:*)
@@ -12,6 +13,7 @@ allowed-tools:
   - Bash(git log:*)
   - Bash(git status:*)
   - Bash(git fetch:*)
+  - Bash(git push -u origin HEAD)
   - Bash(git symbolic-ref:*)
   - Bash(gh pr view:*)
   - Bash(gh pr diff:*)
@@ -22,6 +24,7 @@ allowed-tools:
   - Bash(gh issue view:*)
   - Bash(gh issue list:*)
   - Bash(gh repo view:*)
+  - Bash(gh api user --jq .login)
   - Read
 ---
 
@@ -39,7 +42,8 @@ checklist box for that stays theirs.
 - Argument: $ARGUMENTS
 - Current branch: !`git branch --show-current`
 - Remote default branch: !`git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
-- PR for this branch: !`gh pr view --json number,title,state --jq '"#\(.number) \(.state) — \(.title)"' 2>/dev/null || echo "none"`
+- PR for this branch: !`gh pr view --json number,title,state,author --jq '"#\(.number) \(.state) — \(.title) — by \(.author.login)"' 2>/dev/null || echo "none"`
+- You are: !`gh api user --jq .login 2>/dev/null || echo "unknown"`
 
 ## Your task
 
@@ -58,7 +62,7 @@ Follow these steps in order.
 
 An empty argument on a branch that already has a PR is a refresh, never a second PR. Say which mode you picked in one line before going further, so a misread shows early — then carry on without waiting.
 
-In **create** mode, stop and say so if the branch is `main` or the resolved default: there is nothing to open a PR from. Check for unpushed commits (`git log origin/<head>..HEAD`) and push before creating, or the PR opens on an incomplete diff.
+In **create** mode, stop and say so if the branch is `main` or the resolved default: there is nothing to open a PR from. Check for unpushed commits (`git log origin/<head>..HEAD`) and push them with `git push -u origin HEAD` before creating, or the PR opens on an incomplete diff.
 
 ### Step 2 — Establish the diff of record
 
@@ -81,8 +85,10 @@ Note the size against the 200 lines / 10 files budget. Over it, the description 
 In **refresh** mode, read the current description before writing anything:
 
 ```bash
-gh pr view <number> --json title,body --jq '.body'
+gh pr view <number> --json author,title,body
 ```
+
+If the PR's author is not you, stop and ask before going further: the skill writes without confirmation, and that is only safe on your own PR's prose.
 
 Never regenerate a description from the diff alone. The prose holds decisions the diff cannot show — why an approach was chosen, what a reviewer already asked and got answered. Rewriting from scratch throws those away and asks the reviewer to re-read a text they had already approved. Splice; do not replace.
 
@@ -123,15 +129,15 @@ If nothing drifted, say exactly that and stop without writing. A refresh that fi
 
 Otherwise, write it now — no confirmation question.
 
-In refresh mode, write back the body **you read in Step 3 with your edits spliced in** — never a body you did not read. Re-read it immediately before writing, so an edit made on the forge in the meantime is kept:
+In refresh mode, write back the body **you read in Step 3 with your edits spliced in** — never a body you did not read. Re-read it right before writing: if it changed since Step 3, splice your edits onto the fresh version, so an edit made on the forge in the meantime is kept. Pass the body on stdin, so no temporary file has to survive between shell calls:
 
 ```bash
-body="$(mktemp)"
-gh pr view <number> --json body --jq '.body' > "$body"   # splice, then:
-gh pr edit <number> --body-file "$body"                  # add --title "<title>" if Step 5 changed it
+gh pr edit <number> --body-file - <<'PR_BODY'      # add --title "<title>" if Step 5 changed it
+<the spliced body>
+PR_BODY
 ```
 
-In create mode, `gh pr create --title "<conventional-commit-title>" --body-file <file>`. Do not add reviewers — per the conventions, the author assigns them on the platform. Carry **no AI attribution**: no `Co-Authored-By` for an assistant, no generated-with footer.
+In create mode, `gh pr create --title "<conventional-commit-title>" --body-file -`, with the body on stdin the same way. Do not add reviewers — per the conventions, the author assigns them on the platform. Carry **no AI attribution**: no `Co-Authored-By` for an assistant, no generated-with footer.
 
 Then report, briefly:
 
