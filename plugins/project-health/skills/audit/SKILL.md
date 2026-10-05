@@ -145,7 +145,7 @@ An item that still improves several cells counts in full in each; the total effo
 
 **Verdict.** Never average. **Blocked** when a cell's state is E, **Needs work** when one is C or D, **Healthy** when all are A or B — read on the assessed cells only, and marked **partial**, naming the `—` cells, when any cell is not assessed — followed by the total effort in person-days.
 
-**Progress.** With a previous audit, put both grade tables side by side, then list the IDs fixed, still open and new. If the previous audit used another grid version, recompute its grades with Grid v1 from its findings first. If it has no grid, or its findings name no module, mark its grades not comparable and compare its findings only: fixed, still open, or corrected.
+**Progress.** With a previous audit, put both grade tables side by side, then list the IDs fixed, still open, not reassessed and new. A previous finding whose cell now reads `—`, or whose module was left out of scope, is not reassessed: it keeps its ID, stays open, and is never listed as fixed. If the previous audit used another grid version, recompute its grades with Grid v1 from its findings first. If it has no grid, or its findings name no module, mark its grades not comparable and compare its findings only: fixed, still open, or corrected.
 
 **Confirm the blockers.** If a 🔴 is still _likely_, it alone decides the verdict: before writing, offer to confirm it with the one build or run it needs — prompted — and grade with the outcome.
 
@@ -177,7 +177,7 @@ The default branch is the remote-tracking ref above without its `origin/` prefix
 
 ## Progress since the last audit
 
-<!-- Only with a previous audit: both grade tables side by side, then the IDs fixed, still open, and new. -->
+<!-- Only with a previous audit: both grade tables side by side, then the IDs fixed, still open, not reassessed, and new. -->
 
 ## Blockers
 
