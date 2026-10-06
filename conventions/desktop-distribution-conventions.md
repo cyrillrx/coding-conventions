@@ -127,7 +127,7 @@ Installers are built by the Compose Gradle plugin's `nativeDistributions` block,
 |-----------------------------------------|---|
 | `packageName`                           | The application name the user sees in the menu, the Dock and the installer. Not a Java package name |
 | `macOS { bundleID }`                    | The reverse-DNS identifier macOS uses to recognise the application across versions |
-| `windows { upgradeUuid }`               | Generated once and never changed. Without it, or if it changes, each MSI installs next to the previous one instead of upgrading it |
+| `windows { upgradeUuid }`               | Generated once and never changed. Without it, jpackage derives the upgrade code from the vendor and the application name, so renaming either one makes the next MSI install next to the previous one instead of upgrading it, and so does changing the UUID |
 | `windows { perUserInstall }`            | `true`, so installing needs no administrator rights |
 | `windows { menu, menuGroup, shortcut }` | A Start menu entry and a desktop shortcut, so the application can be found after installing |
 | `iconFile` per OS                       | `.icns` for macOS, `.ico` for Windows, `.png` for Linux; without one, the application shows a generic Java icon |
@@ -176,7 +176,7 @@ val appVersion = providers.gradleProperty("appVersion").getOrElse("1.0.0")
 ## Release Workflow
 
 - Releases are built by a **dedicated workflow**, separate from the CI workflow. Verification and delivery have different triggers and different permissions: CI runs on every pull request with read access, a release runs on a tag and writes to the repository's Releases.
-- The workflow triggers only on a tag shaped `vMAJOR.MINOR.PATCH`: a looser `v*` lets `v1.2.0-rc1` through, which creates the Release before every package job fails.
+- The workflow triggers only on a tag shaped `vMAJOR.MINOR.PATCH`: a looser `v*` lets `v1.2.0-rc1` through, which creates the Release before jpackage rejects the version.
 - It runs on a matrix — `macos-latest` (arm64), `windows-latest`, `ubuntu-latest` — because `jpackage` cannot cross-build: each OS, and each CPU architecture, builds its own installer. An Intel Mac build needs its own runner; whether to ship one is a project-level choice.
 - Each job runs `packageReleaseDistributionForCurrentOS` and attaches its installer to the GitHub Release for the tag. The Release notes come from a file in the repository, so the [signing workaround](#signing) is never forgotten.
 - Configuration the build reads from an untracked file (API keys, project identifiers) comes from GitHub secrets, written into that file by the job. It is never committed.
