@@ -50,7 +50,7 @@ Two instances of the application sharing one data directory corrupt each other's
 
 - The first instance takes an OS file lock — `FileChannel.tryLock()` — on an `instance.lock` file in the application data directory, **before anything else touches that directory**. Opening the database or reading preferences first defeats the lock.
 - Create the directory if it is missing, right before taking the lock: on a fresh install nothing has created it yet, and opening the lock file in a missing directory fails. Creating the directory is the only thing that comes before the lock.
-- Hold the channel for the whole lifetime of the process. The lock lasts as long as the channel stays open.
+- Keep a reference to the returned lock for the whole lifetime of the process, in a top-level `val` for instance. The lock lasts as long as its channel stays open, and the garbage collector can close a channel nothing references any more.
 - The OS releases the lock when the process dies, crash included. That is why the lock is a file lock and not a PID file: a PID file left behind by a crash blocks the next launch, or forces guessing whether its process is still alive.
 - `tryLock()` returns `null` when another process holds the lock, and throws `OverlappingFileLockException` when the same JVM already holds it. Treat both as "held".
 
@@ -92,8 +92,8 @@ fun listenForActivation(dataDirectory: Path, onActivationRequested: () -> Unit) 
                     val request = ByteBuffer.allocate(1)
                     if (client.read(request) > 0 && request.get(0) == ACTIVATE) onActivationRequested()
                 }
-            } catch (e: IOException) {
-                // A dropped client only loses its own request: keep serving the next ones.
+            } catch (e: Exception) {
+                // A dropped client or a failed activation only loses its own request: keep serving the next ones.
             }
         }
     }
