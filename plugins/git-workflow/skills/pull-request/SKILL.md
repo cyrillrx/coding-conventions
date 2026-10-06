@@ -137,7 +137,7 @@ gh pr edit <number> --body-file - <<'PR_BODY'      # add --title "<title>" if St
 PR_BODY
 ```
 
-In create mode, `gh pr create --title "<conventional-commit-title>" --body-file -`, with the body on stdin the same way. Do not add reviewers — per the conventions, the author assigns them on the platform. Carry **no AI attribution**: no `Co-Authored-By` for an assistant, no generated-with footer.
+In create mode, `gh pr create --draft --title "<conventional-commit-title>" --body-file -`, with the body on stdin the same way. Always open the PR as a draft: marking it ready for review is the author's call, made on the forge after proofreading. Do not add reviewers — per the conventions, the author assigns them on the platform. Carry **no AI attribution**: no `Co-Authored-By` for an assistant, no generated-with footer.
 
 Then report, briefly:
 
@@ -149,7 +149,7 @@ Then report, briefly:
    | 1   | Description  | diff → description | The extraction in `core/` is in no bullet         |
    | 2   | Quality gate | lifecycle          | The gate it explains now passes; section is stale |
 
-3. **The PR URL**, and a reminder that the proofreading checkbox is the author's. Do not reprint the body: it is on the forge.
+3. **The PR URL**, and a reminder that the proofreading checkbox is the author's — in create mode, so is marking the draft ready for review. Do not reprint the body: it is on the forge.
 
 ## Related skills
 
