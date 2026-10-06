@@ -176,7 +176,7 @@ val appVersion = providers.gradleProperty("appVersion").getOrElse("1.0.0")
 ## Release Workflow
 
 - Releases are built by a **dedicated workflow**, separate from the CI workflow. Verification and delivery have different triggers and different permissions: CI runs on every pull request with read access, a release runs on a tag and writes to the repository's Releases.
-- The workflow triggers on a `v*` tag.
+- The workflow triggers only on a tag shaped `vMAJOR.MINOR.PATCH`: a looser `v*` lets `v1.2.0-rc1` through, which creates the Release before every package job fails.
 - It runs on a matrix — `macos-latest` (arm64), `windows-latest`, `ubuntu-latest` — because `jpackage` cannot cross-build: each OS, and each CPU architecture, builds its own installer. An Intel Mac build needs its own runner; whether to ship one is a project-level choice.
 - Each job runs `packageReleaseDistributionForCurrentOS` and attaches its installer to the GitHub Release for the tag. The Release notes come from a file in the repository, so the [signing workaround](#signing) is never forgotten.
 - Configuration the build reads from an untracked file (API keys, project identifiers) comes from GitHub secrets, written into that file by the job. It is never committed.
@@ -186,7 +186,7 @@ name: Release
 
 on:
   push:
-    tags: ["v*"]
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
 permissions:
   contents: write
@@ -219,7 +219,9 @@ jobs:
         env:
           LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
       - run: ./gradlew :desktopApp:packageReleaseDistributionForCurrentOS -PappVersion="${GITHUB_REF_NAME#v}"
-      - run: gh release upload "$GITHUB_REF_NAME" desktopApp/build/compose/binaries/main-release/*/*
+      - run: |
+          shopt -s nullglob
+          gh release upload "$GITHUB_REF_NAME" desktopApp/build/compose/binaries/main-release/*/*.{dmg,msi,deb}
         env:
           GH_TOKEN: ${{ github.token }}
 ```
