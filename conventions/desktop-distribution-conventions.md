@@ -123,15 +123,15 @@ Keep the lock and the socket in a product-agnostic JVM module, not in the compos
 
 Installers are built by the Compose Gradle plugin's `nativeDistributions` block, which drives `jpackage`. Some of its settings are optional to the plugin but required for a release:
 
-| Setting                           | Why |
-|-----------------------------------|---|
-| `packageName`                     | The application name the user sees in the menu, the Dock and the installer. Not a Java package name |
-| `macOS { bundleID }`              | The reverse-DNS identifier macOS uses to recognise the application across versions |
-| `windows { upgradeUuid }`         | Generated once and never changed. Without it, or if it changes, each MSI installs next to the previous one instead of upgrading it |
-| `windows { perUserInstall }`      | `true`, so installing needs no administrator rights |
-| `windows { menuGroup, shortcut }` | A Start menu entry and a desktop shortcut, so the application can be found after installing |
-| `iconFile` per OS                 | `.icns` for macOS, `.ico` for Windows, `.png` for Linux; without one, the application shows a generic Java icon |
-| `modules(...)`                    | The bundled runtime is built by `jlink` and contains only the listed JDK modules. Check the list with the `suggestRuntimeModules` task: a missing module builds fine and fails at runtime, on the user's machine only |
+| Setting                                 | Why |
+|-----------------------------------------|---|
+| `packageName`                           | The application name the user sees in the menu, the Dock and the installer. Not a Java package name |
+| `macOS { bundleID }`                    | The reverse-DNS identifier macOS uses to recognise the application across versions |
+| `windows { upgradeUuid }`               | Generated once and never changed. Without it, or if it changes, each MSI installs next to the previous one instead of upgrading it |
+| `windows { perUserInstall }`            | `true`, so installing needs no administrator rights |
+| `windows { menu, menuGroup, shortcut }` | A Start menu entry and a desktop shortcut, so the application can be found after installing |
+| `iconFile` per OS                       | `.icns` for macOS, `.ico` for Windows, `.png` for Linux; without one, the application shows a generic Java icon |
+| `modules(...)`                          | The bundled runtime is built by `jlink` and contains only the listed JDK modules. Check the list with the `suggestRuntimeModules` task: a missing module builds fine and fails at runtime, on the user's machine only |
 
 ```kotlin
 compose.desktop {
@@ -151,6 +151,7 @@ compose.desktop {
             windows {
                 upgradeUuid = "3f1c2a8e-5b7d-4c9a-9e61-0d2b7f4a8c15"
                 perUserInstall = true
+                menu = true
                 menuGroup = "Example"
                 shortcut = true
                 iconFile = project.file("icons/app.ico")
