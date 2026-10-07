@@ -22,6 +22,7 @@ conventions/
   docs-conventions.md                  # Documentation file naming, section separators, line wrapping, Markdown tables
   kotlin-conventions.md                # Kotlin style, idioms, testing, multiplatform (any Kotlin project)
   compose-conventions.md               # Compose UI layer: MVVM, state and events, Compose, Maestro
+  desktop-distribution-conventions.md  # Shipping a Compose Desktop app: single instance, packaging, releases, signing
   rust-conventions.md                  # Rust backend conventions
   go-conventions.md                    # Go backend conventions
   bruno-conventions.md                 # Bruno API testing conventions
@@ -37,7 +38,7 @@ templates/
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
   git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review, /review-loop
   kotlin-conventions/                  # SessionStart hook pointing to a copy of conventions/kotlin-conventions.md
-  compose-conventions/                 # SessionStart hook pointing to a copy of conventions/compose-conventions.md
+  compose-conventions/                 # SessionStart hook pointing to copies of conventions/compose-conventions.md and desktop-distribution-conventions.md
   coding-conventions/                  # SessionStart hook injecting copies of conventions/coding-conventions.md and docs-conventions.md
   project-health/                      # /audit: graded project health report written to docs/audit-YYYY-MM-DD.md
 .claude/skills/
@@ -95,6 +96,13 @@ Use `git mv` for any file rename or move, to preserve history.
 - Formatting 100% delegated to ktlint via `configs/.editorconfig` (4-space indent, 120 cols, trailing commas)
 - Prefer early returns over deep nesting; prefer affirmative conditions
 - Image resources: `ic_` prefix + size suffix for icons, `img_` prefix + size suffix for multicolor images
+
+### Desktop distribution (`conventions/desktop-distribution-conventions.md`)
+- One instance per user: an OS file lock on `instance.lock` in the application data directory, taken before anything else touches it; a second launch activates the first through a Unix domain socket and exits, never runs degraded
+- Application data in the per-OS user data directory, never the temp directory
+- Release `nativeDistributions` settings: user-visible `packageName`, `bundleID`, a fixed `upgradeUuid`, per-user MSI install, icons, `modules(...)` checked with `suggestRuntimeModules`
+- Version from the `vMAJOR.MINOR.PATCH` tag, within the MSI and DMG limits; installers built by a tag-triggered release workflow, one runner per OS, separate from CI
+- Unsigned installers and manual updates by default; signing and automatic updates are per-project ADR decisions
 
 ### Backend (`conventions/{rust,go}-conventions.md`)
 - Layered architecture, explicit error handling, formatter-enforced style (`rustfmt` / `gofmt`)

@@ -17,6 +17,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 - [Documentation Conventions](conventions/docs-conventions.md) — file naming, section separators, line wrapping, Markdown tables
 - [Kotlin](conventions/kotlin-conventions.md) — style, idioms, testing, multiplatform (any Kotlin project)
 - [Compose](conventions/compose-conventions.md) — UI architecture, Compose, end-to-end tests (Android / KMP / CMP apps)
+- [Desktop Distribution](conventions/desktop-distribution-conventions.md) — single instance, packaging, versioning, releases, signing and updates (Compose Desktop apps)
 - [Rust Backend](conventions/rust-conventions.md)
 - [Go Backend](conventions/go-conventions.md)
 - [Bruno API Testing](conventions/bruno-conventions.md)
@@ -43,7 +44,7 @@ Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 | --------------------- | --------------------------------------------------------------------------------- | --- |
 | `git-workflow`        | `/commit`, `/pull-request`, `/triage-findings`, `/address-review`, `/review-loop` | Atomic Conventional Commits; PR descriptions kept in line with their diff; review-finding triage; answering reviewer comments; review rounds until a PR converges |
 | `kotlin-conventions`  | — (SessionStart hook)                                                             | Points every session to the Kotlin conventions; pair it with `coding-conventions` for Clean Code |
-| `compose-conventions` | — (SessionStart hook)                                                             | Points every session to the Compose UI conventions; enable it with `kotlin-conventions` in an app with screens |
+| `compose-conventions` | — (SessionStart hook)                                                             | Points every session to the Compose UI conventions, and to the desktop distribution conventions for a Desktop target; enable it with `kotlin-conventions` in an app with screens |
 | `coding-conventions`  | — (SessionStart hook)                                                             | Loads the general coding and documentation conventions into every session |
 | `project-health`      | `/audit`                                                                          | Graded project health audit, following [Project Audit](collaboration/project-audit.md): state and effort grades, blockers, debt, workload |
 
