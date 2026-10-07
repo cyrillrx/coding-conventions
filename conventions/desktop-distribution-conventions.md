@@ -131,7 +131,7 @@ Installers are built by the Compose Gradle plugin's `nativeDistributions` block,
 | `windows { perUserInstall }`            | `true`, so installing needs no administrator rights |
 | `windows { menu, menuGroup, shortcut }` | A Start menu entry and a desktop shortcut, so the application can be found after installing |
 | `iconFile` per OS                       | `.icns` for macOS, `.ico` for Windows, `.png` for Linux; without one, the application shows a generic Java icon |
-| `modules(...)`                          | The bundled runtime is built by `jlink` and contains only the listed JDK modules. Check the list with the `suggestRuntimeModules` task: a missing module builds fine and fails at runtime, on the user's machine only |
+| `modules(...)`                          | The bundled runtime is built by `jlink` and contains the plugin's default modules (`java.desktop` among them) plus the listed ones. Check the list with the `suggestRuntimeModules` task: a missing module builds fine and fails at runtime, on the user's machine only |
 
 ```kotlin
 compose.desktop {
