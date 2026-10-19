@@ -69,7 +69,7 @@ In this order:
 3. **Replies** — the round 0 replies are posted and the addressed threads resolved, per [Code Review Comments](code-review-comments.md#responding-to-a-comment).
 4. **Description** — the pull request description is brought back in line with the diff, per [Pull Request Descriptions](pull-request-descriptions.md), and the follow-ups are listed under its `## 🔁 Follow-ups` section.
 5. **Status label** — see [§6](#6-review-status-label).
-6. **Report** — rounds run, fixes per round, follow-ups opened, findings dismissed and why, the reason the loop stopped, and the commit that was reviewed. It is what the author reads before the final human review.
+6. **Report** — rounds run and the extensions the author chose, the diagnosis when one was given, fixes per round, follow-ups opened, findings dismissed and why, the reason the loop stopped, and the commit that was reviewed. It is what the author reads before the final human review.
 
 ## 6. Review status label
 
@@ -88,4 +88,5 @@ A 🕐 that has its ticket does not count as pending: it is decided and traced. 
 - A comment from a person is answered by the author's decision, never by a default.
 - No reply claims a fix that is not pushed.
 - No round commits a red build.
+- No round runs that the author did not choose: past the cap, only an explicit extension continues the loop.
 - Every finding of every round gets a decision, per [Code Review Triage](code-review-triage.md).
