@@ -147,7 +147,7 @@ The grid and the overrides cover the common cases, not every case. A finding tha
 
 Overrides, which win over the grid:
 
-- **Out of the change's scope** → 🕐 or ❌, never ✅. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth.
+- **Out of the change's scope** → 🕐 when it stands, ❌ when it is not worth a trace. The one exception is a 🏕 cleanup — a couple of lines with no behavior change, in a file the change already touches — which may be ✅, in its own commit. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth.
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
 - **Wrong — the code already handles it, or does not do what it claims — or speculative** → ❌.
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
