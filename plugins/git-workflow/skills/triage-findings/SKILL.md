@@ -149,7 +149,8 @@ Overrides, which win over the grid:
 
 - **Out of the change's scope** → 🕐 or ❌, never ✅. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth.
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
-- **Wrong, speculative, or already handled elsewhere** → ❌.
+- **Wrong — the code already handles it, or does not do what it claims — or speculative** → ❌.
+- **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
 - **A preference the user cannot justify to themselves** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score the answer. Reviewers owe a justification; that duty is not a licence to dismiss them when they forget it.
 
 When the emoji conventions are in use, read them as **intent only** — what the reviewer expects. A 🔧 can be factually wrong (→ ❌), a 💭 can uncover a real crash (→ 🔴 ✅), and a comment with no emoji is scored exactly the same way. The emoji never sets severity and never sets the outcome.

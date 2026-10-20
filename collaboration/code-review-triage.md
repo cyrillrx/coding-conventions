@@ -85,7 +85,8 @@ The grid is the default, not the verdict. It is overridden by:
 
 - **Out of the PR's scope** → 🕐 or ❌, never ✅. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth (see [PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)).
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
-- **The finding is wrong, speculative, or already handled elsewhere** → ❌.
+- **The finding is wrong — the code already handles it, or does not do what it claims — or speculative** → ❌.
+- **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
 - **A preference you cannot justify to yourself** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score it. Reviewers owe a justification ([PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)); that duty is not a licence to dismiss them when they forget it.
 
 ## 6. Follow-ups
