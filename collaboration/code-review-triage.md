@@ -83,7 +83,7 @@ These are dispositions of a **finding**, not replies to a **person**: they decid
 
 The grid is the default, not the verdict. It is overridden by:
 
-- **Out of the PR's scope** → 🕐 or ❌, never ✅. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth (see [PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)).
+- **Out of the PR's scope** → 🕐 when it stands, ❌ when it is not worth a trace. The one exception is a 🏕 cleanup — a couple of lines with no behavior change, in a file the PR already touches — which may be ✅, in its own commit. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth (see [PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)).
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
 - **The finding is wrong — the code already handles it, or does not do what it claims — or speculative** → ❌.
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
