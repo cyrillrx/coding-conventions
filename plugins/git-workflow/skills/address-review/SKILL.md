@@ -79,9 +79,9 @@ For each unresolved thread, read the file at `path` around the relevant `line`, 
 
 **Response criteria:**
 - ✅ **Apply** — the comment stands: valid, clear, and consistent with the project's conventions.
-- 🕐 **Defer** — the comment stands, but is too costly or too broad for this PR. It is not applied here; it needs an owner and a trace.
+- 🕐 **Defer** — the comment stands, but is too costly or too broad for this PR, or an open ticket already tracks it. It is not applied here; it needs an owner and a trace.
 - ⚠️ **Discuss** — it needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason.
-- ❌ **Skip** — it is factually wrong, out of scope, or already addressed.
+- ❌ **Skip** — it is factually wrong — the code already handles it, or does not do what it claims — or out of scope.
 - 💬 **Answer** — it needs no code change: a note, a compliment, or a question that an answer settles.
 
 A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link — a team convention, a precedent already in the codebase, or a stated line of reasoning all count. The emoji the reviewer used never sets the response. When in doubt, consult the project's conventions (`CLAUDE.md` / `AGENTS.md` and any linked convention docs).
