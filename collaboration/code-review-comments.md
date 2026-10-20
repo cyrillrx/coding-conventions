@@ -56,13 +56,13 @@ Every comment gets a reply before the merge, the declined ones included: a silen
 
 Each comment gets one outcome, and its rationale is stated alongside it — to the reviewer in the reply, and in any table proposing the outcomes before they are posted:
 
-| Outcome    | When                                                                                                 |
-|------------|------------------------------------------------------------------------------------------------------|
-| ✅ Apply   | The comment stands: valid, clear, and consistent with the project's conventions                      |
-| 🕐 Defer   | The comment stands, but is too costly or too broad for this PR; it needs an owner and a trace        |
-| ⚠️ Discuss | It needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason |
-| ❌ Skip    | It is factually wrong, out of scope, or already addressed                                            |
-| 💬 Answer  | It needs no code change: a note, a compliment, or a question that an answer settles                  |
+| Outcome    | When                                                                                                                   |
+|------------|------------------------------------------------------------------------------------------------------------------------|
+| ✅ Apply   | The comment stands: valid, clear, and consistent with the project's conventions                                        |
+| 🕐 Defer   | The comment stands, but is too costly or broad for this PR, or an open ticket tracks it; it needs an owner and a trace |
+| ⚠️ Discuss | It needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason                   |
+| ❌ Skip    | It is factually wrong — the code already handles it, or does not do what it claims — or out of scope                   |
+| 💬 Answer  | It needs no code change: a note, a compliment, or a question that an answer settles                                    |
 
 A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link — a team convention, a precedent already in the codebase, or a stated line of reasoning all count. Backing a comment is the reviewer's duty ([Git & Collaboration §7](git-and-collaboration.md#reviewers)); it is not the price of being heard.
 

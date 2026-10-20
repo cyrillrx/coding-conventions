@@ -182,7 +182,7 @@ The rationale explains the **trade-off** — why the other two outcomes were rej
 **3. Action plan**, grouped by outcome:
 
 - **✅ To fix here** — the ordered list of edits, with the files each one touches.
-- **🕐 To defer** — on the user's own change: for each, the ticket ready to submit (title, body with context, `file:line`, why it is deferred, link to the PR) and the tracker it goes to. On someone else's change: the scored comment to leave, and the note that the ticket is the author's call.
+- **🕐 To defer** — on the user's own change: for each, the ticket ready to submit (title, body with context, `file:line`, why it is deferred, link to the PR) and the tracker it goes to — or, when an open ticket already tracks it, that ticket's number. On someone else's change: the scored comment to leave, and the note that the ticket is the author's call.
 - **❌ No action** — one line each with its reason.
 
 End your turn with a question such as "Shall I apply this plan?". Wait for the user to approve, adjust, or override — the recommendations are proposals, and the person who owns the code decides.
@@ -192,7 +192,7 @@ End your turn with a question such as "Shall I apply this plan?". Wait for the u
 Once approved, in this order:
 
 1. **Apply the ✅ fixes.** Verify the project still builds and tests still pass where a command exists.
-2. **Open the 🕐 tickets** — only for the user's own change, only in the tracker identified at Step 3, and only after showing the final title and body. This skill holds no forge permissions by design, so `gh issue create` — or whatever the project's tracker needs — is prompted every time. That prompt is the feature, not the friction. **Never open a ticket in another author's name.**
+2. **Open the new 🕐 tickets** — a 🕐 pointing at an open ticket opens nothing. Only for the user's own change, only in the tracker identified at Step 3, and only after showing the final title and body. This skill holds no forge permissions by design, so `gh issue create` — or whatever the project's tracker needs — is prompted every time. That prompt is the feature, not the friction. **Never open a ticket in another author's name.**
 3. **Reference the follow-ups in the PR description** — append or update the `## 🔁 Follow-ups` section (the heading the PR template ships; match it exactly rather than adding a second one):
 
    ```markdown

@@ -168,7 +168,7 @@ A triage produces three things, in this order.
 - **Rationale**: introduced by this PR, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 
-**An action plan**, grouped by outcome: the ordered list of fixes to apply, the follow-up tickets to open (title and body ready to submit), and the `## 🔁 Follow-ups` block to append to the PR description.
+**An action plan**, grouped by outcome: the ordered list of fixes to apply, the follow-up tickets to open (title and body ready to submit) or already open (their number), and the `## 🔁 Follow-ups` block to append to the PR description.
 
 ## 9. Non-negotiables
 

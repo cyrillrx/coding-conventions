@@ -23,7 +23,7 @@ Round 0 does not count toward the round cap.
 1. **A fresh review** of the whole change against its base branch. Fresh means a reviewer without the previous rounds in mind: a reviewer that remembers its own earlier fixes tends to confirm them rather than read them. Findings from earlier rounds are never carried over.
 2. **A triage** of every finding, per [Code Review Triage](code-review-triage.md). The author approves the round's plan as one batch. When the author chooses to, the grid's recommendations stand without approval, and the round stops only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or contested, a ✅ fix that is structural. A fix is structural when its complexity is L or its diff would break the pull request's budget: it is flagged at triage, with the option to defer it — except a 🔴, whose minimal fix stays here — because the rounds that follow will spend themselves on what it reshapes.
 3. **The ✅ fixes are applied**, the build and the tests pass, and the round is committed — one commit per logical unit, per [Git & Collaboration](git-and-collaboration.md). A round never commits a red build: it fixes the build or stops.
-4. **The 🕐 follow-ups are collected**, not filed. They are opened together when the loop closes, so the author approves them once.
+4. **The 🕐 follow-ups are collected**, not filed. The new ones are opened together when the loop closes, so the author approves them once; a 🕐 pointing at an open ticket only cites it.
 5. **The author chooses to go on or to stop.** Once a round has committed its fixes, the author sees a one-line summary with the trend so far — fixes and their severities, round after round — and decides whether the next round runs or the loop closes, even when the grid decides the triage alone. Further rounds are not always worth their cost, and only the author can say so. When the trend turns — fixes rising two rounds in a row, or a round fixing code an earlier round fixed — the diagnosis of [§4](#when-the-loop-does-not-converge) comes with the summary, without waiting for the cap.
 
 ## 4. When to stop
@@ -64,7 +64,7 @@ A cascade after a structural change is often expected, and its trend decides the
 
 In this order:
 
-1. **Follow-ups** — the collected 🕐 tickets are shown together, opened once approved, and anchored in the code where they belong (`TODO(#142):`), with that anchor committed.
+1. **Follow-ups** — the new 🕐 tickets are shown together and opened once approved, and every 🕐 is anchored in the code where it belongs (`TODO(#142):`), with that anchor committed.
 2. **Push** — once, for the whole loop.
 3. **Replies** — the round 0 replies are posted and the addressed threads resolved, per [Code Review Comments](code-review-comments.md#responding-to-a-comment).
 4. **Description** — the pull request description is brought back in line with the diff, per [Pull Request Descriptions](pull-request-descriptions.md), and the follow-ups are listed under its `## 🔁 Follow-ups` section.

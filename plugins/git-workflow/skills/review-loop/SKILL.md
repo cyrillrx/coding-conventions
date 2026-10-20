@@ -79,7 +79,7 @@ For round `i` from 1 to the cap:
    - by default, present the round's plan and **wait for one approval for the whole batch** — the author may adjust any line;
    - with `--auto`, the grid's recommendations stand, and the round stops for the author only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or that contests an earlier decision, a ✅ fix that is structural.
    - Either way, flag a **structural** ✅ — complexity L, or a diff that would break the PR's 200 lines / 10 files budget — and offer to defer it as a 🕐 — except a 🔴, whose minimal fix stays here: the rounds that follow will spend themselves on what it reshapes.
-3. **Collect the 🕐** — keep each ready-to-submit ticket from the plan in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
+3. **Collect the 🕐** — keep each ready-to-submit ticket from the plan — or the number of the open ticket a 🕐 points at — in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
 4. **Converged?** If the approved plan holds no ✅, the loop has converged: go to Step 4.
 5. **Apply** the ✅ fixes, as `triage-findings` Step 6.1 does. Run the verification commands; if they fail, fix the failure within the round, or stop the loop as blocked. When blocked, keep what passes: commit the fixes that are green on their own, stash the rest so no later commit picks it up, and name the stash in the report. **Never commit a red build** — but a green fix is not lost to a red neighbour.
 6. **Commit** the round with `/git-workflow:commit --auto` — atomic Conventional Commits, no AI attribution. `--auto`, because invoking this skill was the approval. Do not push.
@@ -110,7 +110,7 @@ For a cascade, the trend on the area decides: keep reviewing when its findings s
 
 In this order:
 
-1. **Follow-ups** — show at once every collected 🕐 ticket the author has not approved yet, open the approved ones in the tracker `triage-findings` Step 3 identified, add the `TODO(#n):` anchors where they belong, and commit those anchors.
+1. **Follow-ups** — show at once every new 🕐 ticket the author has not approved yet, open the approved ones in the tracker `triage-findings` Step 3 identified, add the `TODO(#n):` anchors where they belong, and commit those anchors.
 2. **Push** the branch, once. This call is prompted.
 3. **Replies** — post the round 0 replies held in Step 2 and resolve the threads `address-review` Step 6 would resolve. Each call is prompted.
 4. **Description** — run `/git-workflow:pull-request` to bring the description back in line with the diff, with the opened follow-ups under `## 🔁 Follow-ups`.
