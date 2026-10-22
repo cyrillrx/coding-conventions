@@ -21,12 +21,13 @@ esac
 # TODO(#72): read the added lines from the tool's patch instead of comparing with old_string.
 added=$(jq -r --arg marker "$marker" --arg docstring "$docstring" '
   def stripped: sub("^\\s+"; "") | sub("\\s+$"; "");
-  (.tool_input.old_string // "" | split("\n") | map(stripped)) as $old
+  (.tool_name == "Write") as $whole_file
+  | (.tool_input.old_string // "" | split("\n") | map(stripped)) as $old
   | (.tool_input.new_string // .tool_input.content // "" | split("\n")) as $new
   | range(0; $new | length) as $i
   | $new[$i]
   | select(stripped as $line | $old | any(. == $line) | not)
-  | select(test($marker) or (test($docstring) and ($i == 0 or ($new[$i - 1] | test(":\\s*$")))))
+  | select(test($marker) or (test($docstring) and (($whole_file and $i == 0) or ($i > 0 and ($new[$i - 1] | test(":\\s*$"))))))
   | select(test("^\\s*\\*/\\s*$") | not)
   | select(test("(//|/\\*|^\\s*\\*|#)\\s*TODO\\b") | not)
 ' <<<"$input" 2>/dev/null) || exit 0

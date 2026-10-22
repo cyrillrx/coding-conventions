@@ -67,6 +67,7 @@ expect_silence "an edit re-indenting an existing comment" \
   "$(edit Foo.kt $'// Kept.\nval a = 1' $'if (b) {\n    // Kept.\n    val a = 1\n}')"
 expect_silence "a Rust dereference" "$(edit a.rs 'x' $'x\n    *count += 1;')"
 expect_silence "a multi-line string" "$(write tool.py $'q = """\n    select 1\n    """')"
+expect_silence "an edit opening on a string closing" "$(edit tool.py 'x = 1' $'"""\nx = 2')"
 expect_silence "a multi-line string closed in a call" "$(write tool.py $'q = x("""\n    select 1\n""")')"
 expect_silence "a trailing TODO" "$(write Foo.kt 'val a = 1 // TODO(#12): drop once migrated')"
 expect_silence "a shebang alone" "$(write tool.sh $'#!/usr/bin/env bash\necho hi')"
