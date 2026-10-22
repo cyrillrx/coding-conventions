@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cat \"${CLAUDE_PLUGIN_ROOT}\"/conventions/*.md"
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}\"/conventions/coding-conventions.md"
           }
         ]
       }
@@ -18,6 +18,16 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}\"/hooks/comment-reminder.sh"
+          },
+          {
+            "type": "command",
+            "if": "Edit(*.md)",
+            "command": "printf '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"This project follows the documentation conventions in %s/conventions/docs-conventions.md. Read that file in full before writing more Markdown.\"}}' \"${CLAUDE_PLUGIN_ROOT}\""
+          },
+          {
+            "type": "command",
+            "if": "Write(*.md)",
+            "command": "printf '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"This project follows the documentation conventions in %s/conventions/docs-conventions.md. Read that file in full before writing more Markdown.\"}}' \"${CLAUDE_PLUGIN_ROOT}\""
           }
         ]
       }
