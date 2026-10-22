@@ -18,6 +18,7 @@ esac
 
 # A docstring is the first statement of a module, a def or a class: the triple quotes of any other
 # line open or close an ordinary string.
+# TODO(#72): read the added lines from the tool's patch instead of comparing with old_string.
 added=$(jq -r --arg marker "$marker" --arg docstring "$docstring" '
   def stripped: sub("^\\s+"; "") | sub("\\s+$"; "");
   (.tool_input.old_string // "" | split("\n") | map(stripped)) as $old
