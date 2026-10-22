@@ -52,6 +52,9 @@ expect_reminder "a trailing hash comment" "$(write tool.py 'x = 1  # Reads the i
 expect_reminder "a Python docstring" "$(write tool.py $'def f():\n    """Does f."""')" '"""Does f."""'
 expect_reminder "a React component" "$(write Button.tsx $'// Renders a button.\nconst a = 1')" "// Renders a button."
 expect_reminder "a TODO mentioned mid-sentence" "$(write Foo.kt '// Avoids a TODO here.')" "// Avoids a TODO here."
+expect_reminder "a multiplication before a trailing comment" \
+  "$(write Foo.kt 'val n = w *TODO_MAX // Explains the cap.')" "// Explains the cap."
+expect_reminder "a reminder that spares tool directives" "$(write Foo.kt '// Keeps a positive.')" "Tool directives"
 expect_unlisted "a shebang above a comment" \
   "$(write tool.py $'#!/usr/bin/env python3\n# Reads the input.')" "#!/usr/bin/env python3"
 expect_silence "an edit keeping an existing comment" \
@@ -59,6 +62,7 @@ expect_silence "an edit keeping an existing comment" \
 expect_silence "an edit re-indenting an existing comment" \
   "$(edit Foo.kt $'// Kept.\nval a = 1' $'if (b) {\n    // Kept.\n    val a = 1\n}')"
 expect_silence "a Rust dereference" "$(edit a.rs 'x' $'x\n    *count += 1;')"
+expect_silence "a multi-line string" "$(write tool.py $'q = """\n    select 1\n    """')"
 expect_silence "a trailing TODO" "$(write Foo.kt 'val a = 1 // TODO(#12): drop once migrated')"
 expect_silence "a shebang alone" "$(write tool.sh $'#!/usr/bin/env bash\necho hi')"
 expect_silence "a KDoc closing line alone" "$(edit Foo.kt 'x' $'x\n */')"

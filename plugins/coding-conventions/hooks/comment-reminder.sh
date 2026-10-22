@@ -18,8 +18,8 @@ added=$(jq -r --arg marker "$marker" '
   | (.tool_input.new_string // .tool_input.content // "" | split("\n"))[]
   | select(stripped as $line | $old | any(. == $line) | not)
   | select(test($marker))
-  | select(test("^\\s*\\*/\\s*$") | not)
-  | select(test("(//|\\*|#)\\s*TODO") | not)
+  | select(test("^\\s*(\\*/|\"{3}|\\x27{3})\\s*$") | not)
+  | select(test("(//|/\\*|^\\s*\\*|#)\\s*TODO") | not)
 ' <<<"$input" 2>/dev/null) || exit 0
 
 [ -n "$added" ] || exit 0
@@ -27,6 +27,6 @@ added=$(jq -r --arg marker "$marker" '
 jq -n --arg file "$file" --arg lines "$added" '{
   hookSpecificOutput: {
     hookEventName: "PostToolUse",
-    additionalContext: "This edit added comment lines to \($file):\n\($lines)\nCheck each one against §4 Comments of the coding conventions loaded at session start; keep it only if it passes."
+    additionalContext: "This edit added comment lines to \($file):\n\($lines)\nCheck each one against §4 Comments of the coding conventions loaded at session start; keep it only if it passes. Tool directives (build tags, linter or type-checker pragmas) are not comments: leave them."
   }
 }'

@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/comment-reminder.sh"
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}\"/hooks/comment-reminder.sh"
           }
         ]
       }
