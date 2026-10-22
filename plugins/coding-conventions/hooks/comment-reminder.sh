@@ -6,18 +6,20 @@ input=$(cat)
 file=$(jq -r '.tool_input.file_path // empty' <<<"$input" 2>/dev/null) || exit 0
 
 case "${file##*.}" in
-  kt | kts | java | swift | go | rs | js | ts | c | cpp | gradle) marker='^\s*(//|/\*|\*)' ;;
-  sh | py | rb | toml | yaml | yml) marker='^\s*#(?!!)' ;;
+  kt | kts | java | swift | go | rs | js | jsx | ts | tsx | c | cpp | gradle) marker='^\s*(//|/\*|\*(\s|/|$))|\S\s+(//|/\*)(\s|$)' ;;
+  py) marker='^\s*#(?!!)|\S\s+#(\s|$)|^\s*[rRuUbB]?("{3}|\x27{3})' ;;
+  sh | rb | toml | yaml | yml) marker='^\s*#(?!!)|\S\s+#(\s|$)' ;;
   *) exit 0 ;;
 esac
 
 added=$(jq -r --arg marker "$marker" '
-  (.tool_input.old_string // "" | split("\n")) as $old
+  def stripped: sub("^\\s+"; "") | sub("\\s+$"; "");
+  (.tool_input.old_string // "" | split("\n") | map(stripped)) as $old
   | (.tool_input.new_string // .tool_input.content // "" | split("\n"))[]
-  | select(. as $line | $old | any(. == $line) | not)
+  | select(stripped as $line | $old | any(. == $line) | not)
   | select(test($marker))
   | select(test("^\\s*\\*/\\s*$") | not)
-  | select(test("TODO") | not)
+  | select(test("(//|\\*|#)\\s*TODO") | not)
 ' <<<"$input" 2>/dev/null) || exit 0
 
 [ -n "$added" ] || exit 0
