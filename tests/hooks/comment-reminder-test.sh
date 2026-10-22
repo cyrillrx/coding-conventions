@@ -53,6 +53,8 @@ expect_reminder "a Python docstring" "$(write tool.py $'def f():\n    """Does f.
 expect_reminder "a multi-line Python docstring" \
   "$(write tool.py $'def f():\n    """\n    Does f.\n    """')" $'tool.py:\n    """\nCheck'
 expect_reminder "a React component" "$(write Button.tsx $'// Renders a button.\nconst a = 1')" "// Renders a button."
+expect_reminder "a comment opening on a word that starts with TODO" \
+  "$(write Foo.kt '// TODOs live in the tracker.')" "// TODOs live in the tracker."
 expect_reminder "a TODO mentioned mid-sentence" "$(write Foo.kt '// Avoids a TODO here.')" "// Avoids a TODO here."
 expect_reminder "a multiplication before a trailing comment" \
   "$(write Foo.kt 'val n = w *TODO_MAX // Explains the cap.')" "// Explains the cap."

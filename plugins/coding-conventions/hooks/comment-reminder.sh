@@ -27,7 +27,7 @@ added=$(jq -r --arg marker "$marker" --arg docstring "$docstring" '
   | select(stripped as $line | $old | any(. == $line) | not)
   | select(test($marker) or (test($docstring) and ($i == 0 or ($new[$i - 1] | test(":\\s*$")))))
   | select(test("^\\s*\\*/\\s*$") | not)
-  | select(test("(//|/\\*|^\\s*\\*|#)\\s*TODO") | not)
+  | select(test("(//|/\\*|^\\s*\\*|#)\\s*TODO\\b") | not)
 ' <<<"$input" 2>/dev/null) || exit 0
 
 [ -n "$added" ] || exit 0
