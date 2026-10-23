@@ -124,7 +124,7 @@ fun requestActivation(dataDirectory: Path): Boolean =
 
 ### Why on every OS
 
-On macOS, a `.app` launched from the Finder or the Dock is already single-instance: LaunchServices reactivates the running copy. But `open -n`, a launch from a terminal, or the development `run` task each start a second process. The lock applies on every OS, macOS included.
+On macOS, a `.app` launched from the Finder or the Dock is already single-instance: LaunchServices reactivates the running copy. But `open -n`, running the bundle's executable directly, or the development `run` task each start a second process. The lock applies on every OS, macOS included.
 
 ### Where the logic lives
 
@@ -161,7 +161,7 @@ compose.desktop {
                 iconFile = project.file("icons/app.icns")
             }
             windows {
-                upgradeUuid = "3f1c2a8e-5b7d-4c9a-9e61-0d2b7f4a8c15"
+                upgradeUuid = "<generate-once-with-uuidgen>"
                 perUserInstall = true
                 menu = true
                 menuGroup = "Example"
@@ -231,10 +231,10 @@ jobs:
       - run: printf '%s\n' "$LOCAL_PROPERTIES" > local.properties
         env:
           LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
-      - run: ./gradlew :desktopApp:packageReleaseDistributionForCurrentOS -PappVersion="${GITHUB_REF_NAME#v}"
+      - run: ./gradlew :desktop-app:packageReleaseDistributionForCurrentOS -PappVersion="${GITHUB_REF_NAME#v}"
       - run: |
           shopt -s nullglob
-          gh release upload "$GITHUB_REF_NAME" --clobber desktopApp/build/compose/binaries/main-release/*/*.{dmg,msi,deb}
+          gh release upload "$GITHUB_REF_NAME" --clobber desktop-app/build/compose/binaries/main-release/*/*.{dmg,msi,deb}
         env:
           GH_TOKEN: ${{ github.token }}
 
