@@ -1,6 +1,6 @@
 {
   "name": "coding-conventions",
-  "description": "Loads this team's general coding and documentation conventions into every session, so they apply without being asked for, and recalls the comment rule whenever an edit adds comments to a code file",
+  "description": "Loads this team's general coding conventions into every session, so they apply without being asked for, recalls the comment rule whenever an edit adds comments to a code file, and points to the documentation conventions whenever a Markdown file is written",
   "author": {
     "name": "cyrillrx"
   },

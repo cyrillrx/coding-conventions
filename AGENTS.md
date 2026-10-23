@@ -38,7 +38,7 @@ plugins/                               # Derived plugin skills (regenerate with 
   git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review, /review-loop
   kotlin-conventions/                  # SessionStart hook pointing to a copy of conventions/kotlin-conventions.md
   compose-conventions/                 # SessionStart hook pointing to a copy of conventions/compose-conventions.md
-  coding-conventions/                  # SessionStart hook injecting copies of conventions/coding-conventions.md and docs-conventions.md, PostToolUse hook recalling §4 when an edit adds comments
+  coding-conventions/                  # SessionStart hook injecting a copy of conventions/coding-conventions.md; PostToolUse hooks recalling §4 when an edit adds comments and pointing to a copy of docs-conventions.md on Markdown edits
   project-health/                      # /audit: graded project health report written to docs/audit-YYYY-MM-DD.md
 tests/hooks/                           # One test script per plugin hook script
 .claude/skills/
