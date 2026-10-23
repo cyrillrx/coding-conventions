@@ -62,14 +62,18 @@ Two instances of the application sharing one data directory corrupt each other's
 fun tryLockInstance(dataDirectory: Path): FileLock? {
     Files.createDirectories(dataDirectory)
     val channel = FileChannel.open(dataDirectory / "instance.lock", CREATE, WRITE)
-    val lock = try {
-        channel.tryLock()
-    } catch (e: OverlappingFileLockException) {
-        null
-    }
+    val lock = tryLockOrNull(channel)
     if (lock == null) channel.close()
+
     return lock
 }
+
+private fun tryLockOrNull(channel: FileChannel): FileLock? =
+    try {
+        channel.tryLock()
+    } catch (exception: OverlappingFileLockException) {
+        null
+    }
 ```
 
 ### Activating the running instance
@@ -90,16 +94,18 @@ fun listenForActivation(dataDirectory: Path, onActivationRequested: () -> Unit) 
     Files.deleteIfExists(address.path)
     val server = ServerSocketChannel.open(StandardProtocolFamily.UNIX).bind(address)
     thread(isDaemon = true, name = "instance-activation") {
-        while (true) {
-            try {
-                server.accept().use { client ->
-                    val request = ByteBuffer.allocate(1)
-                    if (client.read(request) > 0 && request.get(0) == ACTIVATE) onActivationRequested()
-                }
-            } catch (e: Exception) {
-                // A dropped client or a failed activation only loses its own request: keep serving the next ones.
-            }
+        while (server.isOpen) serveActivationRequest(server, onActivationRequested)
+    }
+}
+
+private fun serveActivationRequest(server: ServerSocketChannel, onActivationRequested: () -> Unit) {
+    try {
+        server.accept().use { client ->
+            val request = ByteBuffer.allocate(1)
+            if (client.read(request) > 0 && request.get(0) == ACTIVATE) onActivationRequested()
         }
+    } catch (exception: IOException) {
+        logger.warn(exception) { "Activation request dropped" }
     }
 }
 
@@ -109,8 +115,9 @@ fun requestActivation(dataDirectory: Path): Boolean =
         SocketChannel.open(UnixDomainSocketAddress.of(dataDirectory / "instance.sock")).use { channel ->
             channel.write(ByteBuffer.wrap(byteArrayOf(ACTIVATE)))
         }
+
         true
-    } catch (e: IOException) {
+    } catch (exception: IOException) {
         false
     }
 ```
