@@ -7,6 +7,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 - [Git & Collaboration](collaboration/git-and-collaboration.md) — Conventional Commits, branching, PR etiquette, ADRs
 - [Code Review Comments](collaboration/code-review-comments.md) — emoji legend for review comments, and how to answer them
 - [Code Review Triage](collaboration/code-review-triage.md) — turning findings into decisions: severity, impact, complexity, recommendation
+- [Issue Labels](collaboration/issue-labels.md) — carrying the triage scores on every ticket as labels, to order the backlog
 - [Code Review Loop](collaboration/code-review-loop.md) — iterating review, triage and fix until a review leaves nothing to fix
 - [Pull Request Descriptions](collaboration/pull-request-descriptions.md) — keeping a title and description true to the diff as the branch moves
 - [Project Audit](collaboration/project-audit.md) — grading a project's health over time: scope, axes, severities, state and effort grades

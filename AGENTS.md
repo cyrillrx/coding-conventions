@@ -14,6 +14,7 @@ collaboration/
   git-and-collaboration.md             # Conventional Commits, branching, PR etiquette, ADRs
   code-review-comments.md              # Emoji legend for review comments, and the protocol for answering them
   code-review-triage.md                # Severity/impact/complexity grid, fix-here vs follow-up vs no-action
+  issue-labels.md                      # The triage scores carried on every ticket as labels
   code-review-loop.md                  # Review → triage → fix rounds until a review leaves nothing to fix, and the status label
   pull-request-descriptions.md         # Keeping a PR title and description true to its diff as the branch moves
   project-audit.md                     # Project health audit: scope, axes, audit severities, A–E state and effort grids
@@ -77,6 +78,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Trunk-based development; short-lived feature branches named after commit types
 - Use [code-review-comments.md](collaboration/code-review-comments.md) to signal blocking vs. non-blocking comments; every comment gets a reply, and a request with no stated reason is discussed, never dismissed
 - Every review finding gets a decision — see [code-review-triage.md](collaboration/code-review-triage.md): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale
+- Every ticket carries one `severity:*`, one `impact:*` and one `complexity:*` label on the triage scales — see [issue-labels.md](collaboration/issue-labels.md); no type label, the title prefix carries it
 - Iterate review rounds per [code-review-loop.md](collaboration/code-review-loop.md): open comments first, a fresh review each round of correctness and of conformance to the conventions in force, one push at the end, stop when a round has no ✅, or when the author ends it after a round; at the cap (10 by default) the loop diagnoses why it does not converge, and the author closes or extends it
 - Project audits follow [project-audit.md](collaboration/project-audit.md): one cause per finding with a stable ID, A–E state and effort grades per module and axis, a verdict from the worst cell and never an average; changing the grading bumps the grid version
 
