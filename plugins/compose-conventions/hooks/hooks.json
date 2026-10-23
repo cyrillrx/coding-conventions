@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf 'This project follows the Compose conventions for its UI layer in %s/conventions/compose-conventions.md. Read that file in full before writing, reviewing or refactoring composables, ViewModels or their tests.\\n' \"${CLAUDE_PLUGIN_ROOT}\""
+            "command": "printf 'This project follows the Compose conventions for its UI layer, split by what is being written. Read the one that applies, in full, before writing, reviewing or refactoring it: composables in %s/conventions/compose-conventions.md, ViewModels and their state in %s/conventions/compose-viewmodel-conventions.md, their tests in %s/conventions/compose-testing-conventions.md.\\n' \"${CLAUDE_PLUGIN_ROOT}\" \"${CLAUDE_PLUGIN_ROOT}\" \"${CLAUDE_PLUGIN_ROOT}\""
           }
         ]
       }
