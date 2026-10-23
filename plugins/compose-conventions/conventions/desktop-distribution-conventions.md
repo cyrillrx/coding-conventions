@@ -176,7 +176,7 @@ val appVersion = providers.gradleProperty("appVersion").getOrElse("1.0.0")
 ## Release Workflow
 
 - Releases are built by a **dedicated workflow**, separate from the CI workflow. Verification and delivery have different triggers and different permissions: CI runs on every pull request with read access, a release runs on a tag and writes to the repository's Releases.
-- The workflow triggers only on a tag shaped `vMAJOR.MINOR.PATCH`: a looser `v*` lets `v1.2.0-rc1` through, which creates the Release before jpackage rejects the version.
+- The workflow triggers only on a tag shaped `vMAJOR.MINOR.PATCH`: a looser `v*` lets `v1.2.0-rc1` through, a version the packaging rejects. The pattern does not check the [bounds of each format](#versioning); the tag still has to respect them.
 - It runs on a matrix — `macos-latest` (arm64), `windows-latest`, `ubuntu-latest` — because `jpackage` cannot cross-build: each OS, and each CPU architecture, builds its own installer. An Intel Mac build needs its own runner; whether to ship one is a project-level choice.
 - Each job runs `packageReleaseDistributionForCurrentOS` and attaches its installer to the GitHub Release for the tag. The Release notes come from a file in the repository, so the [signing workaround](#signing) is never forgotten.
 - Configuration the build reads from an untracked file (API keys, project identifiers) comes from GitHub secrets, written into that file by the job. It is never committed.
@@ -196,13 +196,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file .github/release-notes.md
+      - run: gh release create "$GITHUB_REF_NAME" --draft --title "$GITHUB_REF_NAME" --notes-file .github/release-notes.md
         env:
           GH_TOKEN: ${{ github.token }}
 
   package:
     needs: release
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
@@ -221,12 +222,20 @@ jobs:
       - run: ./gradlew :desktopApp:packageReleaseDistributionForCurrentOS -PappVersion="${GITHUB_REF_NAME#v}"
       - run: |
           shopt -s nullglob
-          gh release upload "$GITHUB_REF_NAME" desktopApp/build/compose/binaries/main-release/*/*.{dmg,msi,deb}
+          gh release upload "$GITHUB_REF_NAME" --clobber desktopApp/build/compose/binaries/main-release/*/*.{dmg,msi,deb}
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  publish:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft=false
         env:
           GH_TOKEN: ${{ github.token }}
 ```
 
-The release is created once, before the matrix: three jobs each creating it would race.
+The release is created once, before the matrix, because three jobs each creating it would race. It stays a draft until every installer is attached: a failed job leaves no public Release with missing installers, and its rerun replaces what it had already uploaded.
 
 ## Signing
 
