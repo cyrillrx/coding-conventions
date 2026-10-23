@@ -77,7 +77,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Trunk-based development; short-lived feature branches named after commit types
 - Use [code-review-comments.md](collaboration/code-review-comments.md) to signal blocking vs. non-blocking comments; every comment gets a reply, and a request with no stated reason is discussed, never dismissed
 - Every review finding gets a decision — see [code-review-triage.md](collaboration/code-review-triage.md): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale
-- Iterate review rounds per [code-review-loop.md](collaboration/code-review-loop.md): open comments first, a fresh review each round, one push at the end, stop when a round has no ✅, or when the author ends it after a round; at the cap (10 by default) the loop diagnoses why it does not converge, and the author closes or extends it
+- Iterate review rounds per [code-review-loop.md](collaboration/code-review-loop.md): open comments first, a fresh review each round of correctness and of conformance to the conventions in force, one push at the end, stop when a round has no ✅, or when the author ends it after a round; at the cap (10 by default) the loop diagnoses why it does not converge, and the author closes or extends it
 - Project audits follow [project-audit.md](collaboration/project-audit.md): one cause per finding with a stable ID, A–E state and effort grades per module and axis, a verdict from the worst cell and never an average; changing the grading bumps the grid version
 
 ### Documentation (`conventions/docs-conventions.md`)
