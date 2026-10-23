@@ -9,7 +9,7 @@ edit() { jq -n --arg f "$1" --arg o "$2" --arg n "$3" '{tool_name: "Edit", tool_
 
 expect_reminder() {
   local name=$1 input=$2 expected=$3 output
-  output=$("$hook" <<<"$input")
+  output=$(bash "$hook" <<<"$input")
   if jq -e --arg e "$expected" '.hookSpecificOutput.additionalContext | contains($e)' <<<"$output" >/dev/null 2>&1; then
     echo "ok   $name"
   else
@@ -20,7 +20,7 @@ expect_reminder() {
 
 expect_unlisted() {
   local name=$1 input=$2 unexpected=$3 output
-  output=$("$hook" <<<"$input")
+  output=$(bash "$hook" <<<"$input")
   if jq -e --arg u "$unexpected" '.hookSpecificOutput.additionalContext | contains($u) | not' <<<"$output" >/dev/null 2>&1; then
     echo "ok   $name"
   else
@@ -31,7 +31,7 @@ expect_unlisted() {
 
 expect_silence() {
   local name=$1 input=$2 output status
-  output=$("$hook" <<<"$input")
+  output=$(bash "$hook" <<<"$input")
   status=$?
   if [ -z "$output" ] && [ "$status" -eq 0 ]; then
     echo "ok   $name"
