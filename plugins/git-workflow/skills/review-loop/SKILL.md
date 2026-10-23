@@ -74,7 +74,7 @@ Round 0 does not count toward the cap.
 
 For round `i` from 1 to the cap:
 
-1. **Review and triage**: run `/git-workflow:triage-findings --review <effort>`. `--review` makes it start from a fresh review in a subagent, never from the findings earlier rounds left in this conversation.
+1. **Review and triage**: run `/git-workflow:triage-findings --review <effort>`. `--review` makes it start from a fresh review in a subagent, never from the findings earlier rounds left in this conversation. That review covers correctness and conformance to the conventions that apply to the changed files, each conformance finding citing its rule.
 2. **Decide**:
    - by default, present the round's plan and **wait for one approval for the whole batch** — the author may adjust any line;
    - with `--auto`, the grid's recommendations stand, and the round stops for the author only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or that contests an earlier decision, a ✅ fix that is structural.

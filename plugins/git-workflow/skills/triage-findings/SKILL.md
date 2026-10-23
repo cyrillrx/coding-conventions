@@ -26,8 +26,9 @@ allowed-tools:
 ---
 
 <!--
-The triage grid in this skill is derived from collaboration/code-review-triage.md
-in cyrillrx/coding-conventions. Keep it in sync with /sync-plugins.
+The triage grid in this skill is derived from collaboration/code-review-triage.md, and the two
+review axes of Step 1 from collaboration/code-review-loop.md (§3), in cyrillrx/coding-conventions.
+Keep them in sync with /sync-plugins.
 -->
 
 **Scope.** This skill decides; it does not correspond. Its findings come from the **conversation**, and the change from the local **git** state. If a reviewer has left comments on an open PR and is waiting on you, that is `/git-workflow:address-review`.
@@ -56,7 +57,9 @@ The findings are already here. This skill is normally invoked straight after a c
 If the conversation holds no findings, or `--review` is passed, **review the change first**, on a fresh context:
 
 - Resolve the base branch as Step 2 describes.
-- Launch a subagent to run `/code-review <effort>` on `<base>...HEAD` — plus, without `--review`, the uncommitted work, staged or not (`git diff HEAD`) — with `<effort>` the `low`, `medium` or `high` argument, `high` by default, and to return its findings verbatim, changing nothing. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so.
+- Launch a subagent to review `<base>...HEAD` — plus, without `--review`, the uncommitted work, staged or not (`git diff HEAD`) — on both axes, and to return the findings of each verbatim, changing nothing:
+  - **Correctness**: `/code-review <effort>`, with `<effort>` the `low`, `medium` or `high` argument, `high` by default. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so.
+  - **Conformance**: list the changed files (`git diff --name-only`), read the project's `AGENTS.md` / `CLAUDE.md` as an index, then read only the convention documents that apply to those files — the general ones, plus each one bound to a file type the change touches — and nothing else. Report every added line that contradicts a rule read, with its `file:line` and the rule cited as document and section. A finding that cites no rule is not reported.
 - With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over. Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
 
 Findings already in the conversation come first otherwise — a linter's output, pasted comments, an earlier review: do not run a second review on top of them. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
