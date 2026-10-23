@@ -7,7 +7,7 @@ file=$(jq -r '.tool_input.file_path // empty' <<<"$input" 2>/dev/null) || exit 0
 
 docstring='(?!)'
 case "${file##*.}" in
-  kt | kts | java | swift | go | rs | js | jsx | ts | tsx | c | cpp | gradle) marker='^\s*(//|/\*|\*(\s|/|$))|\S\s+(//|/\*)(\s|$)' ;;
+  kt | kts | java | swift | go | rs | js | jsx | ts | tsx | c | cpp | gradle) marker='^\s*(//|/\*|\*(\s|/|$))|\S\s+(//|/\*)(\s|$)|[{(,]\s*/\*' ;;
   py)
     marker='^\s*#(?!!)|\S\s+#(\s|$)'
     docstring='^\s*[rRuUbB]?("{3}|\x27{3})'
@@ -22,11 +22,11 @@ esac
 added=$(jq -r --arg marker "$marker" --arg docstring "$docstring" '
   def stripped: sub("^\\s+"; "") | sub("\\s+$"; "");
   (.tool_name == "Write") as $whole_file
-  | (.tool_input.old_string // "" | split("\n") | map(stripped)) as $old
+  | (.tool_input.old_string // "" | split("\n") | INDEX(stripped)) as $old
   | (.tool_input.new_string // .tool_input.content // "" | split("\n")) as $new
   | range(0; $new | length) as $i
   | $new[$i]
-  | select(stripped as $line | $old | any(. == $line) | not)
+  | select(stripped as $line | $old | has($line) | not)
   | select(test($marker) or (test($docstring) and (($whole_file and $i == 0) or ($i > 0 and ($new[$i - 1] | test(":\\s*$"))))))
   | select(test("^\\s*\\*/\\s*$") | not)
   | select(test("(//|/\\*|^\\s*\\*|#)\\s*TODO\\b") | not)
@@ -37,6 +37,6 @@ added=$(jq -r --arg marker "$marker" --arg docstring "$docstring" '
 jq -n --arg file "$file" --arg lines "$added" '{
   hookSpecificOutput: {
     hookEventName: "PostToolUse",
-    additionalContext: "This edit added comment lines to \($file):\n\($lines)\nCheck each one against §4 Comments of the coding conventions loaded at session start; keep it only if it passes. Tool directives (build tags, linter or type-checker pragmas) are not comments: leave them."
+    additionalContext: "Check each comment line below, which this edit added to \($file), against §4 Comments of the coding conventions loaded at session start; keep it only if it passes. Tool directives (build tags, linter or type-checker pragmas) are not comments: leave them.\n\($lines)"
   }
 }'
