@@ -18,12 +18,13 @@ It builds on the [Kotlin conventions](kotlin-conventions.md) and the [Compose co
 
 Everything the application persists — local database, preferences, caches it cannot rebuild cheaply, the single-instance lock — lives in one per-user application data directory, at the location each OS reserves for it:
 
-| OS      | Directory                                                      |
-|---------|----------------------------------------------------------------|
-| macOS   | `~/Library/Application Support/<App>`                          |
-| Windows | `%APPDATA%\<App>`, falling back to the user's home directory   |
-| Linux   | `$XDG_DATA_HOME/<App>`, falling back to `~/.local/share/<App>` |
+| OS      | Directory                                                         |
+|---------|-------------------------------------------------------------------|
+| macOS   | `~/Library/Application Support/<App>`                             |
+| Windows | `%LOCALAPPDATA%\<App>`, falling back to the user's home directory |
+| Linux   | `$XDG_DATA_HOME/<App>`, falling back to `~/.local/share/<App>`    |
 
+- On Windows, the local folder and not the roaming one (`%APPDATA%`): a lock, a socket and a local database belong to the machine, and a roaming folder redirected to a network share breaks the first two.
 - Never use the system temp directory. The OS purges it on its own schedule, so the user's data disappears without any action on their part.
 - Resolve the directory once, in a single function, and pass the resulting path to whatever needs it. Two components computing it separately end up disagreeing on one OS.
 
@@ -33,7 +34,10 @@ fun applicationDataDirectory(appName: String): Path {
     val os = System.getProperty("os.name").lowercase()
     return when {
         os.startsWith("mac") -> home / "Library" / "Application Support" / appName
-        os.startsWith("windows") -> (System.getenv("APPDATA")?.let(::Path) ?: home) / appName
+        os.startsWith("windows") -> {
+            val localAppData = System.getenv("LOCALAPPDATA")?.takeIf(String::isNotEmpty)?.let(::Path)
+            (localAppData ?: home) / appName
+        }
         else -> {
             val xdgDataHome = System.getenv("XDG_DATA_HOME")?.takeIf(String::isNotEmpty)?.let(::Path)
             (xdgDataHome ?: home / ".local" / "share") / appName
