@@ -4,7 +4,7 @@ This file provides guidance to AI agents working in this repository.
 
 ## Purpose
 
-Documentation-only repository containing coding conventions and collaboration guidelines, shared across projects. There is no build system, no tests, and no runnable code — all files are Markdown (plus a shared editor config). The conventions are the human-readable source of truth and must remain understandable without any AI tooling.
+Documentation-only repository containing coding conventions and collaboration guidelines, shared across projects. It holds no application and no library, and has no build system: the files are Markdown, a shared editor config, and small scripts that enforce the conventions as plugin hooks. Each script has a test under `tests/hooks/`, run with `bash tests/hooks/<script>-test.sh`. The conventions are the human-readable source of truth and must remain understandable without any AI tooling.
 
 ## Structure
 
@@ -38,8 +38,9 @@ plugins/                               # Derived plugin skills (regenerate with 
   git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review, /review-loop
   kotlin-conventions/                  # SessionStart hook pointing to a copy of conventions/kotlin-conventions.md
   compose-conventions/                 # SessionStart hook pointing to a copy of conventions/compose-conventions.md
-  coding-conventions/                  # SessionStart hook injecting copies of conventions/coding-conventions.md and docs-conventions.md
+  coding-conventions/                  # SessionStart hook injecting copies of conventions/coding-conventions.md and docs-conventions.md, PostToolUse hook recalling §4 when an edit adds comments
   project-health/                      # /audit: graded project health report written to docs/audit-YYYY-MM-DD.md
+tests/hooks/                           # One test script per plugin hook script
 .claude/skills/
   sync-plugins/                        # Repo-local meta-skill: regenerate plugins from docs
 ```
