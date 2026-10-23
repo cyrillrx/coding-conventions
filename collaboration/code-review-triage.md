@@ -97,7 +97,7 @@ A deferral needs **an owner and a trace**. Who provides them depends on whose ch
 
 Self-review, or your own PR after a review. The deferral is yours to carry, so all three exist:
 
-1. **A ticket** in whatever tracker the project actually uses. Its description carries the context: what was found, where (`file:line`), why it was deferred, and a link back to the PR.
+1. **A ticket** in whatever tracker the project actually uses. Its description carries the context: what was found, where (`file:line`), why it was deferred, and a link back to the PR. On a GitHub tracker, its severity, impact and complexity also go on it as labels, per [Issue Labels](issue-labels.md).
 2. **A reference in the PR description**, under the `## 🔁 Follow-ups` section of the [PR template](../.github/pull_request_template.md), so the deferral is visible at merge time and in the merged history:
 
    ```markdown
