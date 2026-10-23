@@ -124,27 +124,7 @@ These implementations belong to the **main source set** of the data layer (e.g. 
 
 Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/.editorconfig`](../configs/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
 
-The rules below describe what that configuration enforces, for reference.
-
-### Indentation
-
-Use 4 spaces for indentation. Do not use tabs.
-
-### Line length
-
-Keep lines to fewer than `120` characters unless there is a good reason not to.
-
-### Horizontal whitespace
-
-- Put spaces around binary operators (`a + b`). Exception: no spaces around the range operator (`0..i`).
-- No spaces around unary operators (`a++`).
-- Put a space between control-flow keywords (`if`, `when`, `for`, `while`) and the opening parenthesis.
-- No space before the opening parenthesis in a primary constructor, method declaration, or method call.
-- Never put a space after `(`, `[`, or before `]`, `)`.
-- Never put a space around `.` or `?.`: `foo.bar().filter { it > 2 }`, `foo?.bar()`.
-- Put a space after `//`.
-- No spaces around angle brackets for type parameters (`Map<K, V>`), around `::` (`Foo::class`), or before `?` on a nullable type (`String?`).
-- Avoid horizontal alignment of any kind: renaming an identifier should not force reformatting of surrounding lines.
+That configuration enforces the layout — indentation, the 120-column limit, whitespace, wrapping, braces, blank lines and trailing commas — so none of it is restated here: ktlint's report is the reference. The rules below are the ones it does not check.
 
 ### Function and expression body formatting
 
@@ -155,24 +135,7 @@ fun foo(): Int { return 1 }  // bad
 fun foo() = 1                // good
 ```
 
-If the expression body doesn't fit on the declaration line, put `=` on the first line and indent the body by 4 spaces:
-
-```kotlin
-fun f(x: String) =
-    x.length
-```
-
 ### Control-flow formatting
-
-If an `if`/`when` condition is multiline, use curly braces and put the closing parenthesis with the opening brace on a separate line:
-
-```kotlin
-if (!component.isSyncing &&
-    !hasAnyKotlinRuntimeInScope(module)
-) {
-    return createKotlinNotConfiguredPanel(module)
-}
-```
 
 Prefer affirmative conditions to negative ones:
 
@@ -184,37 +147,7 @@ if (statement) {   // good
 }
 ```
 
-Put `else`, `catch`, `finally`, and the `while` of a do/while on the same line as the preceding closing brace.
-
-### Chained call wrapping
-
-When wrapping chained calls, put `.` or `?.` on the next line with a single indent:
-
-```kotlin
-val anchor = owner
-    ?.firstChild
-    .siblings(forward = true)
-    .dropWhile { it is PsiComment || it is PsiWhiteSpace }
-```
-
-### New lines
-
-Add a new line after conditionals and blocks. Include exactly one blank line between methods — no more.
-
-### Trailing commas
-
-Add a trailing comma after function, constructor, and lambda parameters when there is more than one parameter. It simplifies diffs when adding parameters.
-
-```kotlin
-// good
-class YesCommas(
-    val foo: Int,
-    val bar: Int,
-)
-
-// good — single param, no comma
-class OneLineNoComma(val foo: Int)
-```
+Add a blank line after a conditional or a block that is followed by more statements.
 
 ## Code Idioms
 
