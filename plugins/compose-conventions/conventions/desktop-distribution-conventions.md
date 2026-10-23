@@ -80,7 +80,7 @@ private fun tryLockOrNull(channel: FileChannel): FileLock? =
 
 A user who launches the application again expects the window they already have, not a silent no-op. The first instance therefore also listens for activation requests:
 
-- The first instance listens on a Unix domain socket (`UnixDomainSocketAddress`, JDK 16 and later; supported on Windows 10 and later) in the application data directory. It deletes a leftover socket file before binding: that is safe, since only the lock holder reaches this point.
+- The first instance listens on a Unix domain socket (`UnixDomainSocketAddress`, JDK 16 and later; supported on Windows 10 version 1803 and later) in the application data directory. A socket path is limited to about 100 bytes (104 on macOS), so keep the application's directory name short. It deletes a leftover socket file before binding: that is safe, since only the lock holder reaches this point.
 - A second instance connects to the socket, sends an activation request, and exits.
 - On a request, the first instance brings its window to the front: un-minimize it, then `toFront()` and `requestFocus()`. The request arrives on the socket thread, so hand it over to the UI thread first. On Windows, focus-stealing prevention may flash the taskbar button instead of raising the window; that is the OS's rule, not a bug to work around.
 - **Never run a degraded second instance** — one without sync, or read-only — silently. If the socket is unreachable (the first instance is still starting, or hung), the second instance exits anyway: a failed request is reported to the caller, never thrown at it.
@@ -142,7 +142,8 @@ Installers are built by the Compose Gradle plugin's `nativeDistributions` block,
 | `windows { perUserInstall }`            | `true`, so installing needs no administrator rights |
 | `windows { menu, menuGroup, shortcut }` | A Start menu entry and a desktop shortcut, so the application can be found after installing |
 | `iconFile` per OS                       | `.icns` for macOS, `.ico` for Windows, `.png` for Linux; without one, the application shows a generic Java icon |
-| `modules(...)`                          | The bundled runtime is built by `jlink` and contains the plugin's default modules (`java.desktop` among them) plus the listed ones. Check the list with the `suggestRuntimeModules` task: a missing module builds fine and fails at runtime, on the user's machine only |
+| `buildTypes.release.proguard`           | The release tasks shrink the application with ProGuard. A missing keep rule builds fine and fails at runtime: run `runReleaseDistributable` before tagging, and add the rules or disable it |
+| `modules(...)`                          | The bundled runtime is built by `jlink` and contains the plugin's default modules (`java.desktop` among them) plus the listed ones. Check the list with the `suggestRuntimeModules` task: a missing module builds fine and fails at runtime: the `run` task uses the full JDK and hides it, `runReleaseDistributable` shows it |
 
 ```kotlin
 compose.desktop {
