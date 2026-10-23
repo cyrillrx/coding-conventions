@@ -17,7 +17,9 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 - [General Coding Conventions](conventions/coding-conventions.md) — Clean Code principles (all languages)
 - [Documentation Conventions](conventions/docs-conventions.md) — file naming, section separators, line wrapping, Markdown tables
 - [Kotlin](conventions/kotlin-conventions.md) — style, idioms, testing, multiplatform (any Kotlin project)
-- [Compose](conventions/compose-conventions.md) — UI architecture, Compose, end-to-end tests (Android / KMP / CMP apps)
+- [Compose](conventions/compose-conventions.md) — UI architecture and composables (Android / KMP / CMP apps)
+- [Compose ViewModels](conventions/compose-viewmodel-conventions.md) — ViewModel naming, state, events, lifecycle-aware refresh
+- [Compose testing](conventions/compose-testing-conventions.md) — ViewModel tests and Maestro end-to-end flows
 - [Rust Backend](conventions/rust-conventions.md)
 - [Go Backend](conventions/go-conventions.md)
 - [Bruno API Testing](conventions/bruno-conventions.md)

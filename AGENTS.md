@@ -22,7 +22,9 @@ conventions/
   coding-conventions.md                # Clean Code principles (all languages)
   docs-conventions.md                  # Documentation file naming, section separators, line wrapping, Markdown tables
   kotlin-conventions.md                # Kotlin style, idioms, testing, multiplatform (any Kotlin project)
-  compose-conventions.md               # Compose UI layer: MVVM, state and events, Compose, Maestro
+  compose-conventions.md               # Compose UI layer: MVVM, composables, resources
+  compose-viewmodel-conventions.md     # Compose ViewModels: naming, state shape, events, lifecycle-aware refresh
+  compose-testing-conventions.md       # Compose testing: ViewModel tests, Maestro end-to-end flows
   rust-conventions.md                  # Rust backend conventions
   go-conventions.md                    # Go backend conventions
   bruno-conventions.md                 # Bruno API testing conventions
@@ -38,7 +40,7 @@ templates/
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
   git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review, /review-loop
   kotlin-conventions/                  # SessionStart hook pointing to a copy of conventions/kotlin-conventions.md
-  compose-conventions/                 # SessionStart hook pointing to a copy of conventions/compose-conventions.md
+  compose-conventions/                 # SessionStart hook pointing to copies of the three conventions/compose-*.md, by what is written
   coding-conventions/                  # SessionStart hook injecting a copy of conventions/coding-conventions.md; PostToolUse hooks recalling §4 when an edit adds comments and pointing to a copy of docs-conventions.md on Markdown edits
   project-health/                      # /audit: graded project health report written to docs/audit-YYYY-MM-DD.md
 tests/hooks/                           # One test script per plugin hook script
@@ -92,7 +94,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Table columns are at least 3 columns wide (a formatting choice); a column whose widest cell exceeds 120 columns, and every column to its right, is left unpadded
 - ADRs and PRDs start from the skeletons in `templates/`; numbers are never reused, and a superseded document keeps its file
 
-### Kotlin / Compose (`conventions/kotlin-conventions.md`, `conventions/compose-conventions.md`)
+### Kotlin / Compose (`conventions/kotlin-conventions.md`, `conventions/compose-*.md`)
 - Kotlin only; Jetpack/Compose Multiplatform — no XML layouts, no View-system APIs
 - MVVM + Unidirectional Data Flow: `StateFlow` for state, `SharedFlow` (one-shot) for events
 - Formatting 100% delegated to ktlint via `configs/.editorconfig` (4-space indent, 120 cols, trailing commas)
