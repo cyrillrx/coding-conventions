@@ -31,10 +31,10 @@ Everything the application persists — local database, preferences, caches it c
 ```kotlin
 fun applicationDataDirectory(appName: String): Path {
     val home = Path(System.getProperty("user.home"))
-    val os = System.getProperty("os.name").lowercase()
+    val osName = System.getProperty("os.name").lowercase()
     return when {
-        os.startsWith("mac") -> home / "Library" / "Application Support" / appName
-        os.startsWith("windows") -> {
+        osName.startsWith("mac") -> home / "Library" / "Application Support" / appName
+        osName.startsWith("windows") -> {
             val localAppData = System.getenv("LOCALAPPDATA")?.let(::Path)?.takeIf(Path::isAbsolute)
             (localAppData ?: home) / appName
         }
@@ -108,7 +108,7 @@ private fun serveActivationRequest(server: ServerSocketChannel, onActivationRequ
         logger.warn(exception) { "Activation request dropped" }
     }
 
-/** Returns whether the running instance received the request. The caller exits either way. */
+/** Returns whether the running instance received the request. */
 fun requestActivation(dataDirectory: Path): Boolean =
     try {
         SocketChannel.open(UnixDomainSocketAddress.of(dataDirectory / "instance.sock")).use { channel ->
