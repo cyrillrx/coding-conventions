@@ -98,16 +98,15 @@ fun listenForActivation(dataDirectory: Path, onActivationRequested: () -> Unit) 
     }
 }
 
-private fun serveActivationRequest(server: ServerSocketChannel, onActivationRequested: () -> Unit) {
+private fun serveActivationRequest(server: ServerSocketChannel, onActivationRequested: () -> Unit) =
     try {
         server.accept().use { client ->
             val request = ByteBuffer.allocate(1)
             if (client.read(request) > 0 && request.get(0) == ACTIVATE) onActivationRequested()
         }
-    } catch (exception: IOException) {
+    } catch (exception: Exception) {
         logger.warn(exception) { "Activation request dropped" }
     }
-}
 
 /** Returns whether the running instance received the request. The caller exits either way. */
 fun requestActivation(dataDirectory: Path): Boolean =
