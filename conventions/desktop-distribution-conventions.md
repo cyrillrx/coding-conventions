@@ -207,7 +207,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: gh release create "$GITHUB_REF_NAME" --draft --title "$GITHUB_REF_NAME" --notes-file .github/release-notes.md
+      - run: gh release view "$GITHUB_REF_NAME" || gh release create "$GITHUB_REF_NAME" --draft --title "$GITHUB_REF_NAME" --notes-file .github/release-notes.md
         env:
           GH_TOKEN: ${{ github.token }}
 
