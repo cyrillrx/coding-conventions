@@ -35,11 +35,11 @@ fun applicationDataDirectory(appName: String): Path {
     return when {
         os.startsWith("mac") -> home / "Library" / "Application Support" / appName
         os.startsWith("windows") -> {
-            val localAppData = System.getenv("LOCALAPPDATA")?.takeIf(String::isNotEmpty)?.let(::Path)
+            val localAppData = System.getenv("LOCALAPPDATA")?.let(::Path)?.takeIf(Path::isAbsolute)
             (localAppData ?: home) / appName
         }
         else -> {
-            val xdgDataHome = System.getenv("XDG_DATA_HOME")?.takeIf(String::isNotEmpty)?.let(::Path)
+            val xdgDataHome = System.getenv("XDG_DATA_HOME")?.let(::Path)?.takeIf(Path::isAbsolute)
             (xdgDataHome ?: home / ".local" / "share") / appName
         }
     }
