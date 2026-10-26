@@ -18,13 +18,13 @@ It builds on the [Kotlin conventions](kotlin-conventions.md) and the [Compose co
 
 Everything the application persists — local database, preferences, caches it cannot rebuild cheaply, the single-instance lock — lives in one per-user application data directory, at the location each OS reserves for it:
 
-| OS      | Directory                                                         |
-|---------|-------------------------------------------------------------------|
-| macOS   | `~/Library/Application Support/<App>`                             |
-| Windows | `%LOCALAPPDATA%\<App>`, falling back to the user's home directory |
-| Linux   | `$XDG_DATA_HOME/<App>`, falling back to `~/.local/share/<App>`    |
+| OS      | Directory                                                              |
+|---------|------------------------------------------------------------------------|
+| macOS   | `~/Library/Application Support/<App>`                                  |
+| Windows | `%LOCALAPPDATA%\<App>\data`, falling back to the user's home directory |
+| Linux   | `$XDG_DATA_HOME/<App>`, falling back to `~/.local/share/<App>`         |
 
-- On Windows, the local folder and not the roaming one (`%APPDATA%`): a lock, a socket and a local database belong to the machine, and a roaming folder redirected to a network share breaks the first two.
+- On Windows, the local folder and not the roaming one (`%APPDATA%`): a lock, a socket and a local database belong to the machine, and a roaming folder can be redirected to a network share, where a Unix domain socket cannot be created. The data goes in a `data` subfolder, because a per-user MSI installs the application itself in `%LOCALAPPDATA%\<App>`.
 - Never use the system temp directory. The OS purges it on its own schedule, so the user's data disappears without any action on their part.
 - Resolve the directory once, in a single function, and pass the resulting path to whatever needs it. Two components computing it separately end up disagreeing on one OS.
 
@@ -36,7 +36,7 @@ fun applicationDataDirectory(appName: String): Path {
         osName.startsWith("mac") -> home / "Library" / "Application Support" / appName
         osName.startsWith("windows") -> {
             val localAppData = System.getenv("LOCALAPPDATA")?.let(::Path)?.takeIf(Path::isAbsolute)
-            (localAppData ?: home) / appName
+            (localAppData ?: home) / appName / "data"
         }
         else -> {
             val xdgDataHome = System.getenv("XDG_DATA_HOME")?.let(::Path)?.takeIf(Path::isAbsolute)
