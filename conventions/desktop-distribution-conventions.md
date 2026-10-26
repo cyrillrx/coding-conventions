@@ -83,7 +83,7 @@ A user who launches the application again expects the window they already have, 
 - The first instance listens on a Unix domain socket (`UnixDomainSocketAddress`, JDK 16 and later; supported on Windows 10 version 1803 and later) in the application data directory. A socket path is limited to about 100 bytes (104 on macOS), so keep the application's directory name short. It deletes a leftover socket file before binding: that is safe, since only the lock holder reaches this point.
 - A second instance connects to the socket, sends an activation request, and exits.
 - On a request, the first instance brings its window to the front: un-minimize it, then `toFront()` and `requestFocus()`. The request arrives on the socket thread, so hand it over to the UI thread first. On Windows, focus-stealing prevention may flash the taskbar button instead of raising the window; that is the OS's rule, not a bug to work around.
-- **Never run a degraded second instance** — one without sync, or read-only — silently. If the socket is unreachable (the first instance is still starting, or hung), the second instance exits anyway: a failed request is reported to the caller, never thrown at it.
+- **Never run a degraded second instance** — one without sync, or read-only — silently. If the socket is unreachable (the first instance is still starting), the second instance exits anyway: a failed request is reported to the caller, never thrown at it.
 - One failed request never stops the listener. A client that drops its connection must not end the listening thread, or every later launch sends its request to nobody and exits.
 
 ```kotlin
@@ -108,7 +108,7 @@ private fun serveActivationRequest(server: ServerSocketChannel, onActivationRequ
         logger.warn(exception) { "Activation request dropped" }
     }
 
-/** Returns whether the running instance received the request. */
+/** Returns whether the request reached the running instance's socket. */
 fun requestActivation(dataDirectory: Path): Boolean =
     try {
         SocketChannel.open(UnixDomainSocketAddress.of(dataDirectory / "instance.sock")).use { channel ->
