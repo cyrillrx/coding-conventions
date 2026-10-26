@@ -105,7 +105,7 @@ Use `git mv` for any file rename or move, to preserve history.
 ### Desktop distribution (`conventions/desktop-distribution-conventions.md`)
 - One instance per user: an OS file lock on `instance.lock` in the application data directory, taken before anything else touches it; a second launch activates the first through a Unix domain socket and exits, never runs degraded
 - Application data in the per-OS user data directory, never the temp directory
-- Release `nativeDistributions` settings: user-visible `packageName`, `bundleID`, a fixed `upgradeUuid`, per-user MSI install, icons, `modules(...)` checked with `suggestRuntimeModules`
+- Release `nativeDistributions` settings: user-visible `packageName`, `bundleID`, a fixed `upgradeUuid`, per-user MSI install, a Start menu entry, icons, `modules(...)` checked with `suggestRuntimeModules`, ProGuard checked with `runReleaseDistributable`
 - Version from the `vMAJOR.MINOR.PATCH` tag, within the MSI and DMG limits; installers built by a tag-triggered release workflow, one runner per OS, separate from CI
 - Unsigned installers and manual updates by default; signing and automatic updates are per-project ADR decisions
 
