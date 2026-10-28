@@ -224,7 +224,7 @@ Applies to Kotlin Multiplatform projects only.
 - **Targets**: Kotlin Multiplatform (KMP) targeting Android, iOS, and Desktop (JVM).
 - **Shared modules**: Pure Kotlin domain/data code lives in shared modules.
 - **Local Database**: SQLDelight (when persistence is needed).
-- **Public API**: A public declaration of a shared module gets a KDoc when it has a contract its signature does not carry — a precondition, a thrown exception, the meaning of `null`, a unit, an invariant. A KDoc that only restates the name is a redundant comment (`coding-conventions.md` §4) and is left out.
+- **Public API**: A public declaration of a shared module gets a KDoc when it has a contract its signature does not carry: a precondition, a thrown exception, the meaning of `null`, a unit, an invariant. A KDoc that only restates the name is a redundant comment (`coding-conventions.md` §4) and is left out.
 
 ## CI & Policies
 

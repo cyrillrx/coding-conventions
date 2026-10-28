@@ -1,8 +1,8 @@
 # Kotlin Conventions
 
-This document details the style rules, idioms and testing guidelines for any Kotlin code: a JVM server, a Kotlin Multiplatform (KMP) library, or the shared modules of an app. The UI layer of an app follows the [Compose conventions](compose-conventions.md), which build on this document.
+This document details the style rules, idioms and testing guidelines for any Kotlin code: a JVM server, a Kotlin Multiplatform (KMP) library, or the shared modules of an app. The UI layer of an app follows the [Compose conventions](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/compose-conventions.md), which build on this document.
 
-It builds on [Kotlin's coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) and the general [Clean Code principles](coding-conventions.md).
+It builds on [Kotlin's coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) and the general [Clean Code principles](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/coding-conventions.md).
 
 ## Table of Contents
 
@@ -122,7 +122,7 @@ These implementations belong to the **main source set** of the data layer (e.g. 
 
 ## Formatting
 
-Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/.editorconfig`](../configs/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
+Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/.editorconfig`](https://github.com/cyrillrx/coding-conventions/blob/main/configs/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
 
 That configuration enforces the layout — indentation, the 120-column limit, whitespace, wrapping, braces, blank lines and trailing commas — so none of it is restated here: ktlint's report is the reference. The rules below are the ones it does not check.
 
@@ -224,11 +224,11 @@ Applies to Kotlin Multiplatform projects only.
 - **Targets**: Kotlin Multiplatform (KMP) targeting Android, iOS, and Desktop (JVM).
 - **Shared modules**: Pure Kotlin domain/data code lives in shared modules.
 - **Local Database**: SQLDelight (when persistence is needed).
-- **Public API**: A public declaration of a shared module gets a KDoc when it has a contract its signature does not carry — a precondition, a thrown exception, the meaning of `null`, a unit, an invariant. A KDoc that only restates the name is a redundant comment (`coding-conventions.md` §4) and is left out.
+- **Public API**: A public declaration of a shared module gets a KDoc when it has a contract its signature does not carry: a precondition, a thrown exception, the meaning of `null`, a unit, an invariant. A KDoc that only restates the name is a redundant comment (`coding-conventions.md` §4) and is left out.
 
 ## CI & Policies
 
-Refer to [`git-and-collaboration.md`](../collaboration/git-and-collaboration.md) for general CI policies (warnings as errors, PR requirements, security scans).
+Refer to [`git-and-collaboration.md`](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/git-and-collaboration.md) for general CI policies (warnings as errors, PR requirements, security scans).
 
 Kotlin-specific CI requirements:
 - PRs must pass `ktlintCheck`.
