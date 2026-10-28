@@ -1,7 +1,7 @@
 ## 📝 Description
 
 <!-- PR title follows Conventional Commits: <type>(<scope>): <subject>. See collaboration/git-and-collaboration.md. -->
-<!-- Becomes the squash commit body, so write it like one: the problem, then what this PR changes — the diff shows the details. About three short sentences' worth, one idea each; bullets help when several changes are listed. Reasoning history and reviewer guidance go elsewhere, not here. -->
+<!-- Becomes the squash commit body, so write it like one: the problem, then what this PR changes; the diff shows the details. About three short sentences' worth, one idea each; bullets help when several changes are listed. Reasoning history and reviewer guidance go elsewhere, not here. -->
 
 ## 🔍 Review notes
 

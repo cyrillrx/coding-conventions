@@ -22,7 +22,7 @@ For example:
 | ⛏        | `:pick:`                             | This is a nitpick. <br /><br /> This is a small adjustment I think should be made in order to improve readability, coherence with the codebase or compliance to the guidelines. Might also be an organization suggestion. |
 | 💭       | `:thought_balloon:`                  | Let me think out loud here for a minute. <br /><br /> I might express concern, suggest an alternative solution, or walk through the code in my own words to make sure I understand. |
 | 🕐       | `:clock1:`                           | The comment may be addressed later. Filing a ticket in the project's tracker, and referencing it in the code, is recommended. |
-| 🏕        | `:camping:`                          | Here is an opportunity, not directly related to your changes, for us to leave the campground [code] cleaner than we found it. Most of the time such a cleanup belongs in its own PR — keep it in the current one only when it is a couple of lines in a file that PR already touches. |
+| 🏕        | `:camping:`                          | Here is an opportunity, not directly related to your changes, for us to leave the campground [code] cleaner than we found it. Most of the time such a cleanup belongs in its own PR; keep it in the current one only when it is a couple of lines in a file that PR already touches. |
 | ❓       | `:question:`                         | I have a question. <br /><br /> This should be a fully formed question with sufficient information and context that requires a response. |
 | 📝       | `:memo:`                             | This is an explanatory note, fun fact, or relevant commentary that does not require any action. |
 
@@ -48,37 +48,37 @@ Prepend comments with the appropriate emoji to convey the meaning associated wit
 
 ## Reading an emoji
 
-The emoji is an **intent** signal: it tells the author what the reviewer expects, and nothing more. It never sets the severity of a finding nor the response it gets — a 🔧 can be factually wrong, a 💭 can uncover a real crash, and a comment with no emoji at all (an external reviewer, a bot) is read the same way. Scoring a finding belongs to [Code Review Triage](code-review-triage.md#7-coming-from-a-review-comment).
+The emoji is an **intent** signal: it tells the author what the reviewer expects, and nothing more. It never sets the severity of a finding nor the response it gets: a 🔧 can be factually wrong, a 💭 can uncover a real crash, and a comment with no emoji at all (an external reviewer, a bot) is read the same way. Scoring a finding belongs to [Code Review Triage](code-review-triage.md#7-coming-from-a-review-comment).
 
 ## Responding to a comment
 
 Every comment gets a reply before the merge, the declined ones included: a silent thread reads as ignored, not as declined.
 
-Each comment gets one outcome, and its rationale is stated alongside it — to the reviewer in the reply, and in any table proposing the outcomes before they are posted:
+Each comment gets one outcome, and its rationale is stated alongside it (to the reviewer in the reply, and in any table proposing the outcomes before they are posted):
 
 | Outcome    | When                                                                                                                   |
 |------------|------------------------------------------------------------------------------------------------------------------------|
 | ✅ Apply   | The comment stands: valid, clear, and consistent with the project's conventions                                        |
 | 🕐 Defer   | The comment stands, but is out of scope or too costly here, or an open ticket tracks it; it needs an owner and a trace |
 | ⚠️ Discuss | It needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason                   |
-| ❌ Skip    | It is wrong — the code already handles it, or does not do what it claims — or out of scope and not worth a trace       |
+| ❌ Skip    | It is wrong (the code already handles it, or does not do what it claims) or out of scope and not worth a trace         |
 | 💬 Answer  | It needs no code change: a note, a compliment, or a question that an answer settles                                    |
 
-A valid comment out of the PR's scope is 🕐 **Defer**. The exception is a 🏕 cleanup — a couple of lines with no behavior change, in a file the PR already touches — which can be ✅ **Apply**, in its own commit.
+A valid comment out of the PR's scope is 🕐 **Defer**. The exception is a 🏕 cleanup (a couple of lines with no behavior change, in a file the PR already touches), which can be ✅ **Apply**, in its own commit.
 
-A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link — a team convention, a precedent already in the codebase, or a stated line of reasoning all count. Backing a comment is the reviewer's duty ([Git & Collaboration §7](git-and-collaboration.md#reviewers)); it is not the price of being heard.
+A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link: a team convention, a precedent already in the codebase, or a stated line of reasoning all count. Backing a comment is the reviewer's duty ([Git & Collaboration §7](git-and-collaboration.md#reviewers)); it is not the price of being heard.
 
-How the code is decided — severity, impact, complexity, and when a 🕐 is the right call — belongs to [Code Review Triage](code-review-triage.md). A 🕐 is never reported as applied: its owner and its trace follow [§6 of that document](code-review-triage.md#6-follow-ups).
+How the code is decided (severity, impact, complexity, and when a 🕐 is the right call) belongs to [Code Review Triage](code-review-triage.md). A 🕐 is never reported as applied: its owner and its trace follow [§6 of that document](code-review-triage.md#6-follow-ups).
 
 **Reply tone per outcome:**
 
-- ✅ **Apply**: briefly confirm what changed ("Fixed — renamed `X` to `Y`.").
-- 🕐 **Defer**: agree, say it is not done here, and name the trace ("Agreed, but out of this PR's scope — tracked in #142."). Never phrase it as fixed.
+- ✅ **Apply**: briefly confirm what changed ("Fixed: renamed `X` to `Y`.").
+- 🕐 **Defer**: agree, say it is not done here, and name the trace ("Agreed, but out of this PR's scope, tracked in #142."). Never phrase it as fixed.
 - ⚠️ **Discuss**: ask for the missing decision, clarification, or reason.
 - ❌ **Skip**: explain concisely why the comment is declined, citing the conventions or sources that apply.
 - 💬 **Answer**: answer the question, or acknowledge the note.
 
-**Resolving threads:** resolve only what was addressed or acknowledged — the ✅ threads, and the 💬 threads that ask nothing back. A 🕐 thread stays open, since it is the trace of the deferral; ⚠️, ❌ and an answered question stay open for the reviewer to follow up.
+**Resolving threads:** resolve only what was addressed or acknowledged (the ✅ threads, and the 💬 threads that ask nothing back). A 🕐 thread stays open, since it is the trace of the deferral; ⚠️, ❌ and an answered question stay open for the reviewer to follow up.
 
 ### Credits
 

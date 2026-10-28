@@ -16,7 +16,7 @@ It builds on the [Kotlin conventions](https://github.com/cyrillrx/coding-convent
 
 ## Application Data Directory
 
-Everything the application persists — local database, preferences, caches it cannot rebuild cheaply, the single-instance lock — lives in one per-user application data directory, at the location each OS reserves for it:
+Everything the application persists (local database, preferences, caches it cannot rebuild cheaply, the single-instance lock) lives in one per-user application data directory, at the location each OS reserves for it:
 
 | OS      | Directory                                                              |
 |---------|------------------------------------------------------------------------|
@@ -52,7 +52,7 @@ Two instances of the application sharing one data directory corrupt each other's
 
 ### Taking the lock
 
-- The first instance takes an OS file lock — `FileChannel.tryLock()` — on an `instance.lock` file in the application data directory, **before anything else touches that directory**. Opening the database or reading preferences first defeats the lock.
+- The first instance takes an OS file lock (`FileChannel.tryLock()`) on an `instance.lock` file in the application data directory, **before anything else touches that directory**. Opening the database or reading preferences first defeats the lock.
 - Create the directory if it is missing, right before taking the lock: on a fresh install nothing has created it yet, and opening the lock file in a missing directory fails. Creating the directory is the only thing that comes before the lock.
 - Keep a reference to the returned lock for the whole lifetime of the process, in a top-level `val` for instance. The lock lasts as long as its channel stays open, and the garbage collector can close a channel nothing references any more.
 - The OS releases the lock when the process dies, crash included. That is why the lock is a file lock and not a PID file: a PID file left behind by a crash blocks the next launch, or forces guessing whether its process is still alive.
@@ -83,7 +83,7 @@ A user who launches the application again expects the window they already have, 
 - The first instance listens on a Unix domain socket (`UnixDomainSocketAddress`, JDK 16 and later; supported on Windows 10 version 1803 and later) in the application data directory. A socket path is limited to about 100 bytes (104 on macOS), so keep the application's directory name short. It deletes a leftover socket file before binding: that is safe, since only the lock holder reaches this point.
 - A second instance connects to the socket, sends an activation request, and exits.
 - On a request, the first instance brings its window to the front: un-minimize it, then `toFront()` and `requestFocus()`. The request arrives on the socket thread, so hand it over to the UI thread first. On Windows, focus-stealing prevention may flash the taskbar button instead of raising the window; that is the OS's rule, not a bug to work around.
-- **Never run a degraded second instance** — one without sync, or read-only — silently. If the socket is unreachable (the first instance is still starting), the second instance exits anyway: a failed request is reported to the caller, never thrown at it.
+- **Never silently run a degraded second instance**, such as one without sync or a read-only one. If the socket is unreachable (the first instance is still starting), the second instance exits anyway: a failed request is reported to the caller, never thrown at it.
 - One failed request never stops the listener. A client that drops its connection must not end the listening thread, or every later launch sends its request to nobody and exits.
 
 ```kotlin
@@ -127,14 +127,14 @@ On macOS, a `.app` launched from the Finder or the Dock is already single-instan
 
 ### Where the logic lives
 
-Keep the lock and the socket in a product-agnostic JVM module, not in the composable entry point. There they are testable with `jvmTest` — two locks on one temporary directory, an activation round trip — and the entry point only wires the outcome to the window.
+Keep the lock and the socket in a product-agnostic JVM module, not in the composable entry point. There they are testable with `jvmTest` (two locks on one temporary directory, an activation round trip), and the entry point only wires the outcome to the window.
 
 ## Packaging
 
 Installers are built by the Compose Gradle plugin's `nativeDistributions` block, which drives `jpackage`.
 
 - On Windows, the installer is an MSI rather than an EXE: jpackage's EXE only wraps the same MSI, and the MSI is the format IT tools such as Group Policy or Intune deploy.
-- A portable build — the `createDistributable` output, zipped — runs without installing, but nothing upgrades it, and it gets no Start menu entry or shortcut. Shipping one beside the installers is a project-level choice.
+- A portable build (the `createDistributable` output, zipped) runs without installing, but nothing upgrades it, and it gets no Start menu entry or shortcut. Shipping one beside the installers is a project-level choice.
 
 Some of its settings are optional to the plugin but required for a release:
 
@@ -188,7 +188,7 @@ compose.desktop {
 ./gradlew :desktop-app:packageReleaseDmg -PappVersion=1.2.0
 ```
 
-- `runReleaseDistributable` runs the packaged application — the `jlink` runtime, ProGuard applied — without building an installer. It is the check to run before tagging.
+- `runReleaseDistributable` runs the packaged application (the `jlink` runtime, ProGuard applied) without building an installer. It is the check to run before tagging.
 - `packageReleaseMsi` runs on Windows and `packageReleaseDmg` on macOS: as in the release workflow, each OS builds its own installer. They land in `desktop-app/build/compose/binaries/main-release/<format>/`.
 - The tasks without `Release` (`packageMsi`, `packageDmg`) skip ProGuard and write to `main/`: quicker to try, but not what ships.
 - `jpackage` needs a JDK 17 or later. The plugin downloads the WiX Toolset the MSI needs on the first Windows build.
@@ -207,7 +207,7 @@ val appVersion = providers.gradleProperty("appVersion").getOrElse("1.0.0")
 
 - Releases are built by a **dedicated workflow**, separate from the CI workflow. Verification and delivery have different triggers and different permissions: CI runs on every pull request with read access, a release runs on a tag and writes to the repository's Releases.
 - The workflow triggers only on a tag shaped `vMAJOR.MINOR.PATCH`: a looser `v*` lets `v1.2.0-rc1` through, a version the packaging rejects. The pattern does not check the [bounds of each format](#versioning); the tag still has to respect them.
-- It runs on a matrix — `macos-latest` (arm64), `windows-latest`, `ubuntu-latest` — because `jpackage` cannot cross-build: each OS, and each CPU architecture, builds its own installer. An Intel Mac build needs its own runner; whether to ship one is a project-level choice.
+- It runs on a matrix of `macos-latest` (arm64), `windows-latest` and `ubuntu-latest`, because `jpackage` cannot cross-build: each OS, and each CPU architecture, builds its own installer. An Intel Mac build needs its own runner; whether to ship one is a project-level choice.
 - Each job runs `packageReleaseDistributionForCurrentOS` and attaches its installer to the GitHub Release for the tag. The Release notes come from a file in the repository, so the [signing workaround](#signing) is never forgotten.
 - Configuration the build reads from an untracked file (API keys, project identifiers) comes from GitHub secrets, written into that file by the job. It is never committed.
 

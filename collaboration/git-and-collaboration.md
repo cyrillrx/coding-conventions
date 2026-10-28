@@ -23,19 +23,20 @@ A commit message should help reviewers get context around a change, but more imp
 <body>
 ```
 
-- **Language**: English — all commits are written in English.
+- **Language**: all commits are written in English.
+- **Punctuation**: no em dash (`—`), per the [documentation conventions](../conventions/docs-conventions.md#punctuation).
 - **Types**: `feat`, `fix`, `ui`, `refactor`, `perf`, `style`, `docs`, `test`, `chore`, `ci`, `build`.
-  - `feat` — new user-facing functionality
-  - `fix` — bug fix
-  - `ui` — visible UI change that is not a new feature (e.g. removing an icon, adjusting layout, tweaking a component)
-  - `refactor` — internal code restructuring with **no visible change** to the user
-  - `perf` — code change that improves performance, with no other behavior change
-  - `style` — formatting only (linter/formatter), no behavior change
-  - `docs` — documentation only
-  - `test` — adding or fixing tests
-  - `chore` — miscellaneous maintenance
-  - `ci` — CI/CD pipeline changes
-  - `build` — build system, dependencies, schema/migration files
+  - `feat`: new user-facing functionality
+  - `fix`: bug fix
+  - `ui`: visible UI change that is not a new feature (e.g. removing an icon, adjusting layout, tweaking a component)
+  - `refactor`: internal code restructuring with **no visible change** to the user
+  - `perf`: code change that improves performance, with no other behavior change
+  - `style`: formatting only (linter/formatter), no behavior change
+  - `docs`: documentation only
+  - `test`: adding or fixing tests
+  - `chore`: miscellaneous maintenance
+  - `ci`: CI/CD pipeline changes
+  - `build`: build system, dependencies, schema/migration files
 - **Scope**: The component or area affected (e.g. the feature name or layer name). Keep it short and consistent within a project.
 - **Subject**: Use the imperative, present tense: "add" not "added" nor "adds". Don't capitalize the first letter. No dot (`.`) at the end.
 - **Body** (optional): Explain the *why* and the context, not the *what* (the diff already shows the what). Wrap at a readable width. Reference issue IDs here when relevant (e.g. `Resolves: PROJ-123`).
@@ -73,7 +74,7 @@ Apply this to all file types: source files, resource files, data files, document
 
 Each commit must be a **single, self-contained logical change**. This makes review easier, enables clean `git bisect` and `git revert`, and keeps the history readable.
 
-- **One commit = one change**: a commit should do one thing — add a component, update a data model, add string resources, etc. Do not mix unrelated changes or changes across different layers in the same commit.
+- **One commit = one change**: a commit should do one thing (add a component, update a data model, add string resources, etc.) Do not mix unrelated changes or changes across different layers in the same commit.
 - **Compilable at every commit**: the project must build and all tests must pass after each individual commit.
 - **Incremental on feature branches**: progress through small, successive commits a reviewer can validate one by one. Avoid large "big bang" commits.
 - **Easy to revert**: an atomic commit can be reverted without side effects on unrelated code.
@@ -95,13 +96,13 @@ feat(spell): redesign spell list screen with new item, samples, and strings
 
 Commits and pull requests are owned by their human author, regardless of the tools used to write them. The author is the only author of record.
 
-Do not include AI-generated attribution anywhere in the history or on the platform — no `Co-Authored-By` trailers for AI assistants, no `🤖 Generated with` footers in commit messages or PR descriptions, no "assisted by" mentions. A commit or PR carries the name of the person who is accountable for it; the tooling that helped produce it is not credited.
+Do not include AI-generated attribution anywhere in the history or on the platform: no `Co-Authored-By` trailers for AI assistants, no `🤖 Generated with` footers in commit messages or PR descriptions, no "assisted by" mentions. A commit or PR carries the name of the person who is accountable for it; the tooling that helped produce it is not credited.
 
 ## 7. Pull Request Etiquette
 
 All commit conventions above also apply to Pull Request titles and descriptions. The title and description must be written in **English**.
 
-**When squashing** commits before merging, do not leave the working commit list as the resulting commit description. Copy the PR's **Description section** into the resulting commit's body — only that section: the other sections and the closing `Closes #N` lines stay on the PR.
+**When squashing** commits before merging, do not leave the working commit list as the resulting commit description. Copy the PR's **Description section** into the resulting commit's body, and only that section: the other sections and the closing `Closes #N` lines stay on the PR.
 
 Because that section becomes the commit body, it has to stay true as the branch moves. [Pull Request Descriptions](pull-request-descriptions.md) covers how to keep a title and a description in line with their diff.
 
@@ -109,18 +110,18 @@ Because that section becomes the commit body, it has to stay true as the branch 
 
 - Keep the diff under 200 lines and 10 files when possible. For mechanical changes (renaming, moving files), exceptions are acceptable.
 - Write the description from the [PR template](../.github/pull_request_template.md): delete the sections that don't apply, and tick only what the diff proves. Copy the template into a project's own `.github/pull_request_template.md` so GitHub pre-fills it.
-- Keep the Description to what the squash commit needs: the problem, then what the PR changes, in about three short sentences' worth. Split it for a quick read — short sentences of one idea each, or bullets when several changes are listed: the layout makes it readable, not longer. Leave out how you got there, reviewer guidance, diff statistics and anything the diff already shows: guidance for the reviewer goes in **Review notes**, the investigation in the linked issue, an architecture decision in an [ADR](#9-architecture-decision-records-adrs).
+- Keep the Description to what the squash commit needs: the problem, then what the PR changes, in about three short sentences' worth. Split it for a quick read (short sentences of one idea each, or bullets when several changes are listed): the layout makes it readable, not longer. Leave out how you got there, reviewer guidance, diff statistics and anything the diff already shows: guidance for the reviewer goes in **Review notes**, the investigation in the linked issue, an architecture decision in an [ADR](#9-architecture-decision-records-adrs).
 - Keep the other sections terse: one line per item, ideally one short sentence, and never a restatement of the diff, the commit list or the file list.
 - Close issues with `Closes #N` lines at the very end of the description, after the checklist.
-- Proofread your own PR before submitting — check diff, description, and comments.
+- Proofread your own PR before submitting: check diff, description, and comments.
 - Assign reviewers directly on the hosting platform.
 
 ### Reviewers
 
-- Review PRs within 24 hours when possible. If you're short on time, don't rush — an unreviewed PR is better than a rubber-stamped one.
+- Review PRs within 24 hours when possible. If you're short on time, don't rush: an unreviewed PR is better than a rubber-stamped one.
 - Be constructive and kind: critique the code, not the author.
 - Back your comments with sources (docs, articles, benchmarks) rather than personal preference. Avoid arguments from authority. Don't request changes you can't justify.
-- That duty is the reviewer's, not a filter for the author: a request whose reason is missing gets a question, not a dismissal. A reason need not be a link — a team convention, a precedent in the codebase, or a stated line of reasoning count.
+- That duty is the reviewer's, not a filter for the author: a request whose reason is missing gets a question, not a dismissal. A reason need not be a link: a team convention, a precedent in the codebase, or a stated line of reasoning count.
 - Use the [Code Review Comments](code-review-comments.md) emoji legend to add meaning to your comments (blocking vs. non-blocking, suggestion vs. question, etc.). The same document covers how the author answers them.
 
 ## 8. CI & Policies
@@ -136,7 +137,7 @@ For any change that significantly affects the data model, source format, or tech
 
 ADRs follow the naming convention `adr-###-kebab-case-title.md`. Creating the ADR in a dedicated commit (or early in the implementation PR) before the bulk of the implementation gives reviewers context and prevents costly rework.
 
-Start from [`templates/adr-template.md`](../templates/adr-template.md): Decision, Context, Rationale, Consequences, Alternatives considered. The alternatives section is the one reviewers read first — an ADR that records only the chosen option does not explain the decision.
+Start from [`templates/adr-template.md`](../templates/adr-template.md): Decision, Context, Rationale, Consequences, Alternatives considered. The alternatives section is the one reviewers read first: an ADR that records only the chosen option does not explain the decision.
 
 Changes that typically require an ADR include, but are not limited to:
 - Source format or schema changes

@@ -14,7 +14,7 @@ It builds on the [Kotlin conventions](kotlin-conventions.md), which apply to eve
 
 ## Tech Stack
 
-- **UI Framework**: Compose Multiplatform — no XML layouts, no View-system APIs.
+- **UI Framework**: Compose Multiplatform, no XML layouts, no View-system APIs.
 
 ## Architecture
 
@@ -31,10 +31,10 @@ The presentation layer (Compose + ViewModels) lives in the app module, on top of
 
 ### Navigation callbacks in primary composables
 
-Do not inject the router into ViewModels. Because the ViewModel outlives configuration changes (rotation), an injected router reference can point to a stale back stack after recreation. **Always bind navigation callbacks directly to the fresh `router` parameter in the ViewModel-taking composable overload** — never to ViewModel methods that delegate to an injected router.
+Do not inject the router into ViewModels. Because the ViewModel outlives configuration changes (rotation), an injected router reference can point to a stale back stack after recreation. **Always bind navigation callbacks directly to the fresh `router` parameter in the ViewModel-taking composable overload**, never to ViewModel methods that delegate to an injected router.
 
 ```kotlin
-// ✅ Correct — navigation goes through the fresh router parameter
+// ✅ Correct: navigation goes through the fresh router parameter
 fun CharacterListScreen(viewModel: CharacterListViewModel, router: CharacterRouter) {
     CharacterListScreen(
         onCharacterClicked = router::openCharacterDetail,
@@ -60,11 +60,11 @@ When a ViewModel must navigate **after async work** (e.g. save before navigate),
 - **State Hoisting**: Hoist state to the lowest common parent. Composables should be as stateless as possible.
 - **Previews**: Write `@Preview` functions for all UI components. Use `androidx.compose.ui.tooling.preview.Preview` from the Multiplatform `ui-tooling-preview` module.
 - **Resources**: Use the generated KMP resources (`Res.string.xxx`, `Res.drawable.xxx`).
-- **Apostrophes in Compose resources**: Write them plain (`J'ai un code`), never escaped: unlike Android resources, a `strings.xml` under `composeResources/` keeps the backslash of `\'` and shows it on screen. Nothing warns — the build stays green, and only the rendered screen, or the base64 in `build/generated/compose/resourceGenerator/preparedResources/**/values*/strings.*.cvr`, shows it.
+- **Apostrophes in Compose resources**: Write them plain (`J'ai un code`), never escaped: unlike Android resources, a `strings.xml` under `composeResources/` keeps the backslash of `\'` and shows it on screen. Nothing warns: the build stays green, and only the rendered screen, or the base64 in `build/generated/compose/resourceGenerator/preparedResources/**/values*/strings.*.cvr`, shows it.
 
 ### List state
 
-Use `LazyColumn` / `LazyRow` for lists. When the parent needs to control or observe scroll position, hoist a `LazyListState`; otherwise let the list own it internally — don't hoist unnecessarily.
+Use `LazyColumn` / `LazyRow` for lists. When the parent needs to control or observe scroll position, hoist a `LazyListState`; otherwise let the list own it internally; don't hoist unnecessarily.
 
 ```kotlin
 val listState = rememberLazyListState()
@@ -81,7 +81,7 @@ LaunchedEffect(refreshTrigger) {
 
 ### Visibility
 
-Showing or hiding content is expressed with a plain `if`. There is no equivalent of `INVISIBLE` (occupying space while hidden) — use `Spacer` with a fixed size if a placeholder is needed. Prefer `AnimatedVisibility` when the appearance/disappearance benefits from a transition.
+Showing or hiding content is expressed with a plain `if`. There is no equivalent of `INVISIBLE` (occupying space while hidden): use `Spacer` with a fixed size if a placeholder is needed. Prefer `AnimatedVisibility` when the appearance/disappearance benefits from a transition.
 
 ```kotlin
 if (isCompanyInfoVisible) {

@@ -10,8 +10,8 @@ description: >-
 argument-hint: "[--auto] [--max N] [low|medium|high]"
 disable-model-invocation: true
 # Local reads and local commits only. Invoking this skill is the approval for the loop's local
-# commits. Everything that leaves the machine — the push, thread replies and resolutions, tickets,
-# the PR description, labels — keeps its permission prompt on purpose.
+# commits. Everything that leaves the machine (the push, thread replies and resolutions, tickets,
+# the PR description, labels) keeps its permission prompt on purpose.
 allowed-tools:
   - Bash(git status:*)
   - Bash(git diff:*)
@@ -31,7 +31,7 @@ allowed-tools:
 ---
 
 <!--
-The loop — round 0, the round, the stop conditions, the closing order and the status labels — is
+The loop (round 0, the round, the stop conditions, the closing order and the status labels) is
 derived from collaboration/code-review-loop.md in cyrillrx/coding-conventions. Keep it in sync with
 /sync-plugins. Scoring and replies are not restated here: they belong to triage-findings and
 address-review, which this skill calls.
@@ -41,27 +41,27 @@ address-review, which this skill calls.
 
 - Arguments: $ARGUMENTS
 - Current branch: !`git branch --show-current`
-- Remote default branch: !`git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
-- PR for this branch: !`gh pr view --json number,title,state --jq '"#\(.number) \(.state) — \(.title)"' 2>/dev/null || echo "none"`
+- Remote default branch: !`git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved: ask"`
+- PR for this branch: !`gh pr view --json number,title,state --jq '"#\(.number) \(.state) - \(.title)"' 2>/dev/null || echo "none"`
 - Uncommitted changes: !`git status --short`
 
 ## Your task
 
 Run the loop below to its end. Approving a round's plan also runs the next round, unless the author makes that round the last: never ask a second time between rounds. Pause only where this skill names a stop.
 
-### Step 1 — Check the preconditions and read the arguments
+### Step 1: Check the preconditions and read the arguments
 
 - **A PR is open for this branch.** If none, stop and point to `/git-workflow:pull-request`: the loop starts after the author's first read of an open PR, never before.
 - **The working tree is clean.** Uncommitted changes would be swept into the loop's commits; if there are any, stop and ask.
 - **The base branch is resolved**, as `triage-findings` Step 2 does it. If it is unresolved, ask.
-- **The verification commands** — how this project builds and runs its tests, from `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` or the build files. If there are none, say so once: the rounds then commit without a build check.
-- **Arguments**: `--auto` lets the grid decide (Step 3); `--max N` sets the round cap — 10 by default; the cap is a decision point, not a hard limit (Step 3.2); `low`, `medium` or `high` is the review effort, `high` by default.
+- **The verification commands**: how this project builds and runs its tests, from `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` or the build files. If there are none, say so once: the rounds then commit without a build check.
+- **Arguments**: `--auto` lets the grid decide (Step 3); `--max N` sets the round cap (10 by default); the cap is a decision point, not a hard limit (Step 3.2); `low`, `medium` or `high` is the review effort, `high` by default.
 
-### Step 2 — Round 0: the open review threads
+### Step 2: Round 0: the open review threads
 
 Fetch the PR's unresolved review threads with the query in `address-review` Step 2. If there are none, go to Step 3.
 
-Otherwise, follow `address-review` Step 3: one proposed response per thread, then **wait for the author's approval, even with `--auto`** — a person is waiting, and the reply goes out in the author's name. Then:
+Otherwise, follow `address-review` Step 3: one proposed response per thread, then **wait for the author's approval, even with `--auto`**: a person is waiting, and the reply goes out in the author's name. Then:
 
 - apply the ✅ responses, run the verification commands, and commit with `/git-workflow:commit --auto`;
 - **hold every reply and every resolution**: they are posted in Step 4, after the push, so no "Fixed" points at code the reviewer cannot see yet;
@@ -70,29 +70,29 @@ Otherwise, follow `address-review` Step 3: one proposed response per thread, the
 
 Round 0 does not count toward the cap.
 
-### Step 3 — The rounds
+### Step 3: The rounds
 
 For round `i` from 1 to the cap:
 
 1. **Review and triage**: run `/git-workflow:triage-findings --review <effort>`. `--review` makes it start from a fresh review in a subagent, never from the findings earlier rounds left in this conversation. That review covers correctness and conformance to the conventions that apply to the changed files, each conformance finding citing its rule.
 2. **Decide**:
-   - by default, present the round's plan and **wait for one approval for the whole batch** — the author may adjust any line, and may make this round the last. Say so when presenting it: an approval with no such word runs the next round;
+   - by default, present the round's plan and **wait for one approval for the whole batch**: the author may adjust any line, and may make this round the last. Say so when presenting it: an approval with no such word runs the next round;
    - with `--auto`, the grid's recommendations stand, and the round stops for the author only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or that contests an earlier decision, a ✅ fix that is structural.
-   - Unless the plan holds no ✅, two rounds wait for the author even with `--auto`: the one whose plan turns the trend — ✅ rising two rounds in a row, or a ✅ on lines an earlier round fixed, read from the log — and the one at the cap. Give the diagnosis below with the plan; the one approval still decides everything. When the trend turns, it runs the next round unless the author makes this one the last. At the cap, the plan recommends closing, so approving it closes the loop after this round; say so when presenting it, even when the diagnosis recommends more rounds. The loop goes on only if the author also asks explicitly for N more rounds (3 suggested), and the author may instead close it and act on the recommendation. An extension is a new block of rounds that ends on this same decision point. Ask again only for a decision the answer left open.
-   - Either way, flag a **structural** ✅ — complexity L, or a diff that would break the PR's 200 lines / 10 files budget — and offer to defer it as a 🕐 — except a 🔴, whose minimal fix stays here: the rounds that follow will spend themselves on what it reshapes.
-3. **Collect the 🕐** — keep each ready-to-submit ticket from the plan — or the number of the open ticket a 🕐 points at — in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
+   - Unless the plan holds no ✅, two rounds wait for the author even with `--auto`: the one whose plan turns the trend (✅ rising two rounds in a row, or a ✅ on lines an earlier round fixed, read from the log) and the one at the cap. Give the diagnosis below with the plan; the one approval still decides everything. When the trend turns, it runs the next round unless the author makes this one the last. At the cap, the plan recommends closing, so approving it closes the loop after this round; say so when presenting it, even when the diagnosis recommends more rounds. The loop goes on only if the author also asks explicitly for N more rounds (3 suggested), and the author may instead close it and act on the recommendation. An extension is a new block of rounds that ends on this same decision point. Ask again only for a decision the answer left open.
+   - Either way, flag a **structural** ✅ (complexity L, or a diff that would break the PR's 200 lines / 10 files budget) and offer to defer it as a 🕐, except a 🔴, whose minimal fix stays here: the rounds that follow will spend themselves on what it reshapes.
+3. **Collect the 🕐**: keep each ready-to-submit ticket from the plan (or the number of the open ticket a 🕐 points at) in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
 4. **Converged?** If the approved plan holds no ✅, the loop has converged: go to Step 4.
-5. **Apply** the ✅ fixes, as `triage-findings` Step 6.1 does. Run the verification commands; if they fail, fix the failure within the round, or stop the loop as blocked. When blocked, keep what passes: commit the fixes that are green on their own, stash the rest so no later commit picks it up, and name the stash in the report. **Never commit a red build** — but a green fix is not lost to a red neighbour.
-6. **Commit** the round with `/git-workflow:commit --auto` — atomic Conventional Commits, no AI attribution. `--auto`, because invoking this skill was the approval. Do not push.
+5. **Apply** the ✅ fixes, as `triage-findings` Step 6.1 does. Run the verification commands; if they fail, fix the failure within the round, or stop the loop as blocked. When blocked, keep what passes: commit the fixes that are green on their own, stash the rest so no later commit picks it up, and name the stash in the report. **Never commit a red build**, but a green fix is not lost to a red neighbour.
+6. **Commit** the round with `/git-workflow:commit --auto`: atomic Conventional Commits, no AI attribution. `--auto`, because invoking this skill was the approval. Do not push.
 7. **Record the round** in a running log kept in this conversation, never handed to the reviewer: the ✅ count and their severities, the files and lines fixed, the ❌ with their title. The trend and the diagnosis read it; the next review stays fresh.
 8. **Continue?** Never ask here: the plan's approval already decided.
    - If the author made this round the last, or this round is at the cap and the author did not extend the loop, go to Step 4 with the reason: stopped by the author, or closed at the cap.
-   - Otherwise, summarise the round in one line with the trend — `Round 3 — 2 fixes (🟠1 🟡1), 1 🕐 · trend 5 → 3 → 2` — and start round `i + 1`: approving this round's plan chose it, an extension moved the cap, and with `--auto`, invoking the skill did. Never run a round the author did not choose.
+   - Otherwise, summarise the round in one line with the trend (`Round 3: 2 fixes (🟠1 🟡1), 1 🕐 · trend 5 → 3 → 2`), and start round `i + 1`: approving this round's plan chose it, an extension moved the cap, and with `--auto`, invoking the skill did. Never run a round the author did not choose.
 
 **The diagnosis** has a fixed form and a free content:
 
-1. **Trajectory** — the fixes per round, with their severities, from the log, then this round's plan.
-2. **Observations** — each with its evidence: files, findings, rounds. When no cause stands out, say so; never invent one.
+1. **Trajectory**: the fixes per round, with their severities, from the log, then this round's plan.
+2. **Observations**: each with its evidence: files, findings, rounds. When no cause stands out, say so; never invent one.
 3. **One recommendation**, for the author to weigh in the approval.
 
 The common causes below are examples of the expected level, not a list to fit every case into; a cause outside it, or several mixed, is a valid diagnosis.
@@ -104,19 +104,19 @@ The common causes below are examples of the expected level, not a list to fit ev
 | A noisy review                      | Dismissed (❌) or contested findings come back, or nearly everything is 🟢            | Close, or run again at a lower review effort          |
 | A change too broad                  | Findings spread over unrelated areas, the diff beyond the 200 lines / 10 files budget | Close, and split the pull request                     |
 
-For a cascade, the trend on the area decides: keep reviewing when its findings shrink round after round; have a person read the area, then start a new loop, when they do not shrink or change nature every round; revert the structural change and defer it — a 🕐 or a PR of its own — when it reaches beyond the subject of this PR.
+For a cascade, the trend on the area decides: keep reviewing when its findings shrink round after round; have a person read the area, then start a new loop, when they do not shrink or change nature every round; revert the structural change and defer it (a 🕐 or a PR of its own) when it reaches beyond the subject of this PR.
 
-### Step 4 — Close the loop
+### Step 4: Close the loop
 
 In this order:
 
-1. **Follow-ups** — show at once every new 🕐 ticket the author has not approved yet, open the approved ones in the tracker `triage-findings` Step 3 identified, add the `TODO(#n):` anchors where they belong, and commit those anchors.
+1. **Follow-ups**: show at once every new 🕐 ticket the author has not approved yet, open the approved ones in the tracker `triage-findings` Step 3 identified, add the `TODO(#n):` anchors where they belong, and commit those anchors.
 2. **Push** the branch, once. This call is prompted.
-3. **Replies** — post the round 0 replies held in Step 2 and resolve the threads `address-review` Step 6 would resolve. Each call is prompted.
-4. **Description** — run `/git-workflow:pull-request` to bring the description back in line with the diff, with the opened follow-ups under `## 🔁 Follow-ups`.
-5. **Status label** — `review: clean` if the loop converged and no round 0 ⚠️ thread is open; `review: findings` otherwise — closed at the cap, stopped by the author, or blocked. A 🕐 with its ticket does not count as pending; a 🕐 left without one does. Check that both labels exist with `gh label list`, and create any that is missing (`gh label create "review: clean" --color 0E8A16`, `gh label create "review: findings" --color D93F0B`). Then set one and remove the other in a single call: `gh pr edit <n> --add-label "<label>" --remove-label "<other>"`. These calls are prompted.
+3. **Replies**: post the round 0 replies held in Step 2 and resolve the threads `address-review` Step 6 would resolve. Each call is prompted.
+4. **Description**: run `/git-workflow:pull-request` to bring the description back in line with the diff, with the opened follow-ups under `## 🔁 Follow-ups`.
+5. **Status label**: `review: clean` if the loop converged and no round 0 ⚠️ thread is open; `review: findings` otherwise (closed at the cap, stopped by the author, or blocked). A 🕐 with its ticket does not count as pending; a 🕐 left without one does. Check that both labels exist with `gh label list`, and create any that is missing (`gh label create "review: clean" --color 0E8A16`, `gh label create "review: findings" --color D93F0B`). Then set one and remove the other in a single call: `gh pr edit <n> --add-label "<label>" --remove-label "<other>"`. These calls are prompted.
 6. **Report**, for the author's final read:
-   - rounds run, the extensions the author chose, and why the loop stopped — converged, closed at the cap, stopped by the author, or blocked on what;
+   - rounds run, the extensions the author chose, and why the loop stopped: converged, closed at the cap, stopped by the author, or blocked on what;
    - the diagnosis, when one was given;
    - the fixes, round by round, with their commits;
    - the follow-ups opened, and the findings dismissed with their reason;
@@ -129,5 +129,5 @@ In this order:
 - A person's comment is answered by the author's decision, never by `--auto`.
 - No reply claims a fix that is not pushed.
 - No round commits a red build.
-- Every finding of every round gets a decision — `triage-findings` owns how.
+- Every finding of every round gets a decision: `triage-findings` owns how.
 - No round runs that the author did not choose: approving a round's plan, or running the loop with `--auto`, chooses the next one, and past the cap only an explicit extension continues the loop.

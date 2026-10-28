@@ -1,14 +1,14 @@
 <!--
 Copy this file to the project's docs/prd/ as prd-NNN-kebab-case-title.md, then delete every comment.
-A PRD describes what a feature does and why, from the user's point of view. It does not describe how it is built — that belongs to an ADR or to the code.
+A PRD describes what a feature does and why, from the user's point of view. It does not describe how it is built: that belongs to an ADR or to the code.
 Number 000 is conventionally the product vision; feature PRDs start at 001. A large feature can be split into prd-001a, prd-001b, … rather than growing past a readable length.
 -->
 
-# PRD-NNN — <feature name>
+# PRD-NNN: <feature name>
 
 > **Status**: Draft | **Version**: 0.1 | **Last updated**: YYYY-MM-DD
 
-<!-- Status: Draft while being written, Approved once agreed, Implemented when shipped, Superseded by PRD-NNN when replaced. Bump the version on every substantive edit — a PRD is a living document, and readers need to know which version they reviewed. -->
+<!-- Status: Draft while being written, Approved once agreed, Implemented when shipped, Superseded by PRD-NNN when replaced. Bump the version on every substantive edit: a PRD is a living document, and readers need to know which version they reviewed. -->
 
 ## Overview
 
@@ -28,10 +28,10 @@ Number 000 is conventionally the product vision; feature PRDs start at 001. A la
 
 ## Functional Requirements
 
-<!-- What the feature must do, as checkable items. Split into phases when the feature ships incrementally, and keep the checkboxes up to date as work lands — this section doubles as the progress view.
+<!-- What the feature must do, as checkable items. Split into phases when the feature ships incrementally, and keep the checkboxes up to date as work lands; this section doubles as the progress view.
 Group related items under a bold sub-heading rather than a flat list of thirty checkboxes. -->
 
-### Phase 1 — MVP
+### Phase 1: MVP
 
 **<Group>**
 - [ ] <requirement>
@@ -42,7 +42,7 @@ Group related items under a bold sub-heading rather than a flat list of thirty c
 
 ## Out of Scope
 
-<!-- What this PRD deliberately does not cover, and where it goes instead — a future PRD, another feature, or nowhere. Prevents scope creep during implementation and review. -->
+<!-- What this PRD deliberately does not cover, and where it goes instead: a future PRD, another feature, or nowhere. Prevents scope creep during implementation and review. -->
 
 ## Open Questions
 

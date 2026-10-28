@@ -36,8 +36,8 @@ reference from the "latest stable" lines of conventions/*-conventions.md. Keep t
 
 ## Context
 
-- Default branch, as its remote-tracking ref: !`git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
-- Audited revision (tip of the default branch, as last fetched): !`git rev-parse --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved — ask"`
+- Default branch, as its remote-tracking ref: !`git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved: ask"`
+- Audited revision (tip of the default branch, as last fetched): !`git rev-parse --short refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved: ask"`
 - Date of that revision: !`git log -1 --format=%cs refs/remotes/origin/HEAD 2>/dev/null || echo "unresolved"`
 - Current branch: !`git branch --show-current`
 - Uncommitted changes: !`git status --short`
@@ -50,11 +50,11 @@ reference from the "latest stable" lines of conventions/*-conventions.md. Keep t
 
 Audit the project in the current directory and write the result to `docs/audit-YYYY-MM-DD.md`, for today. The audit is **read-only**: the report is the only file you write, and you commit it only if the user asks (Step 5). The grading below is **Grid v1** of the [Project Audit](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/project-audit.md) guide; apply it exactly, so that two audits of the same project compare.
 
-### Step 0 — Pin the revision
+### Step 0: Pin the revision
 
-The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit — `git cat-file -p <sha>:<path>`, `git ls-tree -r <sha>` — never from the working tree, which may sit on another branch or change while the audit runs. If the default branch reads "unresolved", ask the user to run `git remote set-head origin --auto`, or to name the branch to audit. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself. Read files with `git cat-file -p`, which is pre-approved, rather than `git show`, which prompts at every call.
+The audit reads **one pinned commit**: the tip of the default branch above, `<sha>`. Every file is read at that commit (`git cat-file -p <sha>:<path>`, `git ls-tree -r <sha>`), never from the working tree, which may sit on another branch or change while the audit runs. If the default branch reads "unresolved", ask the user to run `git remote set-head origin --auto`, or to name the branch to audit. If the remote-tracking branch looks stale, ask the user to fetch first; never check out, stash, fetch or reset anything yourself. Read files with `git cat-file -p`, which is pre-approved, rather than `git show`, which prompts at every call.
 
-### Step 1 — Frame the scope, and confirm it
+### Step 1: Frame the scope, and confirm it
 
 - **Modules.** A module is one build unit: a Gradle module, a Cargo workspace member, a Go module (`go.mod`), or a Bruno collection (`bruno.json`). A single-module project has one module row.
 - **Default rules:**
@@ -70,13 +70,13 @@ The audit reads **one pinned commit**: the tip of the default branch above, `<sh
 - **Consumers.** The consumer projects are the arguments, as local paths or `owner/repo`. Without any, the Consumers section reads "Not assessed: no consumer project was given". Never search for consumers, never guess them.
 - **Previous audit.** When a `docs/audit-*.md` exists, at the pinned revision or in the working tree, read the latest one by date: its finding IDs, its grades and its grid version feed Step 3. A report that was never pushed still counts, or its IDs would be reused. Previous reports are the one exception to the pinned commit: they are the audit's history, not the audited code.
 
-Then **always** show the scope — each module included, excluded or attached, with its reason — and the cost: five subagents each read a large part of the repository. Say that the subagents do not inherit this skill's permissions, so each of their `git cat-file -p` and `git ls-tree` calls is prompted. Offer the one-time fix: add `Bash(git cat-file -p:*)` and `Bash(git ls-tree:*)` to `permissions.allow` in the project's or the user's Claude Code settings. Wait for the user to confirm or adjust it. A module they leave out is graded `—`, "not assessed".
+Then **always** show the scope (each module included, excluded or attached, with its reason) and the cost: five subagents each read a large part of the repository. Say that the subagents do not inherit this skill's permissions, so each of their `git cat-file -p` and `git ls-tree` calls is prompted. Offer the one-time fix: add `Bash(git cat-file -p:*)` and `Bash(git ls-tree:*)` to `permissions.allow` in the project's or the user's Claude Code settings. Wait for the user to confirm or adjust it. A module they leave out is graded `-`, "not assessed".
 
-### Step 2 — Fan out, five subagents
+### Step 2: Fan out, five subagents
 
-Launch the five subagents below in parallel, each with the `project-health:auditor` type, which already carries the read-only rules. Never use `Explore` here — it locates code, it does not review it. Ask each for a very thorough pass over the whole scope. Each one receives the project root, the pinned `<sha>`, the confirmed scope, the detected stacks, its checklist below, any per-stack checklist, and the finding format:
+Launch the five subagents below in parallel, each with the `project-health:auditor` type, which already carries the read-only rules. Never use `Explore` here: it locates code, it does not review it. Ask each for a very thorough pass over the whole scope. Each one receives the project root, the pinned `<sha>`, the confirmed scope, the detected stacks, its checklist below, any per-stack checklist, and the finding format:
 
-- **One fix is one finding**, listing all its occurrences. Each finding has: the module it belongs to (or "repository"), its axis, a proposed severity from the table in Step 3, its evidence (`file:line`, or a cited source), and _likely_ when only a build or a run would confirm it — together with any existing evidence that settles it, such as a build report or a CI log.
+- **One fix is one finding**, listing all its occurrences. Each finding has: the module it belongs to (or "repository"), its axis, a proposed severity from the table in Step 3, its evidence (`file:line`, or a cited source), and _likely_ when only a build or a run would confirm it, together with any existing evidence that settles it, such as a build report or a CI log.
 
 | Subagent                 | Axes                               | Checklist |
 |--------------------------|------------------------------------|-----|
@@ -86,15 +86,15 @@ Launch the five subagents below in parallel, each with the `project-health:audit
 | Build, CI and docs       | Build and CI, Docs and conventions | Build configuration and its deprecations, targets, publishing and signing, CI workflows and what they check, release process. README and module docs, doc comments, stale files, git history against Conventional Commits, ADRs, formatter config, against [coding-conventions](https://github.com/cyrillrx/coding-conventions) and the stack's convention doc. |
 | Dependencies and context | Dependencies and obsolescence      | Every toolchain and dependency version against its latest stable release, with the release page as source. Deprecated, end-of-life or abandoned SDKs. Each consumer given: targets, toolchain, what it would need. Gaps to the market's reference libraries. |
 
-Only the dependencies and context subagent searches the web; every subagent may fetch the `cyrillrx/coding-conventions` docs it needs. The dependencies subagent's obsolescence reference is the "latest stable" line of each stack's convention doc — [Kotlin](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md), [Go](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/go-conventions.md), [Rust](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/rust-conventions.md). The security and the build, CI and docs subagents may read the forge's repository settings with read-only `gh api` calls — alerts, rulesets, branch protection — and mark those facts as today's state, not the commit's. Market gaps and consumer needs are **reported, not graded**: each market comparison cites its source and carries a "verify" marker.
+Only the dependencies and context subagent searches the web; every subagent may fetch the `cyrillrx/coding-conventions` docs it needs. The dependencies subagent's obsolescence reference is the "latest stable" line of each stack's convention doc: [Kotlin](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/kotlin-conventions.md), [Go](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/go-conventions.md), [Rust](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/rust-conventions.md). The security and the build, CI and docs subagents may read the forge's repository settings with read-only `gh api` calls (alerts, rulesets, branch protection) and mark those facts as today's state, not the commit's. Market gaps and consumer needs are **reported, not graded**: each market comparison cites its source and carries a "verify" marker.
 
-### Step 3 — Identify and grade
+### Step 3: Identify and grade
 
 Collect the findings and merge them: **one fix is one finding**, so the same problem reported by several subagents becomes one finding, and two problems closed by one change become one. File each finding **where its fix is made**: its axis is the one the fix belongs to, whichever subagent revealed it; its module is the one the fix touches, and a fix spanning several modules is filed under each, with the same ID; a build problem specific to one module goes on the repository row, under Build and CI, tagged with that module.
 
 **Set every severity yourself** against the table below and its examples: the subagent's severity is a proposal. **Settle the _likely_ findings** with any evidence already at hand, such as a build report or a CI log, in either direction.
 
-Give each finding a stable ID, `<AXIS>-NN` — `CODE`, `ARCH`, `TEST`, `DEPS`, `SEC`, `BUILD`, `DOCS`: a finding that matches one of the previous audit keeps its ID; a new one numbers on from the previous report's **Last IDs** line on its axis — or, when that report has none, from the highest ID it mentions — and never from a gap; a fixed ID is never reused.
+Give each finding a stable ID, `<AXIS>-NN` (`CODE`, `ARCH`, `TEST`, `DEPS`, `SEC`, `BUILD`, `DOCS`): a finding that matches one of the previous audit keeps its ID; a new one numbers on from the previous report's **Last IDs** line on its axis (or, when that report has none, from the highest ID it mentions) and never from a gap; a fixed ID is never reused.
 
 Severities, read for a project at rest:
 
@@ -107,9 +107,9 @@ Severities, read for a project at rest:
 
 A missing first release is 🟠, not 🔴: 🔴 is reserved for breaking what already ships.
 
-The cells are the modules × Code, Architecture, Tests, Dependencies and obsolescence, Security, plus the repository × Security, Build and CI, Docs and conventions. A cell that does not apply reads `·`; one that could not be assessed reads `—` with the reason.
+The cells are the modules × Code, Architecture, Tests, Dependencies and obsolescence, Security, plus the repository × Security, Build and CI, Docs and conventions. A cell that does not apply reads `·`; one that could not be assessed reads `-` with the reason (an em dash in a report written before the punctuation rule).
 
-**State grade.** Count the 🔴, 🟠 and 🟡 filed under each cell — a _likely_ finding counts like a confirmed one — and read the grid from E upwards; the first line that holds is the grade:
+**State grade.** Count the 🔴, 🟠 and 🟡 filed under each cell (a _likely_ finding counts like a confirmed one) and read the grid from E upwards; the first line that holds is the grade:
 
 | Grade | Holds when                         |
 |-------|------------------------------------|
@@ -121,13 +121,13 @@ The cells are the modules × Code, Architecture, Tests, Dependencies and obsoles
 
 The volume is meant to count: each dependency behind its latest stable release is its own 🟡, so up to three lagging dependencies leave a module at A, four to ten bring it to B, and more than ten to C. A dependency past its end of life is a 🟠 on its own.
 
-**Effort.** Effort is measured in person-days: one focused working day of one person, about six effective hours. Group the findings into **narrow** work items — one cell each where possible; split a cross-cutting change into the items each cell needs — and size each one on the audit's scale below, never on the triage complexity scale, which sizes a change about to merge. The estimate covers the test and the verification. Fixes of a few minutes each in the same cell form **one** item: ten ten-minute fixes are one S, not ten.
+**Effort.** Effort is measured in person-days: one focused working day of one person, about six effective hours. Group the findings into **narrow** work items (one cell each where possible; split a cross-cutting change into the items each cell needs) and size each one on the audit's scale below, never on the triage complexity scale, which sizes a change about to merge. The estimate covers the test and the verification. Fixes of a few minutes each in the same cell form **one** item: ten ten-minute fixes are one S, not ten.
 
 | Size  | Estimated effort                 | Counts as                                                         |
 |-------|----------------------------------|-------------------------------------------------------------------|
 | **S** | Up to about two hours            | 0.25 person-day                                                   |
 | **M** | More than two hours, up to a day | 1 person-day                                                      |
-| **L** | More than a day                  | The person-days its estimate states — an L item always states one |
+| **L** | More than a day                  | The person-days its estimate states (an L item always states one) |
 
 An item that still improves several cells counts in full in each; the total effort counts it once. Each cell shows its person-days and the matching grade, such as `3.75 (C)`:
 
@@ -139,18 +139,18 @@ An item that still improves several cells counts in full in each; the total effo
 | D     | 7 to under 15 person-days |
 | E     | 15 person-days or more    |
 
-**Verdict.** Never average. **Blocked** when a cell's state is E, **Needs work** when one is C or D, **Healthy** when all are A or B — read on the assessed cells only, and marked **partial**, naming the `—` cells, when any cell is not assessed — followed by the total effort in person-days.
+**Verdict.** Never average. **Blocked** when a cell's state is E, **Needs work** when one is C or D, **Healthy** when all are A or B (read on the assessed cells only, and marked **partial**, naming the `-` cells, when any cell is not assessed), followed by the total effort in person-days.
 
-**Progress.** With a previous audit, put both grade tables side by side, then list the IDs fixed, still open, not reassessed and new. A previous finding whose cell now reads `—`, or whose module was left out of scope, is not reassessed: it keeps its ID, stays open, and is never listed as fixed. If the previous audit used another grid version, recompute its grades with Grid v1 from its findings first. If it has no grid, or its findings name no module, mark its grades not comparable and compare its findings only: fixed, still open, or corrected.
+**Progress.** With a previous audit, put both grade tables side by side, then list the IDs fixed, still open, not reassessed and new. A previous finding whose cell now reads `-`, or whose module was left out of scope, is not reassessed: it keeps its ID, stays open, and is never listed as fixed. If the previous audit used another grid version, recompute its grades with Grid v1 from its findings first. If it has no grid, or its findings name no module, mark its grades not comparable and compare its findings only: fixed, still open, or corrected.
 
-**Confirm the blockers.** If a 🔴 is still _likely_, it alone decides the verdict: before writing, offer to confirm it with the one build or run it needs — prompted — and grade with the outcome.
+**Confirm the blockers.** If a 🔴 is still _likely_, it alone decides the verdict: before writing, offer to confirm it with the one build or run it needs (prompted) and grade with the outcome.
 
-### Step 4 — Write the report
+### Step 4: Write the report
 
 The default branch is the remote-tracking ref above without its `origin/` prefix: `origin/main` is `main`. When the current branch is not the default branch, or there are uncommitted changes, ask the user where to write the report rather than adding it to unrelated work. Otherwise write `docs/audit-YYYY-MM-DD.md` from the template below, in English, following the [documentation conventions](https://github.com/cyrillrx/coding-conventions/blob/main/conventions/docs-conventions.md): no hard wrap, no `---` between sections, aligned tables. Delete the HTML comments and any section that does not apply, except Consumers, which says "Not assessed" instead. If the file already exists, ask before overwriting it.
 
 ```markdown
-# Project Audit — YYYY-MM-DD
+# Project Audit: YYYY-MM-DD
 
 > **Audited revision**: `<sha>` (<date>) on `<default branch>` | **Grid**: v1 | **Method**: static read, compared with `cyrillrx/coding-conventions`, <the consumers given> and the latest stable toolchain. <"Nothing was built; findings marked _likely_ need a build to confirm.", or the commands run.>
 
@@ -167,9 +167,9 @@ The default branch is the remote-tracking ref above without its `origin/` prefix
 
 <!-- Same shape as State; each cell reads `<person-days> (<grade>)`, such as `3.75 (C)`. -->
 
-**Verdict**: <Blocked | Needs work | Healthy><, partial — not assessed: <the `—` cells>> — <the cells that drive it>. Total effort: <N> person-days.
+**Verdict**: <Blocked | Needs work | Healthy><, partial (not assessed: <the `-` cells>)>, driven by <the cells that drive it>. Total effort: <N> person-days.
 
-**Last IDs**: <`CODE-NN`, `ARCH-NN`, … — the highest ID ever used on each axis, fixed ones included; `—` for an axis never used>.
+**Last IDs**: <`CODE-NN`, `ARCH-NN`, …: the highest ID ever used on each axis, fixed ones included; `-` for an axis never used>.
 
 ## Progress since the last audit
 
@@ -207,11 +207,11 @@ The default branch is the remote-tracking ref above without its `origin/` prefix
 |-----------|---------------|-------------------|------|-------------|
 ```
 
-### Step 5 — Hand over
+### Step 5: Hand over
 
 Summarise the verdict, the worst cells and the total effort in a few lines, and point to the report. Then offer, without doing any of it unasked:
 
-- to confirm the remaining _likely_ findings by running the build and the tests — each command is prompted, and the report is updated with the outcome;
+- to confirm the remaining _likely_ findings by running the build and the tests: each command is prompted, and the report is updated with the outcome;
 - to commit the report with `/git-workflow:commit`;
 - to draft an action plan from the work items.
 
@@ -220,7 +220,7 @@ Summarise the verdict, the worst cells and the total effort in a few lines, and 
 - The report is the only write, and it is committed only on request. No fix, no branch, no ticket, no checkout, no fetch.
 - The scope is always confirmed before the fan-out.
 - Static by default: nothing is built or run without the user's consent.
-- Every file is read at the pinned commit, never from the working tree — previous audit reports excepted.
+- Every file is read at the pinned commit, never from the working tree, previous audit reports excepted.
 - One fix is one finding, filed where its fix is made, with a stable ID and its evidence. You set the severity.
 - Consumers are given, never guessed. Market gaps and consumer needs are reported, never graded.
 - Grades follow Grid v1 exactly; the verdict follows the worst cell, never a mean.
