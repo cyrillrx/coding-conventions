@@ -35,7 +35,7 @@ These rules apply across all technologies (Kotlin, Rust, Go, etc.).
 - **A "why" recorded elsewhere is not repeated**: When a spec (PRD, ADR) or a test name already states the rule, a comment duplicates it and drifts first.
 - **Show a magic number's derivation in code**: Build it from named constants (`(MAX_FILE_NAME_BYTES - MAX_SUFFIX_BYTES) / MAX_UTF8_BYTES_PER_UTF16_UNIT`) rather than explaining a bare `74` in a comment.
 - **Never describe behavior located elsewhere**: Don't reference how or where a symbol is used in other files; such comments rot the moment that code changes. Delete a stale comment rather than maintain it.
-- **Good Comments**: Public API contracts (KDoc/Rustdoc), TODOs, legal headers.
+- **Good Comments**: TODOs, legal headers, and public API contracts (KDoc/Rustdoc) that state what the signature cannot say rather than restate the name.
 - **Bad Comments**: Redundant explanations, commented-out code (delete it, Git remembers), changelogs, cross-references to other files' state.
 
 ## 5. Error Handling
