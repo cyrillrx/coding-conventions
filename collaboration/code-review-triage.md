@@ -103,8 +103,8 @@ Self-review, or your own PR after a review. The deferral is yours to carry, so a
    ```markdown
    ## 🔁 Follow-ups
 
-   - [#142](https://github.com/org/repo/issues/142) — 🟠 cache has no eviction policy (deferred: needs an ADR on cache sizing)
-   - PROJ-318 — 🟡 extract the pagination logic shared with `SpellListScreen`
+   - [#142](https://github.com/org/repo/issues/142): 🟠 cache has no eviction policy (deferred: needs an ADR on cache sizing)
+   - PROJ-318: 🟡 extract the pagination logic shared with `SpellListScreen`
    ```
 
 3. **A code reference** when the finding is anchored to a specific place — a `TODO(#142):` naming the ticket, per the [🕐 convention](code-review-comments.md#emoji-legend).
