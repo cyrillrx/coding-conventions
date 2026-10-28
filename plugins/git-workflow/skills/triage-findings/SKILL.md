@@ -201,8 +201,8 @@ Once approved, in this order:
    ```markdown
    ## 🔁 Follow-ups
 
-   - [#142](https://github.com/org/repo/issues/142) — 🟠 cache has no eviction policy (deferred: needs an ADR on cache sizing)
-   - PROJ-318 — 🟡 extract the pagination logic shared with `SpellListScreen`
+   - [#142](https://github.com/org/repo/issues/142): 🟠 cache has no eviction policy (deferred: needs an ADR on cache sizing)
+   - PROJ-318: 🟡 extract the pagination logic shared with `SpellListScreen`
    ```
 
    Read the current body first, splice the section in, and write it back — never overwrite a description you have not read. Like the ticket creation, this call is prompted.
