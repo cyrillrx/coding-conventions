@@ -131,7 +131,12 @@ Keep the lock and the socket in a product-agnostic JVM module, not in the compos
 
 ## Packaging
 
-Installers are built by the Compose Gradle plugin's `nativeDistributions` block, which drives `jpackage`. Some of its settings are optional to the plugin but required for a release:
+Installers are built by the Compose Gradle plugin's `nativeDistributions` block, which drives `jpackage`.
+
+- On Windows, the installer is an MSI rather than an EXE: jpackage's EXE only wraps the same MSI, and the MSI is the format IT tools such as Group Policy or Intune deploy.
+- A portable build — the `createDistributable` output, zipped — runs without installing, but nothing upgrades it, and it gets no Start menu entry or shortcut. Shipping one beside the installers is a project-level choice.
+
+Some of its settings are optional to the plugin but required for a release:
 
 | Setting                                 | Why |
 |-----------------------------------------|---|
