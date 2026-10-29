@@ -47,7 +47,7 @@ address-review, which this skill calls.
 
 ## Your task
 
-Run the loop below to its end. Approving a round's plan also runs the next round, unless the author makes that round the last: never ask a second time between rounds. Pause only where this skill names a stop — the trend turning, the cap, and under `--auto` what the grid does not settle.
+Run the loop below to its end. Approving a round's plan also runs the next round, unless the author makes that round the last: never ask a second time between rounds. Pause only where this skill names a stop.
 
 ### Step 1 — Check the preconditions and read the arguments
 
@@ -85,7 +85,8 @@ For round `i` from 1 to the cap:
 6. **Commit** the round with `/git-workflow:commit --auto` — atomic Conventional Commits, no AI attribution. `--auto`, because invoking this skill was the approval. Do not push.
 7. **Record the round** in a running log kept in this conversation, never handed to the reviewer: the ✅ count and their severities, the files and lines fixed, the ❌ with their title. The trend and the diagnosis read it; the next review stays fresh.
 8. **Continue?**
-   - Before the cap, summarise the round in one line with the trend — `Round 3 — 2 fixes (🟠1 🟡1), 1 🕐 · trend 5 → 3 → 2` — and start round `i + 1` without asking: approving this round's plan chose it, and with `--auto`, invoking the skill did. If the author made this round the last, go to Step 4 instead.
+   - If the author made this round the last, go to Step 4 with the reason: stopped by the author. Do not ask again, even at the cap or when the trend turns.
+   - Before the cap, summarise the round in one line with the trend — `Round 3 — 2 fixes (🟠1 🟡1), 1 🕐 · trend 5 → 3 → 2` — and start round `i + 1` without asking: approving this round's plan chose it, and with `--auto`, invoking the skill did.
    - When the trend turns — fixes rising two rounds in a row, or this round fixing lines an earlier round fixed — pause instead: give the diagnosis below with the summary, and ask whether to run round `i + 1` or close the loop.
    - At the cap, give the diagnosis, then ask: close the loop, extend it by N rounds (3 suggested), or close and act on the recommendation. An extension is a new block of rounds that ends on this same decision point; never run a round the author did not choose.
    - If the author closes, go to Step 4, with the reason: stopped by the author, or closed at the cap.
@@ -131,4 +132,4 @@ In this order:
 - No reply claims a fix that is not pushed.
 - No round commits a red build.
 - Every finding of every round gets a decision — `triage-findings` owns how.
-- No round runs that the author did not choose: approving a round's plan chooses the next one, and past the cap only an explicit extension continues the loop.
+- No round runs that the author did not choose: approving a round's plan, or running the loop with `--auto`, chooses the next one, and past the cap only an explicit extension continues the loop.

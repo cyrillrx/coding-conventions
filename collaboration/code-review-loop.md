@@ -88,5 +88,5 @@ A 🕐 that has its ticket does not count as pending: it is decided and traced. 
 - A comment from a person is answered by the author's decision, never by a default.
 - No reply claims a fix that is not pushed.
 - No round commits a red build.
-- No round runs that the author did not choose: approving a round's plan chooses the next one, and past the cap only an explicit extension continues the loop.
+- No round runs that the author did not choose: approving a round's plan, or running the loop with `--auto`, chooses the next one, and past the cap only an explicit extension continues the loop.
 - Every finding of every round gets a decision, per [Code Review Triage](code-review-triage.md).
