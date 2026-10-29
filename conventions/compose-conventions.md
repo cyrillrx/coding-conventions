@@ -1,6 +1,6 @@
 # Compose Conventions
 
-This document details the architectural patterns and style rules for the composables of Kotlin Multiplatform apps built with Compose Multiplatform (CMP). It also covers Android-specific Compose style. Its ViewModels follow the [Compose ViewModel conventions](compose-viewmodel-conventions.md), and its tests the [Compose testing conventions](compose-testing-conventions.md).
+This document details the architectural patterns and style rules for the composables of Kotlin Multiplatform apps built with Compose Multiplatform (CMP). It also covers Android-specific Compose style. Its ViewModels follow the [Compose ViewModel conventions](compose-viewmodel-conventions.md), and its tests the [Compose testing conventions](compose-testing-conventions.md). An app with a Desktop target also follows the [desktop distribution conventions](desktop-distribution-conventions.md).
 
 It builds on the [Kotlin conventions](kotlin-conventions.md), which apply to every module of the app, and the general [Clean Code principles](coding-conventions.md).
 

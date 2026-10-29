@@ -20,7 +20,7 @@
     {
       "name": "compose-conventions",
       "source": "./plugins/compose-conventions",
-      "description": "Points every session to this team's Compose Multiplatform UI conventions (MVVM, state and events, Compose, Maestro), to read before writing or reviewing the UI layer. Pair it with kotlin-conventions, which it builds on"
+      "description": "Points every session to this team's Compose Multiplatform UI conventions (MVVM, state and events, Compose, Maestro), to read before writing or reviewing the UI layer, and to its desktop distribution conventions for an app with a Desktop target. Pair it with kotlin-conventions, which it builds on"
     },
     {
       "name": "coding-conventions",

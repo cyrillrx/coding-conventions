@@ -20,6 +20,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 - [Compose](conventions/compose-conventions.md) — UI architecture and composables (Android / KMP / CMP apps)
 - [Compose ViewModels](conventions/compose-viewmodel-conventions.md) — ViewModel naming, state, events, lifecycle-aware refresh
 - [Compose testing](conventions/compose-testing-conventions.md) — ViewModel tests and Maestro end-to-end flows
+- [Desktop Distribution](conventions/desktop-distribution-conventions.md) — single instance, packaging, versioning, releases, signing and updates (Compose Desktop apps)
 - [Rust Backend](conventions/rust-conventions.md)
 - [Go Backend](conventions/go-conventions.md)
 - [Bruno API Testing](conventions/bruno-conventions.md)
@@ -46,7 +47,7 @@ Marketplace name: **`cyrillrx-conventions`**. Available plugins:
 | --------------------- | --------------------------------------------------------------------------------- | --- |
 | `git-workflow`        | `/commit`, `/pull-request`, `/triage-findings`, `/address-review`, `/review-loop` | Atomic Conventional Commits; PR descriptions kept in line with their diff; review-finding triage; answering reviewer comments; review rounds until a PR converges |
 | `kotlin-conventions`  | — (SessionStart hook)                                                             | Points every session to the Kotlin conventions; pair it with `coding-conventions` for Clean Code |
-| `compose-conventions` | — (SessionStart hook)                                                             | Points every session to the Compose UI conventions; enable it with `kotlin-conventions` in an app with screens |
+| `compose-conventions` | — (SessionStart hook)                                                             | Points every session to the Compose UI conventions, and to the desktop distribution conventions for a Desktop target; enable it with `kotlin-conventions` in an app with screens |
 | `coding-conventions`  | — (SessionStart and PostToolUse hooks)                                            | Loads the general coding conventions into every session, recalls the comment rule when an edit adds comments (a reminder that needs `jq`, and stays silent without it), and points to the documentation conventions when a Markdown file is written |
 | `project-health`      | `/audit`                                                                          | Graded project health audit, following [Project Audit](collaboration/project-audit.md): state and effort grades, blockers, debt, workload |
 
