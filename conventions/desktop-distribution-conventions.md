@@ -180,6 +180,20 @@ compose.desktop {
 }
 ```
 
+### Building locally
+
+```bash
+./gradlew :desktop-app:runReleaseDistributable
+./gradlew :desktop-app:packageReleaseMsi -PappVersion=1.2.0
+./gradlew :desktop-app:packageReleaseDmg -PappVersion=1.2.0
+```
+
+- `runReleaseDistributable` runs the packaged application — the `jlink` runtime, ProGuard applied — without building an installer. It is the check to run before tagging.
+- `packageReleaseMsi` runs on Windows and `packageReleaseDmg` on macOS: as in the release workflow, each OS builds its own installer. They land in `desktop-app/build/compose/binaries/main-release/<format>/`.
+- The tasks without `Release` (`packageMsi`, `packageDmg`) skip ProGuard and write to `main/`: quicker to try, but not what ships.
+- `jpackage` needs a JDK 17 or later. The plugin downloads the WiX Toolset the MSI needs on the first Windows build.
+- A DMG built locally carries no quarantine flag, so Gatekeeper stays silent. To see the warning users get, download the DMG from a draft Release.
+
 ## Versioning
 
 - The version comes from the git tag `vMAJOR.MINOR.PATCH`, passed to Gradle as a property by the release workflow. A local build falls back to a default.
