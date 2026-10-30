@@ -37,7 +37,7 @@ Seven axes are graded. Most are graded per module; the ones that belong to the r
 | Build and CI                  | The repository                                                                        |
 | Docs and conventions          | The repository                                                                        |
 
-A cell that does not apply reads `·`. A cell that applies but could not be assessed reads `-`, with the reason. A report written before the [punctuation rule](../conventions/docs-conventions.md#punctuation) shows an em dash there, with the same meaning.
+A cell that does not apply reads `·`. A cell that applies but could not be assessed reads `?`, with the reason. A report written before the [punctuation rule](../conventions/docs-conventions.md#punctuation) shows an em dash there, with the same meaning.
 
 Gaps to the market's reference libraries and the needs of consumer projects are **reported, not graded**. They are opportunities rather than defects, and they rest on external sources that need verifying. They appear in the report and in the workload estimate, never in a state grade.
 
@@ -119,14 +119,14 @@ The state grades are never averaged. The verdict follows the worst cell:
 - **Needs work**: at least one cell is graded C or D.
 - **Healthy**: every cell is graded A or B.
 
-The verdict is read on the assessed cells only. When any cell reads `-`, the verdict is marked **partial** and names those cells: a module nobody looked at never counts as healthy.
+The verdict is read on the assessed cells only. When any cell reads `?`, the verdict is marked **partial** and names those cells: a module nobody looked at never counts as healthy.
 
 The verdict line also states the total effort, in person-days.
 
 ## 8. Following a project over time
 
 - A report is written to `docs/audit-YYYY-MM-DD.md` in the audited project. The previous audit is the latest such file, whether it is already on the default branch or still local: a report that was never pushed still holds IDs that must not be reused, so previous reports are the one thing read outside the pinned commit. When the working tree is not on the default branch, or holds uncommitted changes, the person running the audit chooses where the report goes, so it never lands in unrelated work.
-- When a previous audit exists, the report opens with its progress: both grade tables side by side, then the finding IDs fixed, still open, not reassessed, and new. A previous finding whose cell now reads `-`, or whose module was left out of scope, is not reassessed: it keeps its ID and stays open, and is never reported as fixed. New IDs number on from the previous report's last IDs; a report that records none falls back to the highest ID it mentions.
+- When a previous audit exists, the report opens with its progress: both grade tables side by side, then the finding IDs fixed, still open, not reassessed, and new. A previous finding whose cell now reads `?`, or whose module was left out of scope, is not reassessed: it keeps its ID and stays open, and is never reported as fixed. New IDs number on from the previous report's last IDs; a report that records none falls back to the highest ID it mentions.
 - When the grid version changed since the previous audit, the previous grades are recomputed with the current grid from that report's findings, so the comparison holds.
 - A previous audit with no grid, or whose findings name no module, cannot be regraded. Its grades are marked not comparable, and only its findings are compared: fixed, still open, or corrected.
 - Changing this document's grading (axes, severities, either grid) bumps the grid version.

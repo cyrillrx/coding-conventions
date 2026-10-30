@@ -70,7 +70,7 @@ The audit reads **one pinned commit**: the tip of the default branch above, `<sh
 - **Consumers.** The consumer projects are the arguments, as local paths or `owner/repo`. Without any, the Consumers section reads "Not assessed: no consumer project was given". Never search for consumers, never guess them.
 - **Previous audit.** When a `docs/audit-*.md` exists, at the pinned revision or in the working tree, read the latest one by date: its finding IDs, its grades and its grid version feed Step 3. A report that was never pushed still counts, or its IDs would be reused. Previous reports are the one exception to the pinned commit: they are the audit's history, not the audited code.
 
-Then **always** show the scope (each module included, excluded or attached, with its reason) and the cost: five subagents each read a large part of the repository. Say that the subagents do not inherit this skill's permissions, so each of their `git cat-file -p` and `git ls-tree` calls is prompted. Offer the one-time fix: add `Bash(git cat-file -p:*)` and `Bash(git ls-tree:*)` to `permissions.allow` in the project's or the user's Claude Code settings. Wait for the user to confirm or adjust it. A module they leave out is graded `-`, "not assessed".
+Then **always** show the scope (each module included, excluded or attached, with its reason) and the cost: five subagents each read a large part of the repository. Say that the subagents do not inherit this skill's permissions, so each of their `git cat-file -p` and `git ls-tree` calls is prompted. Offer the one-time fix: add `Bash(git cat-file -p:*)` and `Bash(git ls-tree:*)` to `permissions.allow` in the project's or the user's Claude Code settings. Wait for the user to confirm or adjust it. A module they leave out is graded `?`, "not assessed".
 
 ### Step 2: Fan out, five subagents
 
@@ -107,7 +107,7 @@ Severities, read for a project at rest:
 
 A missing first release is 🟠, not 🔴: 🔴 is reserved for breaking what already ships.
 
-The cells are the modules × Code, Architecture, Tests, Dependencies and obsolescence, Security, plus the repository × Security, Build and CI, Docs and conventions. A cell that does not apply reads `·`; one that could not be assessed reads `-` with the reason (an em dash in a report written before the punctuation rule).
+The cells are the modules × Code, Architecture, Tests, Dependencies and obsolescence, Security, plus the repository × Security, Build and CI, Docs and conventions. A cell that does not apply reads `·`; one that could not be assessed reads `?` with the reason (an em dash in a report written before the punctuation rule).
 
 **State grade.** Count the 🔴, 🟠 and 🟡 filed under each cell (a _likely_ finding counts like a confirmed one) and read the grid from E upwards; the first line that holds is the grade:
 
@@ -139,9 +139,9 @@ An item that still improves several cells counts in full in each; the total effo
 | D     | 7 to under 15 person-days |
 | E     | 15 person-days or more    |
 
-**Verdict.** Never average. **Blocked** when a cell's state is E, **Needs work** when one is C or D, **Healthy** when all are A or B (read on the assessed cells only, and marked **partial**, naming the `-` cells, when any cell is not assessed), followed by the total effort in person-days.
+**Verdict.** Never average. **Blocked** when a cell's state is E, **Needs work** when one is C or D, **Healthy** when all are A or B (read on the assessed cells only, and marked **partial**, naming the `?` cells, when any cell is not assessed), followed by the total effort in person-days.
 
-**Progress.** With a previous audit, put both grade tables side by side, then list the IDs fixed, still open, not reassessed and new. A previous finding whose cell now reads `-`, or whose module was left out of scope, is not reassessed: it keeps its ID, stays open, and is never listed as fixed. If the previous audit used another grid version, recompute its grades with Grid v1 from its findings first. If it has no grid, or its findings name no module, mark its grades not comparable and compare its findings only: fixed, still open, or corrected.
+**Progress.** With a previous audit, put both grade tables side by side, then list the IDs fixed, still open, not reassessed and new. A previous finding whose cell now reads `?`, or whose module was left out of scope, is not reassessed: it keeps its ID, stays open, and is never listed as fixed. If the previous audit used another grid version, recompute its grades with Grid v1 from its findings first. If it has no grid, or its findings name no module, mark its grades not comparable and compare its findings only: fixed, still open, or corrected.
 
 **Confirm the blockers.** If a 🔴 is still _likely_, it alone decides the verdict: before writing, offer to confirm it with the one build or run it needs (prompted) and grade with the outcome.
 
@@ -167,9 +167,9 @@ The default branch is the remote-tracking ref above without its `origin/` prefix
 
 <!-- Same shape as State; each cell reads `<person-days> (<grade>)`, such as `3.75 (C)`. -->
 
-**Verdict**: <Blocked | Needs work | Healthy><, partial (not assessed: <the `-` cells>)>, driven by <the cells that drive it>. Total effort: <N> person-days.
+**Verdict**: <Blocked | Needs work | Healthy><, partial (not assessed: <the `?` cells>)>, driven by <the cells that drive it>. Total effort: <N> person-days.
 
-**Last IDs**: <`CODE-NN`, `ARCH-NN`, …: the highest ID ever used on each axis, fixed ones included; `-` for an axis never used>.
+**Last IDs**: <`CODE-NN`, `ARCH-NN`, …: the highest ID ever used on each axis, fixed ones included; `none` for an axis never used>.
 
 ## Progress since the last audit
 
