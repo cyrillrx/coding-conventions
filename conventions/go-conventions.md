@@ -38,7 +38,7 @@ internal/
 - **Formatting**: Always run `gofmt` (enforced by `go vet` and most editors).
 - **Linting**: Use `go vet ./...` as a minimum. Consider `golangci-lint` for stricter checks.
 - **Error Handling**: Always handle errors explicitly. Use `fmt.Errorf("context: %w", err)` for wrapping.
-- **Naming**: Follow standard Go conventions — exported names are PascalCase, unexported are camelCase.
+- **Naming**: Follow standard Go conventions: exported names are PascalCase, unexported are camelCase.
 - **Comments**: Document all exported types and functions with a `//` comment starting with the identifier name.
 
 ## 4. API Design

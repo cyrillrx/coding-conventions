@@ -20,7 +20,7 @@ ViewModel public methods must reflect **behavior** (what the app does), not the 
 | ViewModel public method       | Functional verb phrase         | `openCreateCampaign`, `filterByQuery`, `silentRefresh` |
 
 ```kotlin
-// ✅ Correct — callback param name ≠ ViewModel method name
+// ✅ Correct: callback param name ≠ ViewModel method name
 fun CampaignListScreen(viewModel: CampaignListViewModel, router: CampaignRouter) {
     CampaignListScreen(
         onSearchQueryChanged = viewModel::filterByQuery,
@@ -34,7 +34,7 @@ fun CampaignListScreen(viewModel: CampaignListViewModel, router: CampaignRouter)
 
 Every ViewModel exposes a single `StateFlow<XxxState>`. The shape of `XxxState` depends on the screen type.
 
-**List / read-only screens** — use a data class with a sealed `Body` field:
+**List / read-only screens**: use a data class with a sealed `Body` field:
 
 ```kotlin
 data class SpellListState(val body: Body = Body.Loading) {
@@ -47,7 +47,7 @@ data class SpellListState(val body: Body = Body.Loading) {
 }
 ```
 
-**Edit / detail screens** — use a top-level sealed interface whose states model the data-fetch lifecycle:
+**Edit / detail screens**: use a top-level sealed interface whose states model the data-fetch lifecycle:
 
 ```kotlin
 sealed interface CharacterEditState {
@@ -57,9 +57,9 @@ sealed interface CharacterEditState {
 }
 ```
 
-- `Loading` — initial state, set synchronously before the repository call.
-- `NotFound` — set when the repository returns `null`; carries the ID for error display.
-- `Loaded` — the active, mutable state of the screen; the only state that accepts user interactions.
+- `Loading`: initial state, set synchronously before the repository call.
+- `NotFound`: set when the repository returns `null`; carries the ID for error display.
+- `Loaded`: the active, mutable state of the screen; the only state that accepts user interactions.
 
 The screen's ViewModel-taking overload uses an exhaustive `when` on the sealed state; the stateless overload takes `XxxState.Loaded` directly.
 
@@ -68,7 +68,7 @@ The screen's ViewModel-taking overload uses an exhaustive `when` on the sealed s
 Use Kotlin 2.0 explicit backing fields to expose flows with a narrower public type, avoiding a separate private backing property:
 
 ```kotlin
-// ✅ Explicit backing field — single declaration, narrowed public type
+// ✅ Explicit backing field: single declaration, narrowed public type
 val state: StateFlow<XxxState>
     field = MutableStateFlow<XxxState>(XxxState.Loading)
 
@@ -100,7 +100,7 @@ Use `StateFlow` for state that must survive recomposition; use `SharedFlow` (`ex
 
 ## Lifecycle-aware Refresh
 
-Screens that display mutable data (persisted in a repository) must refresh when the user returns to the screen via `LifecycleEventEffect(Lifecycle.Event.ON_RESUME)`. Use `silentRefresh()` — never the full load function — to avoid a flicker when data is already visible.
+Screens that display mutable data (persisted in a repository) must refresh when the user returns to the screen via `LifecycleEventEffect(Lifecycle.Event.ON_RESUME)`. Use `silentRefresh()` (never the full load function) to avoid a flicker when data is already visible.
 
 Every ViewModel with `ON_RESUME` refresh exposes two distinct operations:
 

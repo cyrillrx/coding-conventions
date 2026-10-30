@@ -6,5 +6,5 @@
 
 .idea
 
-# Claude Code worktrees — local scratch checkouts, never committed
+# Claude Code worktrees: local scratch checkouts, never committed
 .claude/worktrees/

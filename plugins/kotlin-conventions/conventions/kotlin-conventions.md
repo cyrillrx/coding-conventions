@@ -109,7 +109,7 @@ When using an acronym in a declaration name, capitalize it if it consists of two
 
 ### Naming in-memory repositories
 
-Name in-memory repository implementations after their **strategy**, not after their role as a test double — never `FakeXxxRepository` or `MockXxxRepository`.
+Name in-memory repository implementations after their **strategy**, not after their role as a test double, never `FakeXxxRepository` or `MockXxxRepository`.
 
 | Prefix   | Strategy                                 | Example                 |
 | -------- | ---------------------------------------- | ----------------------- |
@@ -122,9 +122,9 @@ These implementations belong to the **main source set** of the data layer (e.g. 
 
 ## Formatting
 
-Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct — no debates. Use the shared configuration in [`configs/.editorconfig`](https://github.com/cyrillrx/coding-conventions/blob/main/configs/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
+Formatting is **100% delegated to ktlint**. If the CI pipeline passes, the formatting is correct, no debates. Use the shared configuration in [`configs/.editorconfig`](https://github.com/cyrillrx/coding-conventions/blob/main/configs/.editorconfig); copy or symlink it into the project rather than configuring the IDE by hand.
 
-That configuration enforces the layout — indentation, the 120-column limit, whitespace, wrapping, braces, blank lines and trailing commas — so none of it is restated here: ktlint's report is the reference. The rules below are the ones it does not check.
+That configuration enforces the layout (indentation, the 120-column limit, whitespace, wrapping, braces, blank lines and trailing commas), so none of it is restated here: ktlint's report is the reference. The rules below are the ones it does not check.
 
 ### Function and expression body formatting
 
@@ -195,10 +195,10 @@ Leave a blank line after a return statement to improve readability.
 
 ### Domain tests
 
-- Use `kotlin.test` (`kotlin.test.Test`, `kotlin.test.assertEquals`, …) — no JUnit dependency needed for pure-function tests.
+- Use `kotlin.test` (`kotlin.test.Test`, `kotlin.test.assertEquals`, …): no JUnit dependency needed for pure-function tests.
 - One test file per function or class under test (e.g. `isValidWalkSpeed` → `IsValidWalkSpeedTest.kt`).
 - Method names are backtick strings describing the expected behaviour in plain English.
-- No setup, test doubles, or coroutines needed for pure functions — just call and assert.
+- No setup, test doubles, or coroutines needed for pure functions: just call and assert.
 
 ```kotlin
 class IsValidWalkSpeedTest {

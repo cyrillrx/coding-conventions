@@ -2,14 +2,14 @@
 name: triage-findings
 description: >-
   Turn code review findings into decisions: severity, impact, complexity, then one outcome per finding
-  — fix here, follow-up ticket, or no action — each with its rationale, plus the resulting action plan.
+  (fix here, follow-up ticket, or no action), each with its rationale, plus the resulting action plan.
   Reads the findings from the conversation, typically right after a code review, and the change itself
   from git; when there are none, or with --review, it runs a fresh code review first. Use when
   findings exist but no decision does, or to review then triage a change. When a reviewer is waiting
   for an answer on an open pull request, use address-review instead.
 argument-hint: "[--review] [low|medium|high]"
-# Local reads only. This skill decides; every call that changes something — creating a follow-up
-# ticket, editing a PR description, committing — keeps its permission prompt on purpose.
+# Local reads only. This skill decides; every call that changes something (creating a follow-up
+# ticket, editing a PR description, committing) keeps its permission prompt on purpose.
 # `allowed-tools` merely pre-approves, so listing them here would waive the one check that does not
 # rely on these instructions being followed.
 allowed-tools:
@@ -41,11 +41,11 @@ collaboration/issue-labels.md, in cyrillrx/coding-conventions. Keep them in sync
 
 ## Your task
 
-Produce a decision-ready action plan from code review findings. A finding without a decision is not an outcome — every single one leaves this skill with a severity, an impact, a complexity, and a recommendation backed by a rationale.
+Produce a decision-ready action plan from code review findings. A finding without a decision is not an outcome: every single one leaves this skill with a severity, an impact, a complexity, and a recommendation backed by a rationale.
 
 Follow these steps in order.
 
-### Step 1 — Collect the findings from the conversation
+### Step 1: Collect the findings from the conversation
 
 The findings are already here. This skill is normally invoked straight after a code review, so read back through the conversation and take them from it:
 
@@ -57,48 +57,48 @@ The findings are already here. This skill is normally invoked straight after a c
 If the conversation holds no findings, or `--review` is passed, **review the change first**, on a fresh context:
 
 - Resolve the base branch as Step 2 describes.
-- Launch a subagent to review `<base>...HEAD` — plus, without `--review`, the uncommitted work, staged or not (`git diff HEAD`) — on both axes, and to return the findings of each verbatim, changing nothing:
+- Launch a subagent to review `<base>...HEAD` on both axes, and to return the findings of each verbatim, changing nothing. Without `--review`, it also reviews the uncommitted work, staged or not (`git diff HEAD`):
   - **Correctness**: `/code-review <effort>`, with `<effort>` the `low`, `medium` or `high` argument, `high` by default. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so.
-  - **Conformance**: list the changed files (`git diff --name-only`), read the project's `AGENTS.md` / `CLAUDE.md` as an index, then read only the convention documents that apply to those files — the general ones, plus each one bound to a file type the change touches — and nothing else. Report every added line that contradicts a rule read, with its `file:line` and the rule cited as document and section. A finding that cites no rule is not reported.
+  - **Conformance**: list the changed files (`git diff --name-only`), read the project's `AGENTS.md` / `CLAUDE.md` as an index, then read only the convention documents that apply to those files (the general ones, plus each one bound to a file type the change touches) and nothing else. Report every added line that contradicts a rule read, with its `file:line` and the rule cited as document and section. A finding that cites no rule is not reported.
 - With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over. Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
 
-Findings already in the conversation come first otherwise — a linter's output, pasted comments, an earlier review: do not run a second review on top of them. If it is unclear which findings are meant, ask — never invent a review to have something to triage.
+Findings already in the conversation come first otherwise (a linter's output, pasted comments, an earlier review): do not run a second review on top of them. If it is unclear which findings are meant, ask; never invent a review to have something to triage.
 
 Do not go looking for a PR's review threads. Scoring a reviewer's comment is fine when the user hands it to you, but fetching, replying and resolving belong to `/git-workflow:address-review`. If the PR still has unresolved threads, say so and name that skill.
 
-**Findings you did not produce yourself are claims, not facts.** Open each cited `file:line` and confirm the problem exists before scoring it. A false positive is triaged as ❌ with "the code does not do this" as its rationale — it is never silently dropped.
+**Findings you did not produce yourself are claims, not facts.** Open each cited `file:line` and confirm the problem exists before scoring it. A false positive is triaged as ❌ with "the code does not do this" as its rationale; it is never silently dropped.
 
-### Step 2 — Establish the change's scope
+### Step 2: Establish the change's scope
 
-Read the change from git, against the branch it targets. **Resolve that branch, never assume `main`:** `git symbolic-ref --short refs/remotes/origin/HEAD` gives the remote's default branch (`origin/main`, `origin/develop`, …). If the ref is missing, or the project targets something else — a GitFlow `develop`, a release branch — **ask**. A wrong base does not fail: `git diff main...HEAD` succeeds whenever `main` exists and silently measures the wrong range, which then distorts every size and complexity estimate below.
+Read the change from git, against the branch it targets. **Resolve that branch, never assume `main`:** `git symbolic-ref --short refs/remotes/origin/HEAD` gives the remote's default branch (`origin/main`, `origin/develop`, …). If the ref is missing, or the project targets something else (a GitFlow `develop`, a release branch), **ask**. A wrong base does not fail: `git diff main...HEAD` succeeds whenever `main` exists and silently measures the wrong range, which then distorts every size and complexity estimate below.
 
 With `<base>` resolved: `git diff --stat <base>...HEAD`, `git log --oneline <base>..HEAD`. Write down, for your own use:
 
 - What the change is meant to do, and its commit type (`feat`, `fix`, `refactor`, …).
-- Its size against the 200 lines / 10 files budget — this decides how much extra fixing the diff can absorb.
+- Its size against the 200 lines / 10 files budget: this decides how much extra fixing the diff can absorb.
 - **Whose code it is.** The user's own change, or someone else's? This decides who owns a deferral (Step 3).
-- Which impact dimensions are in play: a `refactor` normally has technical impact only, and a functional impact there means the refactor is not behavior-preserving — which is itself a finding.
+- Which impact dimensions are in play: a `refactor` normally has technical impact only, and a functional impact there means the refactor is not behavior-preserving, which is itself a finding.
 
-### Step 3 — Work out who owns a deferral, and where tickets live
+### Step 3: Work out who owns a deferral, and where tickets live
 
 A deferral needs an owner and a trace, and the owner is whoever owns the code.
 
-**On the user's own change** — the deferral is theirs to carry, so a 🕐 needs a real ticket. Work out the tracker **before** producing the plan, from what is already available:
+**On the user's own change**: the deferral is theirs to carry, so a 🕐 needs a real ticket. Work out the tracker **before** producing the plan, from what is already available:
 
-- ticket keys in the branch name or the recent history — `git log --oneline -20` and `git branch --show-current`; a `PROJ-123` pattern points at an external tracker keyed that way,
+- ticket keys in the branch name or the recent history (`git log --oneline -20` and `git branch --show-current`); a `PROJ-123` pattern points at an external tracker keyed that way,
 - the project's `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md`, which usually names it.
 
-If it stays ambiguous, **ask**. Never invent a ticket destination, and do not query the forge to find one — that is not this skill's job. A 🕐 with no ticket is a deferral in name only: when the ticket is not going to be opened, plan the fix here instead, or state plainly that nothing will happen.
+If it stays ambiguous, **ask**. Never invent a ticket destination, and do not query the forge to find one; that is not this skill's job. A 🕐 with no ticket is a deferral in name only: when the ticket is not going to be opened, plan the fix here instead, or state plainly that nothing will happen.
 
-**On someone else's change** — the decision to defer is not the user's to make and the tracker is not theirs to fill. A 🕐 is *handed over*, not filed: it is raised as a scored comment for the author to decide on, and the thread is the trace. A ticket is only opened if the author asks for it. Do not plan tickets in another author's name; plan the comment instead.
+**On someone else's change**: the decision to defer is not the user's to make and the tracker is not theirs to fill. A 🕐 is *handed over*, not filed: it is raised as a scored comment for the author to decide on, and the thread is the trace. A ticket is only opened if the author asks for it. Do not plan tickets in another author's name; plan the comment instead.
 
 Either way, a 🔴 the change introduces never becomes a follow-up: it is fixed, or it blocks the merge.
 
-### Step 4 — Score every finding
+### Step 4: Score every finding
 
 Apply the four axes below to each finding, then the decision grid.
 
-**Severity** — the consequence of shipping as is, not how the code looks:
+**Severity**: the consequence of shipping as is, not how the code looks:
 
 | Level          | Meaning                                                                                          | Blocks the merge? |
 |----------------|--------------------------------------------------------------------------------------------------|-------------------|
@@ -107,9 +107,9 @@ Apply the four axes below to each finding, then the decision grid.
 | 🟡 **Minor**   | Maintainability or convention issue: naming, duplication, missing doc. No behavior change.       | No                |
 | 🔵 **Nit**     | Pure preference or cosmetics. Never blocking.                                                    | No                |
 
-Not blocking is not the same as not addressed. A finding that stands is fixed here or deferred with a trace — never dropped, because letting maintainability and conventions erode is a decision nobody meant to take. The 🔵 is the only severity that can be dismissed while still standing: for it alone, "not worth its cost" is a sufficient reason. Dismissing anything heavier means contesting the finding itself, not its priority — say so, and score it again. A false positive is not a severity followed by a ❌: invalidating a claim removes its severity.
+Not blocking is not the same as not addressed. A finding that stands is fixed here or deferred with a trace, never dropped, because letting maintainability and conventions erode is a decision nobody meant to take. The 🔵 is the only severity that can be dismissed while still standing: for it alone, "not worth its cost" is a sufficient reason. Dismissing anything heavier means contesting the finding itself, not its priority: say so, and score it again. A false positive is not a severity followed by a ❌: invalidating a claim removes its severity.
 
-**Impact** — name the dimensions the finding actually touches, plus one line on who pays:
+**Impact**: name the dimensions the finding actually touches, plus one line on who pays:
 
 | Dimension      | Borne by   | Typical symptoms                                                              |
 |----------------|------------|-------------------------------------------------------------------------------|
@@ -117,7 +117,7 @@ Not blocking is not the same as not addressed. A finding that stands is fixed he
 | **Technical**  | Developers | Maintainability, readability, testability, coupling, debt, build and CI time  |
 | **Both**       | Everyone   | A design flaw already visible in behavior today                               |
 
-**Complexity** — two estimates, and one rating that carries them:
+**Complexity**: two estimates, and one rating that carries them:
 
 | Size  | Estimated effort | Estimated diff                                                    |
 |-------|------------------|-------------------------------------------------------------------|
@@ -125,9 +125,9 @@ Not blocking is not the same as not addressed. A finding that stands is fixed he
 | **M** | Hours            | Tens of lines, or one or two files added                          |
 | **L** | A day or more    | Beyond what the change can absorb: many files, a new area, an ADR |
 
-Both estimates cover the test and the verification, not just the edit. When they disagree — a one-line fix sitting behind a day of investigation, a mechanical rename that adds 300 lines in ten minutes — **take the higher of the two as the rating**. The diff says whether the finding fits in this change at all, against the remaining 200 lines / 10 files budget; the effort says whether a deferral is a ticket someone picks up or a PR of its own.
+Both estimates cover the test and the verification, not just the edit. When they disagree (a one-line fix sitting behind a day of investigation, a mechanical rename that adds 300 lines in ten minutes), **take the higher of the two as the rating**. The diff says whether the finding fits in this change at all, against the remaining 200 lines / 10 files budget; the effort says whether a deferral is a ticket someone picks up or a PR of its own.
 
-**Recommendation** — exactly three outcomes:
+**Recommendation**: exactly three outcomes:
 
 | Outcome          | What it commits us to                                                                               |
 |------------------|-----------------------------------------------------------------------------------------------------|
@@ -135,7 +135,7 @@ Both estimates cover the test and the verification, not just the edit. When they
 | 🕐 **Follow-up** | Deferred, with an owner and a trace (Step 3). Never a verbal "later".                               |
 | ❌ **No action** | Nothing happens, on purpose. The rationale states why.                                              |
 
-❌ is deliberately weak: it spans "this is wrong" through "correct, but not worth its cost", and most of the time it is simply a finding we skip. It is not a verdict on the code and not a refusal — the default reading is "we looked, we decided, we moved on". These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told.
+❌ is deliberately weak: it spans "this is wrong" through "correct, but not worth its cost", and most of the time it is simply a finding we skip. It is not a verdict on the code and not a refusal; the default reading is "we looked, we decided, we moved on". These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told.
 
 **Default decision grid:**
 
@@ -146,57 +146,57 @@ Both estimates cover the test and the verification, not just the edit. When they
 | 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)    | 🕐 Follow-up  | 🕐 Follow-up                                            |
 | 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
 
-The grid and the overrides cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale — the four axes apply, and the judgement belongs to whoever owns the code. This is a shared default, not an exhaustive rulebook.
+The grid and the overrides cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale: the four axes apply, and the judgement belongs to whoever owns the code. This is a shared default, not an exhaustive rulebook.
 
 Overrides, which win over the grid:
 
-- **Out of the change's scope** → 🕐 when it stands, ❌ when it is not worth a trace. The one exception is a 🏕 cleanup — a couple of lines with no behavior change, in a file the change already touches — which may be ✅, in its own commit. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth.
+- **Out of the change's scope** → 🕐 when it stands, ❌ when it is not worth a trace. The one exception is a 🏕 cleanup (a couple of lines with no behavior change, in a file the change already touches), which may be ✅, in its own commit. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth.
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
-- **Wrong — the code already handles it, or does not do what it claims — or speculative** → ❌.
+- **Wrong (the code already handles it, or does not do what it claims) or speculative** → ❌.
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
 - **A preference the user cannot justify to themselves** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score the answer. Reviewers owe a justification; that duty is not a licence to dismiss them when they forget it.
 
-When the emoji conventions are in use, read them as **intent only** — what the reviewer expects. A 🔧 can be factually wrong (→ ❌), a 💭 can uncover a real crash (→ 🔴 ✅), and a comment with no emoji is scored exactly the same way. The emoji never sets severity and never sets the outcome.
+When the emoji conventions are in use, read them as **intent only**: what the reviewer expects. A 🔧 can be factually wrong (→ ❌), a 💭 can uncover a real crash (→ 🔴 ✅), and a comment with no emoji is scored exactly the same way. The emoji never sets severity and never sets the outcome.
 
-### Step 5 — Present the plan, then stop
+### Step 5: Present the plan, then stop
 
 Output these three parts, and **change nothing in this step**.
 
-**1. Summary table** — one row per finding, none omitted, ordered by severity then complexity:
+**1. Summary table** (one row per finding, none omitted, ordered by severity then complexity):
 
-| #   | Finding                                   | Severity | Impact                 | Complexity | Recommendation |
-|-----|-------------------------------------------|----------|------------------------|------------|----------------|
-| 1   | `SpellRepository.kt:42` — unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
+| #   | Finding                                  | Severity | Impact                 | Complexity | Recommendation |
+|-----|------------------------------------------|----------|------------------------|------------|----------------|
+| 1   | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
 
 **2. Detail block per finding**, carrying the rationale of the decision:
 
 ```markdown
-### 1. `SpellRepository.kt:42` — unbounded cache growth
+### 1. `SpellRepository.kt:42`: unbounded cache growth
 
-- **Severity**: 🟠 Major — the map never evicts, so a long session ends in an OOM
-- **Impact**: functional + technical — users hit a crash; the cache is also untestable as written
-- **Complexity**: M — hours for the eviction policy and its test, tens of lines across the two files the change already touches
-- **Recommendation**: ✅ Fix here — cap the map at 100 entries with an LRU eviction
+- **Severity**: 🟠 Major. The map never evicts, so a long session ends in an OOM
+- **Impact**: functional + technical. Users hit a crash; the cache is also untestable as written
+- **Complexity**: M. Hours for the eviction policy and its test, tens of lines across the two files the change already touches
+- **Recommendation**: ✅ Fix here. Cap the map at 100 entries with an LRU eviction
 - **Rationale**: introduced by this change, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 
-The rationale explains the **trade-off** — why the other two outcomes were rejected — not the finding again.
+The rationale explains the **trade-off** (why the other two outcomes were rejected), not the finding again.
 
 **3. Action plan**, grouped by outcome:
 
-- **✅ To fix here** — the ordered list of edits, with the files each one touches.
-- **🕐 To defer** — on the user's own change: for each, the ticket ready to submit (title, body with context, `file:line`, why it is deferred, link to the PR; on a GitHub tracker, its three labels — `severity:*`, `impact:*`, `complexity:*` — from the scores above) and the tracker it goes to — or, when an open ticket already tracks it, that ticket's number. On someone else's change: the scored comment to leave, and the note that the ticket is the author's call.
-- **❌ No action** — one line each with its reason.
+- **✅ To fix here**: the ordered list of edits, with the files each one touches.
+- **🕐 To defer**: on the user's own change, for each, the ticket ready to submit (title, body with context, `file:line`, why it is deferred, link to the PR) and the tracker it goes to, or the number of the open ticket that already tracks it. On a GitHub tracker, the ticket also carries its three labels from the scores above: `severity:*`, `impact:*` and `complexity:*`. On someone else's change: the scored comment to leave, and the note that the ticket is the author's call.
+- **❌ No action**: one line each with its reason.
 
-End your turn with a question such as "Shall I apply this plan?". Wait for the user to approve, adjust, or override — the recommendations are proposals, and the person who owns the code decides.
+End your turn with a question such as "Shall I apply this plan?". Wait for the user to approve, adjust, or override: the recommendations are proposals, and the person who owns the code decides.
 
-### Step 6 — Execute after approval
+### Step 6: Execute after approval
 
 Once approved, in this order:
 
 1. **Apply the ✅ fixes.** Verify the project still builds and tests still pass where a command exists.
-2. **Open the new 🕐 tickets** — a 🕐 pointing at an open ticket opens nothing. Only for the user's own change, only in the tracker identified at Step 3, and only after showing the final title and body. This skill holds no forge permissions by design, so `gh issue create` — or whatever the project's tracker needs — is prompted every time. That prompt is the feature, not the friction. **Never open a ticket in another author's name.** On GitHub, pass the three labels with `--label`; check first with `gh label list` that the repository defines them, and create any that is missing — the set and its colours are in [Issue Labels](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/issue-labels.md#4-setting-up-a-repository). Both calls are prompted too.
-3. **Reference the follow-ups in the PR description** — append or update the `## 🔁 Follow-ups` section (the heading the PR template ships; match it exactly rather than adding a second one):
+2. **Open the new 🕐 tickets**: a 🕐 pointing at an open ticket opens nothing. Only for the user's own change, only in the tracker identified at Step 3, and only after showing the final title and body. This skill holds no forge permissions by design, so `gh issue create` (or whatever the project's tracker needs) is prompted every time. That prompt is the feature, not the friction. **Never open a ticket in another author's name.** On GitHub, pass the three labels with `--label`; check first with `gh label list` that the repository defines them, and create any that is missing; the set and its colours are in [Issue Labels](https://github.com/cyrillrx/coding-conventions/blob/main/collaboration/issue-labels.md#4-setting-up-a-repository). Both calls are prompted too.
+3. **Reference the follow-ups in the PR description**: append or update the `## 🔁 Follow-ups` section (the heading the PR template ships; match it exactly rather than adding a second one):
 
    ```markdown
    ## 🔁 Follow-ups
@@ -205,19 +205,19 @@ Once approved, in this order:
    - PROJ-318: 🟡 extract the pagination logic shared with `SpellListScreen`
    ```
 
-   Read the current body first, splice the section in, and write it back — never overwrite a description you have not read. Like the ticket creation, this call is prompted.
+   Read the current body first, splice the section in, and write it back; never overwrite a description you have not read. Like the ticket creation, this call is prompted.
 
 4. **Anchor deferred findings in the code** when they belong to a specific place: a `TODO(#142):` naming the ticket.
 
-### Step 7 — Commit only on explicit approval
+### Step 7: Commit only on explicit approval
 
-**Never run `git add`, `git commit`, or `git push` without explicit user approval** — they are absent from `allowed-tools` for that reason. Summarise what changed, then ask:
+**Never run `git add`, `git commit`, or `git push` without explicit user approval**; they are absent from `allowed-tools` for that reason. Summarise what changed, then ask:
 
 > "May I commit and push these changes? Branch: `<branch>`, suggested commit message: `<conventional-commit-message>`"
 
-The commit message follows Conventional Commits and carries **no AI attribution** — no `Co-Authored-By` for AI assistants, no `🤖 Generated with` footer. If the project provides a `/commit` skill, use it to split the fixes into atomic commits.
+The commit message follows Conventional Commits and carries **no AI attribution**: no `Co-Authored-By` for AI assistants, no `🤖 Generated with` footer. If the project provides a `/commit` skill, use it to split the fixes into atomic commits.
 
-The one exception is a round run by `/git-workflow:review-loop`: invoking that skill is the approval for its local commits, and it pushes once, at the end. Follow its steps instead of this one — and instead of Step 5's closing question: the loop's Step 3 decides when a round waits for the author.
+The one exception is a round run by `/git-workflow:review-loop`: invoking that skill is the approval for its local commits, and it pushes once, at the end. Follow its steps instead of this one, and instead of Step 5's closing question: the loop's Step 3 decides when a round waits for the author.
 
 ## Rules
 
@@ -225,5 +225,5 @@ The one exception is a round run by `/git-workflow:review-loop`: invoking that s
 - Nothing is silently dropped: a finding we skip appears in the table as ❌ with its reason.
 - Severity is about consequences, not taste.
 - A deferral is owned by whoever owns the code. Never file a ticket in someone else's name unasked.
-- Never widen the diff beyond what the change is about — that is what 🕐 is for.
+- Never widen the diff beyond what the change is about; that is what 🕐 is for.
 - The plan comes before any change, always.

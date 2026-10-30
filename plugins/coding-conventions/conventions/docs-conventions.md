@@ -3,7 +3,7 @@
 ## File naming
 
 - All documentation files use `lowercase-with-hyphens.md`.
-- Exception: a file whose name is imposed by tooling keeps it as is — `README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, `.github/pull_request_template.md`. GitHub and Claude Code find them by exact name, so renaming one to fit the rule stops it from being found at all.
+- Exception: a file whose name is imposed by tooling keeps it as is: `README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, `.github/pull_request_template.md`. GitHub and Claude Code find them by exact name, so renaming one to fit the rule stops it from being found at all.
 - Structured documents keep their lowercase prefix: `prd-000-vision.md`, `adr-001-data-model.md`.
 
 ## Structured documents
@@ -28,9 +28,16 @@ Two document types recur across projects and have a shared skeleton to start fro
 
 ## Line wrapping
 
-- Do not hard-wrap prose. One line per paragraph, per bullet, per table row — rendering and editing both soft-wrap.
+- Do not hard-wrap prose. One line per paragraph, per bullet, per table row. Rendering and editing both soft-wrap.
 - A hard wrap turns a one-word edit into a reflowed paragraph: the diff shows several changed lines instead of one, and review comments anchor to lines the change never touched.
 - Column limits belong to code, not to prose. Inside fenced code blocks, follow the language's own convention (120 columns for Kotlin, the `rustfmt` and `gofmt` defaults).
+
+## Punctuation
+
+- Do not write an em dash (`—`, U+2014). Each of its uses has a more precise mark: a colon before an explanation or a list, a comma for a short pause, parentheses for an aside, or a second sentence.
+- A heading follows the same rule: `### Step 1: Settle the mode`.
+- The rule covers every text a project writes, not only its Markdown: code comments, commit messages, pull request descriptions and issues.
+- An en dash (`–`) does not stand in for an em dash. It keeps its own use, a range such as `A–E`.
 
 ## Markdown tables
 

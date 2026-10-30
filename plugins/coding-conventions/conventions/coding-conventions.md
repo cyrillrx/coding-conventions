@@ -29,9 +29,9 @@ These rules apply across all technologies (Kotlin, Rust, Go, etc.).
 
 ## 4. Comments
 
-- **A comment is an admission of failure**: It means the code could not express its intent on its own. The default is *no comment* — refactor names and structure until the code speaks for itself. Reach for a comment only when the code genuinely cannot carry the meaning.
+- **A comment is an admission of failure**: It means the code could not express its intent on its own. The default is *no comment*: refactor names and structure until the code speaks for itself. Reach for a comment only when the code genuinely cannot carry the meaning.
 - **Prefer code over comments**: Code tells the truth; comments drift and lie. Make the code self-explanatory instead of describing it.
-- **When a comment earns its place, explain "Why", not "What"**: Capture business rules, non-obvious context, or unavoidable hacks — never a restatement of what the code does. Not every "why" needs stating: if the rationale doesn't matter, omit it.
+- **When a comment earns its place, explain "Why", not "What"**: Capture business rules, non-obvious context, or unavoidable hacks, never a restatement of what the code does. Not every "why" needs stating: if the rationale doesn't matter, omit it.
 - **A "why" recorded elsewhere is not repeated**: When a spec (PRD, ADR) or a test name already states the rule, a comment duplicates it and drifts first.
 - **Show a magic number's derivation in code**: Build it from named constants (`(MAX_FILE_NAME_BYTES - MAX_SUFFIX_BYTES) / MAX_UTF8_BYTES_PER_UTF16_UNIT`) rather than explaining a bare `74` in a comment.
 - **Never describe behavior located elsewhere**: Don't reference how or where a symbol is used in other files; such comments rot the moment that code changes. Delete a stale comment rather than maintain it.

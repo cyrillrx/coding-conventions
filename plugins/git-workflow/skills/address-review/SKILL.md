@@ -32,11 +32,11 @@ Keep them in sync with /sync-plugins.
 
 Follow these steps in order.
 
-### Step 1 — Identify the PR
+### Step 1: Identify the PR
 
 If `$ARGUMENTS` is empty, run `gh pr list` and ask the user which PR to fix. Otherwise use `$ARGUMENTS` as the PR number.
 
-### Step 2 — Fetch open review threads
+### Step 2: Fetch open review threads
 
 Determine `<OWNER>` and `<REPO>` dynamically:
 
@@ -69,7 +69,7 @@ Filter for `isResolved: false` threads. If there are none, inform the user and s
 
 > The query caps at 100 threads and 10 comments per thread. This covers normal PRs; the first comment (needed for `in_reply_to`) is always present. If a thread count of exactly 100 is returned, warn the user that older threads may be truncated rather than silently treating the batch as complete.
 
-### Step 3 — Propose a response per comment
+### Step 3: Propose a response per comment
 
 For each unresolved thread, read the file at `path` around the relevant `line`, then present one row per thread, none omitted:
 
@@ -78,25 +78,25 @@ For each unresolved thread, read the file at `path` around the relevant `line`, 
 | 1   | `path:line` | one-line summary | ✅ Apply / 🕐 Defer / ⚠️ Discuss / ❌ Skip / 💬 Answer | why this response |
 
 **Response criteria:**
-- ✅ **Apply** — the comment stands: valid, clear, and consistent with the project's conventions.
-- 🕐 **Defer** — the comment stands, but is out of scope or too costly for this PR, or an open ticket already tracks it. It is not applied here; it needs an owner and a trace.
-- ⚠️ **Discuss** — it needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason.
-- ❌ **Skip** — it is wrong — the code already handles it, or does not do what it claims — or out of scope and not worth a trace.
-- 💬 **Answer** — it needs no code change: a note, a compliment, or a question that an answer settles.
+- ✅ **Apply**: the comment stands: valid, clear, and consistent with the project's conventions.
+- 🕐 **Defer**: the comment stands, but is out of scope or too costly for this PR, or an open ticket already tracks it. It is not applied here; it needs an owner and a trace.
+- ⚠️ **Discuss**: it needs a design decision, is ambiguous, contradicts a convention, or arrives with no stated reason.
+- ❌ **Skip**: it is wrong (the code already handles it, or does not do what it claims) or out of scope and not worth a trace.
+- 💬 **Answer**: it needs no code change: a note, a compliment, or a question that an answer settles.
 
-A valid comment out of the PR's scope is 🕐 **Defer**. The exception is a 🏕 cleanup — a couple of lines with no behavior change, in a file the PR already touches — which can be ✅ **Apply**, in its own commit.
+A valid comment out of the PR's scope is 🕐 **Defer**. The exception is a 🏕 cleanup (a couple of lines with no behavior change, in a file the PR already touches), which can be ✅ **Apply**, in its own commit.
 
-A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link — a team convention, a precedent already in the codebase, or a stated line of reasoning all count. The emoji the reviewer used never sets the response. When in doubt, consult the project's conventions (`CLAUDE.md` / `AGENTS.md` and any linked convention docs).
+A request whose reason is missing is ⚠️ **Discuss**, never ❌ **Skip**: ask for the reason, then decide on the answer. A reason need not be a link: a team convention, a precedent already in the codebase, or a stated line of reasoning all count. The emoji the reviewer used never sets the response. When in doubt, consult the project's conventions (`CLAUDE.md` / `AGENTS.md` and any linked convention docs).
 
-A 🕐 is never reported as applied. The deferral needs an owner and a trace — on the author's own PR, a ticket in the project's tracker referenced under the `## 🔁 Follow-ups` section of the description. Run `/git-workflow:triage-findings` when the full severity / impact / complexity scoring is needed to decide between ✅ and 🕐.
+A 🕐 is never reported as applied. The deferral needs an owner and a trace: on the author's own PR, a ticket in the project's tracker referenced under the `## 🔁 Follow-ups` section of the description. Run `/git-workflow:triage-findings` when the full severity / impact / complexity scoring is needed to decide between ✅ and 🕐.
 
 **Do not invent severity, impact, or complexity levels here.** This skill decides what to say to the reviewer; `triage-findings` decides what the codebase does about it. Restating its scales from memory is how the two drift apart.
 
-The two are also split by what they touch: this skill works **through the GitHub API** — it reads the threads and writes the replies and resolutions. If nobody is waiting for an answer, nothing here applies.
+The two are also split by what they touch: this skill works **through the GitHub API**: it reads the threads and writes the replies and resolutions. If nobody is waiting for an answer, nothing here applies.
 
 Wait for the user to confirm, adjust, or override each response before proceeding.
 
-### Step 4 — Apply fixes and reply to all threads
+### Step 4: Apply fixes and reply to all threads
 
 For each thread, apply the response and post a reply via the REST API. `gh api` is deliberately absent from `allowed-tools`: each reply and each resolution leaves the machine, so each one goes through a permission prompt.
 
@@ -107,7 +107,7 @@ gh api repos/<OWNER>/<REPO>/pulls/<PR_NUMBER>/comments \
   -X POST -f body="<reply>" -F in_reply_to=<COMMENT_DATABASE_ID>
 ```
 
-> Do **not** use `POST /pulls/comments/{id}/replies` — it returns 404 for comments created by bots (Gemini, CodeRabbit, etc.) and is unreliable in general.
+> Do **not** use `POST /pulls/comments/{id}/replies`: it returns 404 for comments created by bots (Gemini, CodeRabbit, etc.) and is unreliable in general.
 
 The `reviewThreads` query in Step 2 only surfaces inline review threads, so the reply above covers every thread you triaged. Only if the user explicitly asks you to respond to a **general** PR comment (one with no associated file/line, which never appears in `reviewThreads`) use the issue-comments endpoint instead:
 
@@ -118,15 +118,15 @@ gh api repos/<OWNER>/<REPO>/issues/<PR_NUMBER>/comments -X POST -f body="<reply>
 Every thread gets a reply, the declined ones included.
 
 **Reply tone per response:**
-- ✅ **Apply**: briefly confirm what changed (e.g. "Fixed — renamed `X` to `Y`.").
-- 🕐 **Defer**: agree, say it is not done here, and name the trace (e.g. "Agreed, but out of this PR's scope — tracked in #142."). Never phrase it as fixed.
+- ✅ **Apply**: briefly confirm what changed (e.g. "Fixed: renamed `X` to `Y`.").
+- 🕐 **Defer**: agree, say it is not done here, and name the trace (e.g. "Agreed, but out of this PR's scope; tracked in #142."). Never phrase it as fixed.
 - ⚠️ **Discuss**: ask for the missing decision, clarification, or reason.
 - ❌ **Skip**: explain concisely why the comment is declined, citing the conventions or sources that apply.
 - 💬 **Answer**: answer the question, or acknowledge the note.
 
-Do not touch code for 🕐, ⚠️, ❌ or 💬 threads — at most, a 🕐 leaves a `TODO(#142):` naming its ticket.
+Do not touch code for 🕐, ⚠️, ❌ or 💬 threads; at most, a 🕐 leaves a `TODO(#142):` naming its ticket.
 
-### Step 5 — Ask for git permission
+### Step 5: Ask for git permission
 
 **Do NOT run any git commit, push, or rebase commands without explicit user approval.** `git add`, `git commit`, and `git push` are intentionally absent from `allowed-tools` so each git operation requires explicit confirmation.
 
@@ -135,13 +135,13 @@ Summarise the fixes made (files changed, what was fixed), then ask:
 
 The commit message must follow Conventional Commits and carry **no AI attribution**. Wait for approval before proceeding.
 
-### Step 6 — Commit, push, and resolve threads
+### Step 6: Commit, push, and resolve threads
 
 Once the user approves:
 
 1. Stage and commit the changes using the approved message.
 2. Push to the current branch.
-3. Resolve only what was addressed or acknowledged — the ✅ threads, and the 💬 threads that ask nothing back — via GraphQL. A 🕐 thread stays open: the thread is the trace of the deferral, and resolving it hides the decision.
+3. Resolve only what was addressed or acknowledged (the ✅ threads, and the 💬 threads that ask nothing back) via GraphQL. A 🕐 thread stays open: the thread is the trace of the deferral, and resolving it hides the decision.
 
 ```bash
 gh api graphql -f query='
@@ -152,8 +152,8 @@ mutation($threadId:ID!) {
 
 ⚠️, ❌ and answered-question 💬 threads are left open for the reviewer to follow up.
 
-### Step 7 — Re-run review (if available)
+### Step 7: Re-run review (if available)
 
-If the project provides a `/review` skill or command, suggest running `/clear` first (to start a fresh context — review reads the full diff and all touched files), then invoke `/review <PR_NUMBER>`. Do **not** run `/clear` yourself. If no review skill exists, skip this step.
+If the project provides a `/review` skill or command, suggest running `/clear` first (to start a fresh context: review reads the full diff and all touched files), then invoke `/review <PR_NUMBER>`. Do **not** run `/clear` yourself. If no review skill exists, skip this step.
 
 To repeat review, triage and fix until a review leaves nothing to fix, suggest `/git-workflow:review-loop` instead: it runs each review on a fresh context, so no `/clear` is needed between rounds.

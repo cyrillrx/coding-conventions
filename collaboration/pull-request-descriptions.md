@@ -21,7 +21,7 @@ A description drifts in two directions, and only one of them is obvious.
 | Description → diff   | Does every claim still hold?    | A sentence describing code that was since rewritten or reverted  |
 | Diff → description   | Does every change have a claim? | A commit landed and nothing in the prose mentions it             |
 
-The second is the one that gets missed. Group the changed files, and account for each group: it is either described, or deliberately left unmentioned because it is noise (a formatting pass, a generated file). Silence by oversight and silence by choice look identical in the final text — only the check tells them apart.
+The second is the one that gets missed. Group the changed files, and account for each group: it is either described, or deliberately left unmentioned because it is noise (a formatting pass, a generated file). Silence by oversight and silence by choice look identical in the final text: only the check tells them apart.
 
 A long-lived branch drifts a third way, and neither direction above catches it: **the base moved**. A merge into the base can change the template, the section list or the rules a description is written against, leaving a text that is accurate about its diff and wrong about the convention. Re-read §7 and the project's template on any refresh that follows a merge into the base, not just the description.
 
@@ -29,27 +29,27 @@ A long-lived branch drifts a third way, and neither direction above catches it: 
 
 The template says to delete the sections that do not apply. The harder case is the section that **stopped** applying.
 
-A section written to explain a problem — a failing quality gate, a known regression, a temporary workaround — must be removed once the problem is gone, not left as a historical note. It was addressed to reviewers of a state that no longer exists.
+A section written to explain a problem (a failing quality gate, a known regression, a temporary workaround) must be removed once the problem is gone, not left as a historical note. It was addressed to reviewers of a state that no longer exists.
 
 Re-examine, on every refresh:
 
-- **📝 Description** — still the problem, then what changes, about three short sentences' worth. A refresh adds claims; it must not let the section grow into the reviewer guidance and the reasoning history that §7 sends elsewhere.
-- **🔍 Review notes** — where to start, what is mechanical, what deserves attention. Guidance for a state the branch has left is worse than none: a "start with the parser" that no longer exists sends the reviewer looking for it.
-- **🔁 Follow-ups** — every issue cited must exist and still be open. A deferral that was finally fixed in the PR leaves this list; a new one decided during review joins it. See [Code Review Triage](code-review-triage.md) for what earns a follow-up rather than a fix.
-- **🤔 Considered and not addressed** — a suggestion that was eventually applied no longer belongs here.
-- **🖼️ Media** — a screenshot of a screen the branch has since changed is worse than no screenshot.
-- **✅ Checklist** — tick only what the diff proves, and annotate what cannot apply as `(N/A, <reason>)`. "CI is green" is a fact to verify, not a hope. "The author has proofread the PR" is the author's to tick, and nobody else's.
-- **`Closes #N`** — the last lines, after the checklist. An issue the branch stopped closing must lose its line, or merging silently closes work that is still open.
+- **📝 Description**: still the problem, then what changes, about three short sentences' worth. A refresh adds claims; it must not let the section grow into the reviewer guidance and the reasoning history that §7 sends elsewhere.
+- **🔍 Review notes**: where to start, what is mechanical, what deserves attention. Guidance for a state the branch has left is worse than none: a "start with the parser" that no longer exists sends the reviewer looking for it.
+- **🔁 Follow-ups**: every issue cited must exist and still be open. A deferral that was finally fixed in the PR leaves this list; a new one decided during review joins it. See [Code Review Triage](code-review-triage.md) for what earns a follow-up rather than a fix.
+- **🤔 Considered and not addressed**: a suggestion that was eventually applied no longer belongs here.
+- **🖼️ Media**: a screenshot of a screen the branch has since changed is worse than no screenshot.
+- **✅ Checklist**: tick only what the diff proves, and annotate what cannot apply as `(N/A, <reason>)`. "CI is green" is a fact to verify, not a hope. "The author has proofread the PR" is the author's to tick, and nobody else's.
+- **`Closes #N`**: the last lines, after the checklist. An issue the branch stopped closing must lose its line, or merging silently closes work that is still open.
 
 ## 4. The Description section is a commit body
 
-Because the squash makes it one — that section alone, per §7. Everything below it serves the review and dies with the PR, which is what makes the Description the only part a refresh must weigh against the permanent history.
+Because the squash makes it one: that section alone, per §7. Everything below it serves the review and dies with the PR, which is what makes the Description the only part a refresh must weigh against the permanent history.
 
 - The problem, then what the PR changes, about three short sentences' worth, per §7. A refresh is where this budget is lost: each new commit invites one more bullet, and nothing pushes back.
-- Lay it out for a quick read: the problem in a sentence or two, a blank line, then the changes — as short bullets when several are listed, in a sentence or two otherwise. One idea per sentence or bullet: a sentence that chains clauses or lists things in parentheses reads better split. This is about readability, not a format to apply mechanically.
+- Lay it out for a quick read: the problem in a sentence or two, a blank line, then the changes, as short bullets when several are listed, in a sentence or two otherwise. One idea per sentence or bullet: a sentence that chains clauses or lists things in parentheses reads better split. This is about readability, not a format to apply mechanically.
 - Lead with the *why*. The diff already shows the what: do not restate the diff, the commit list or the file list.
 - Order the changes as a reader needs them, never in commit order. Commit order is an artifact of how the work happened; nobody reading the merged history cares.
-- English, like the commit it becomes. One line per paragraph and per bullet, per the [documentation conventions](../conventions/docs-conventions.md) — the forge soft-wraps, and a hard wrap turns a one-word edit into a reflowed block.
+- English, like the commit it becomes. One line per paragraph and per bullet, per the [documentation conventions](../conventions/docs-conventions.md): the forge soft-wraps, and a hard wrap turns a one-word edit into a reflowed block. No em dash (`—`) either, per the same conventions.
 - What no longer fits has a destination, not a deletion: reviewer guidance to **Review notes**, the investigation to the linked issue, an architecture decision to an [ADR](git-and-collaboration.md#9-architecture-decision-records-adrs).
 
 ## 5. The title follows the diff too

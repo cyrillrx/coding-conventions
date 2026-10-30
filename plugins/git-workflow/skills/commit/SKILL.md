@@ -27,14 +27,14 @@ in cyrillrx/coding-conventions. Keep them in sync with /sync-plugins.
 
 ## Your task
 
-**Step 1 — Plan only. No git commands yet.**
+**Step 1: Plan only. No git commands yet.**
 Analyse the diff and produce an explicit commit plan: a numbered list where each entry shows the commit message and the exact files it covers. Split as finely as possible (see grouping strategy below).
 
-Output the plan, then end your turn with a confirmation question such as "Does this plan look good?". **Do not run any `git add` or `git commit` command in this step.** Your response must contain only the plan and the question — no tool calls that modify the repo.
+Output the plan, then end your turn with a confirmation question such as "Does this plan look good?". **Do not run any `git add` or `git commit` command in this step.** Your response must contain only the plan and the question: no tool calls that modify the repo.
 
-With `--auto`, the approval was given before the call — by a skill that runs this one, such as `/git-workflow:review-loop`. Output the plan, then go straight to Step 2 without asking.
+With `--auto`, the approval was given before the call, by a skill that runs this one, such as `/git-workflow:review-loop`. Output the plan, then go straight to Step 2 without asking.
 
-**Step 2 — Execute after approval.**
+**Step 2: Execute after approval.**
 Only once the user has explicitly approved the plan (e.g. "yes", "go ahead", "ok"), execute each commit in the listed order without asking for confirmation again. Stage only the files for each commit, commit, then move to the next. The project must compile after each individual commit.
 
 ## Conventional Commits format
@@ -47,8 +47,9 @@ Only once the user has explicitly approved the plan (e.g. "yes", "go ahead", "ok
 - **Scope**: the component or area affected (feature or layer name). Optional but encouraged; keep it short and consistent.
 - **Body** (optional): explain the *why*, not the *what*. Wrap at a readable width.
 - **English only**.
+- **No em dash** (`—`): a colon, a comma, parentheses or a second sentence instead.
 
-### Authorship — no AI attribution
+### Authorship: no AI attribution
 
 Commits are owned by their human author. **Never** add `Co-Authored-By` trailers for AI assistants, `🤖 Generated with` footers, or any "assisted by" mention.
 
@@ -68,18 +69,18 @@ Commits are owned by their human author. **Never** add `Co-Authored-By` trailers
 | `chore`    | Miscellaneous maintenance                                              |
 | `ci`       | CI/CD pipeline changes                                                 |
 
-## Grouping strategy — split as finely as possible
+## Grouping strategy: split as finely as possible
 
 Group files by **layer** and by **feature**. One layer + one feature = one commit. Never mix a refactor with a feature, or business logic with resources.
 
 Suggested order (each is a separate commit when it has changes):
 
-1. `build(...)` — build scripts, dependency catalogs, schema/migration files
-2. `feat`/`refactor(<feature>)` — domain layer: entities, value types, repository interfaces
-3. `feat`/`refactor(<feature>)` — data layer: repository implementations, persistence
-4. `feat`/`refactor(<feature>)` — navigation / routing
-5. `feat`/`ui(<feature>)` — screens, composables, string resources
-6. `feat`/`refactor(<feature>)` — top-level wiring
+1. `build(...)`: build scripts, dependency catalogs, schema/migration files
+2. `feat`/`refactor(<feature>)`: domain layer (entities, value types, repository interfaces)
+3. `feat`/`refactor(<feature>)`: data layer (repository implementations, persistence)
+4. `feat`/`refactor(<feature>)`: navigation / routing
+5. `feat`/`ui(<feature>)`: screens, composables, string resources
+6. `feat`/`refactor(<feature>)`: top-level wiring
 
 If multiple independent features change in the same layer, split further: one commit per feature per layer.
 

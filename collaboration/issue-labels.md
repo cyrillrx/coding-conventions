@@ -2,11 +2,11 @@
 
 A backlog is only worth ordering if every ticket is scored the same way. This document puts the scores of [Code Review Triage](code-review-triage.md) on the ticket itself, as labels, so an open issue can be filtered and ordered without being reopened and read.
 
-It applies to every ticket in a GitHub tracker: a 🕐 follow-up carries the scores its triage already gave it, and a ticket born anywhere else — a bug report, a feature request, an idea — is scored on the same scales when it is filed.
+It applies to every ticket in a GitHub tracker: a 🕐 follow-up carries the scores its triage already gave it, and a ticket born anywhere else (a bug report, a feature request, an idea) is scored on the same scales when it is filed.
 
 ## 1. Three families, one label each
 
-A ticket carries exactly one label of each family. The scales are those of [Code Review Triage](code-review-triage.md) §2 to §4, which own the definitions — they are not restated here.
+A ticket carries exactly one label of each family. The scales are those of [Code Review Triage](code-review-triage.md) §2 to §4, which own the definitions; they are not restated here.
 
 | Family       | Labels                                                                 | Scale                                                       |
 |--------------|------------------------------------------------------------------------|-------------------------------------------------------------|
