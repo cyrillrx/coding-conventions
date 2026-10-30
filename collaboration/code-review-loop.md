@@ -24,7 +24,7 @@ Round 0 does not count toward the round cap.
 2. **A triage** of every finding, per [Code Review Triage](code-review-triage.md). The author approves the round's plan as one batch, and that approval also runs the next round, unless the author makes this one the last. When the author chooses to, the grid's recommendations stand without approval, and the round stops only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or contested, a ✅ fix that is structural. A fix is structural when its complexity is L or its diff would break the pull request's budget: it is flagged at triage, with the option to defer it — except a 🔴, whose minimal fix stays here — because the rounds that follow will spend themselves on what it reshapes.
 3. **The ✅ fixes are applied**, the build and the tests pass, and the round is committed — one commit per logical unit, per [Git & Collaboration](git-and-collaboration.md). A round never commits a red build: it fixes the build or stops.
 4. **The 🕐 follow-ups are collected**, not filed. The new ones are opened together when the loop closes, so the author approves them once; a 🕐 pointing at an open ticket only cites it.
-5. **The loop goes on unless the author stops it.** Once a round has committed its fixes, a one-line summary gives the trend so far — fixes and their severities, round after round — and the next round starts without a second question: approving the round's plan already chose it. Further rounds are not always worth their cost, and only the author can say so: they say it with that approval, by making the round the last. When the grid decides the triage alone, choosing that mode was the approval. When the trend turns — fixes rising two rounds in a row, or a round fixing code an earlier round fixed — the loop pauses: the diagnosis of [§4](#when-the-loop-does-not-converge) comes with the summary, without waiting for the cap, and the author chooses to go on or to close.
+5. **The loop goes on unless the author stops it.** Once a round has committed its fixes, a one-line summary gives the trend so far — fixes and their severities, round after round — and the next round starts without a second question: approving the round's plan already chose it. Further rounds are not always worth their cost, and only the author can say so: they say it with that approval, by making the round the last. When the grid decides the triage alone, choosing that mode was the approval. Two rounds wait for that approval even when the grid decides: the one whose plan turns the trend — fixes rising two rounds in a row, or a fix on code an earlier round fixed — and the one at the cap. Their plan comes with the diagnosis of [§4](#when-the-loop-does-not-converge), and the one answer settles both: the plan, and whether the loop goes on, closes after this round, or, at the cap, extends.
 
 ## 4. When to stop
 
@@ -32,10 +32,10 @@ Round 0 does not count toward the round cap.
 |-----------|------------------------------------------------------------------|----------------------------------------------------------------------------------------|
 | Converged | A round's triage holds no ✅                                     | The change is done, as far as review goes                                              |
 | Cap       | The round cap is reached — 10 by default                         | Reviews keep finding work: the loop diagnoses why, and the author closes or extends it |
-| Stopped   | The author makes a round the last one, or closes at a pause      | The last fixes were never reviewed: the author judged another round not worth its cost |
+| Stopped   | The author makes a round the last one                            | The last fixes were never reviewed: the author judged another round not worth its cost |
 | Blocked   | A decision needs the author, or the build cannot be made to pass | The loop cannot go further on its own                                                  |
 
-Reaching the cap is a signal, not a failure to hide, and it is not a hard limit either: it is a decision point. An extension is never silent — the author chooses it, after the diagnosis below, as a block of a few more rounds that ends on the same decision point.
+Reaching the cap is a signal, not a failure to hide, and it is not a hard limit either: it is a decision point. An extension is never silent — the author chooses it with the plan of the round at the cap, after the diagnosis below, as a block of a few more rounds that ends on the same decision point.
 
 ### When the loop does not converge
 
@@ -88,5 +88,5 @@ A 🕐 that has its ticket does not count as pending: it is decided and traced. 
 - A comment from a person is answered by the author's decision, never by a default.
 - No reply claims a fix that is not pushed.
 - No round commits a red build.
-- No round runs that the author did not choose: approving a round's plan, or running the loop with `--auto`, chooses the next one, and past the cap only an explicit extension continues the loop.
+- No round runs that the author did not choose: approving a round's plan, or letting the grid decide, chooses the next one, and past the cap only an explicit extension continues the loop.
 - Every finding of every round gets a decision, per [Code Review Triage](code-review-triage.md).
