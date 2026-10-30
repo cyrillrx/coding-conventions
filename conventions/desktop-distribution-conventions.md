@@ -146,7 +146,7 @@ Some of its settings are optional to the plugin but required for a release:
 | `windows { perUserInstall }`            | `true`, so installing needs no administrator rights |
 | `windows { menu, menuGroup, shortcut }` | A Start menu entry and a desktop shortcut, so the application can be found after installing |
 | `iconFile` per OS                       | `.icns` for macOS, `.ico` for Windows, `.png` for Linux; without one, the application shows a generic Java icon |
-| `buildTypes.release.proguard`           | The release tasks shrink the application with ProGuard. A missing keep rule builds fine and fails at runtime: run `runReleaseDistributable` before tagging, and add the rules or disable it |
+| `buildTypes.release.proguard`           | The release tasks shrink the application with ProGuard. A missing keep rule builds fine and fails at runtime: run `runReleaseDistributable` before tagging, and add the rules or disable it. A `VerifyError` at runtime usually comes from the optimizer rather than a missing rule: turn it off with `optimize.set(false)` |
 | `modules(...)`                          | The bundled runtime is built by `jlink` and contains the plugin's default modules (`java.desktop` among them) plus the listed ones. Check the list with the `suggestRuntimeModules` task: a missing module builds fine and fails at runtime. The `run` task uses the full JDK and hides it; `runReleaseDistributable` shows it |
 
 ```kotlin
