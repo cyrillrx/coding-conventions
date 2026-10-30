@@ -21,10 +21,10 @@ Round 0 does not count toward the round cap.
 ## 3. One round
 
 1. **A fresh review** of the whole change against its base branch. Fresh means a reviewer without the previous rounds in mind: a reviewer that remembers its own earlier fixes tends to confirm them rather than read them. Findings from earlier rounds are never carried over. The review covers two axes, every round: **correctness** — bugs, regressions, broken contracts — and **conformance** to the conventions in force, the shared ones and the project's own bindings, found from its `AGENTS.md`. A review that only hunts bugs lets the conventions erode, which [Code Review Triage](code-review-triage.md) refuses to let happen by default. Conformance is read against the conventions that apply to the files the change touches, not against every document, and each conformance finding cites the rule it invokes: without a source, it is not a finding.
-2. **A triage** of every finding, per [Code Review Triage](code-review-triage.md). The author approves the round's plan as one batch. When the author chooses to, the grid's recommendations stand without approval, and the round stops only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or contested, a ✅ fix that is structural. A fix is structural when its complexity is L or its diff would break the pull request's budget: it is flagged at triage, with the option to defer it — except a 🔴, whose minimal fix stays here — because the rounds that follow will spend themselves on what it reshapes.
+2. **A triage** of every finding, per [Code Review Triage](code-review-triage.md). The author approves the round's plan as one batch, and that approval also runs the next round, unless the author makes this one the last. When the author chooses to, the grid's recommendations stand without approval, and the round stops only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or contested, a ✅ fix that is structural. A fix is structural when its complexity is L or its diff would break the pull request's budget: it is flagged at triage, with the option to defer it — except a 🔴, whose minimal fix stays here — because the rounds that follow will spend themselves on what it reshapes.
 3. **The ✅ fixes are applied**, the build and the tests pass, and the round is committed — one commit per logical unit, per [Git & Collaboration](git-and-collaboration.md). A round never commits a red build: it fixes the build or stops.
 4. **The 🕐 follow-ups are collected**, not filed. The new ones are opened together when the loop closes, so the author approves them once; a 🕐 pointing at an open ticket only cites it.
-5. **The author chooses to go on or to stop.** Once a round has committed its fixes, the author sees a one-line summary with the trend so far — fixes and their severities, round after round — and decides whether the next round runs or the loop closes, even when the grid decides the triage alone. Further rounds are not always worth their cost, and only the author can say so. When the trend turns — fixes rising two rounds in a row, or a round fixing code an earlier round fixed — the diagnosis of [§4](#when-the-loop-does-not-converge) comes with the summary, without waiting for the cap.
+5. **The loop goes on unless the author stops it.** Once a round has committed its fixes, a one-line summary gives the trend so far — fixes and their severities, round after round — and the next round starts without a second question: approving the round's plan already chose it. Further rounds are not always worth their cost, and only the author can say so: they say it with that approval, by making the round the last. When the grid decides the triage alone, choosing that mode was the approval. Two rounds wait for that approval even when the grid decides: the one whose plan turns the trend — fixes rising two rounds in a row, or a fix on code an earlier round fixed — and the one at the cap. Their plan comes with the diagnosis of [§4](#when-the-loop-does-not-converge), and the approval still decides everything: when the trend turns, it runs the next round unless the author makes this one the last; at the cap, the plan recommends closing, so approving it closes the loop after this round, and only an explicit request for more rounds extends it. The author is asked again only for a decision the answer left open.
 
 ## 4. When to stop
 
@@ -32,18 +32,18 @@ Round 0 does not count toward the round cap.
 |-----------|------------------------------------------------------------------|----------------------------------------------------------------------------------------|
 | Converged | A round's triage holds no ✅                                     | The change is done, as far as review goes                                              |
 | Cap       | The round cap is reached — 10 by default                         | Reviews keep finding work: the loop diagnoses why, and the author closes or extends it |
-| Stopped   | The author ends the loop after a round                           | The last fixes were never reviewed: the author judged another round not worth its cost |
+| Stopped   | The author makes a round the last one                            | The last fixes were never reviewed: the author judged another round not worth its cost |
 | Blocked   | A decision needs the author, or the build cannot be made to pass | The loop cannot go further on its own                                                  |
 
-Reaching the cap is a signal, not a failure to hide, and it is not a hard limit either: it is a decision point. An extension is never silent — the author chooses it, after the diagnosis below, as a block of a few more rounds that ends on the same decision point.
+Reaching the cap is a signal, not a failure to hide, and it is not a hard limit either: it is a decision point. An extension is never silent — the author chooses it with the plan of the round at the cap, after the diagnosis below, as a block of a few more rounds that ends on the same decision point.
 
 ### When the loop does not converge
 
 The form of the diagnosis is fixed; its content is not:
 
-1. **The trajectory** — the fixes per round, with their severities.
+1. **The trajectory** — the fixes per round, with their severities, up to the plan being decided.
 2. **What is observed** — each observation with its evidence: the files, the findings, the rounds. When no cause stands out, the diagnosis says so rather than invent one.
-3. **One recommendation**, then the choice: close the loop, extend it by a few rounds, or close it and act on the recommendation.
+3. **One recommendation**, for the author to weigh in the approval: go on, or make the round the last; at the cap, close the loop, extend it by a few rounds, or close it and act on the recommendation.
 
 Common causes, as examples of the expected level — an observable signal and what it implies — not as a list to fit every case into. A cause outside it, or several mixed, is a valid diagnosis.
 
@@ -88,5 +88,5 @@ A 🕐 that has its ticket does not count as pending: it is decided and traced. 
 - A comment from a person is answered by the author's decision, never by a default.
 - No reply claims a fix that is not pushed.
 - No round commits a red build.
-- No round runs that the author did not choose: past the cap, only an explicit extension continues the loop.
+- No round runs that the author did not choose: approving a round's plan, or letting the grid decide, chooses the next one, and past the cap only an explicit extension continues the loop.
 - Every finding of every round gets a decision, per [Code Review Triage](code-review-triage.md).

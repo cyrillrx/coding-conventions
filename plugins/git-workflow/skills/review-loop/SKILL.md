@@ -3,7 +3,7 @@ name: review-loop
 description: >-
   Make an open pull request converge: answer the open review threads first, then run review → triage
   → fix → commit rounds, each on a fresh review, until a round leaves nothing to fix, the round cap
-  is reached, or the author stops it after a round; at the cap, diagnose why the PR does not
+  is reached, or the author makes a round the last; at the cap, diagnose why the PR does not
   converge and let the author close or extend the loop. Then push once, post the replies, open the
   follow-ups, refresh the description and label the PR with its review status. Run manually after
   the first human read of a PR, instead of repeating review, triage and commit by hand.
@@ -47,7 +47,7 @@ address-review, which this skill calls.
 
 ## Your task
 
-Run the loop below to its end. After each round that committed fixes, ask the author once whether to run the next round or close the loop — even with `--auto` — and at the cap, diagnose before asking. Do not pause anywhere else: the only stops are the ones this skill names.
+Run the loop below to its end. Approving a round's plan also runs the next round, unless the author makes that round the last: never ask a second time between rounds. Pause only where this skill names a stop.
 
 ### Step 1 — Check the preconditions and read the arguments
 
@@ -55,7 +55,7 @@ Run the loop below to its end. After each round that committed fixes, ask the au
 - **The working tree is clean.** Uncommitted changes would be swept into the loop's commits; if there are any, stop and ask.
 - **The base branch is resolved**, as `triage-findings` Step 2 does it. If it is unresolved, ask.
 - **The verification commands** — how this project builds and runs its tests, from `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` or the build files. If there are none, say so once: the rounds then commit without a build check.
-- **Arguments**: `--auto` lets the grid decide (Step 3); `--max N` sets the round cap — 10 by default; the cap is a decision point, not a hard limit (Step 3.8); `low`, `medium` or `high` is the review effort, `high` by default.
+- **Arguments**: `--auto` lets the grid decide (Step 3); `--max N` sets the round cap — 10 by default; the cap is a decision point, not a hard limit (Step 3.2); `low`, `medium` or `high` is the review effort, `high` by default.
 
 ### Step 2 — Round 0: the open review threads
 
@@ -76,24 +76,24 @@ For round `i` from 1 to the cap:
 
 1. **Review and triage**: run `/git-workflow:triage-findings --review <effort>`. `--review` makes it start from a fresh review in a subagent, never from the findings earlier rounds left in this conversation. That review covers correctness and conformance to the conventions that apply to the changed files, each conformance finding citing its rule.
 2. **Decide**:
-   - by default, present the round's plan and **wait for one approval for the whole batch** — the author may adjust any line;
+   - by default, present the round's plan and **wait for one approval for the whole batch** — the author may adjust any line, and may make this round the last. Say so when presenting it: an approval with no such word runs the next round;
    - with `--auto`, the grid's recommendations stand, and the round stops for the author only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or that contests an earlier decision, a ✅ fix that is structural.
+   - Unless the plan holds no ✅, two rounds wait for the author even with `--auto`: the one whose plan turns the trend — ✅ rising two rounds in a row, or a ✅ on lines an earlier round fixed, read from the log — and the one at the cap. Give the diagnosis below with the plan; the one approval still decides everything. When the trend turns, it runs the next round unless the author makes this one the last. At the cap, the plan recommends closing, so approving it closes the loop after this round; say so when presenting it, even when the diagnosis recommends more rounds. The loop goes on only if the author also asks explicitly for N more rounds (3 suggested), and the author may instead close it and act on the recommendation. An extension is a new block of rounds that ends on this same decision point. Ask again only for a decision the answer left open.
    - Either way, flag a **structural** ✅ — complexity L, or a diff that would break the PR's 200 lines / 10 files budget — and offer to defer it as a 🕐 — except a 🔴, whose minimal fix stays here: the rounds that follow will spend themselves on what it reshapes.
 3. **Collect the 🕐** — keep each ready-to-submit ticket from the plan — or the number of the open ticket a 🕐 points at — in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
 4. **Converged?** If the approved plan holds no ✅, the loop has converged: go to Step 4.
 5. **Apply** the ✅ fixes, as `triage-findings` Step 6.1 does. Run the verification commands; if they fail, fix the failure within the round, or stop the loop as blocked. When blocked, keep what passes: commit the fixes that are green on their own, stash the rest so no later commit picks it up, and name the stash in the report. **Never commit a red build** — but a green fix is not lost to a red neighbour.
 6. **Commit** the round with `/git-workflow:commit --auto` — atomic Conventional Commits, no AI attribution. `--auto`, because invoking this skill was the approval. Do not push.
 7. **Record the round** in a running log kept in this conversation, never handed to the reviewer: the ✅ count and their severities, the files and lines fixed, the ❌ with their title. The trend and the diagnosis read it; the next review stays fresh.
-8. **Continue?**
-   - Before the cap, summarise the round in one line with the trend — `Round 3 — 2 fixes (🟠1 🟡1), 1 🕐 · trend 5 → 3 → 2` — and ask whether to run round `i + 1` or close the loop, continuing being the default. When the trend turns — fixes rising two rounds in a row, or this round fixing lines an earlier round fixed — give the diagnosis below with the summary.
-   - At the cap, give the diagnosis, then ask: close the loop, extend it by N rounds (3 suggested), or close and act on the recommendation. An extension is a new block of rounds that ends on this same decision point; never run a round the author did not choose.
-   - If the author closes, go to Step 4, with the reason: stopped by the author, or closed at the cap.
+8. **Continue?** Never ask here: the plan's approval already decided.
+   - If the author made this round the last, or this round is at the cap and the author did not extend the loop, go to Step 4 with the reason: stopped by the author, or closed at the cap.
+   - Otherwise, summarise the round in one line with the trend — `Round 3 — 2 fixes (🟠1 🟡1), 1 🕐 · trend 5 → 3 → 2` — and start round `i + 1`: approving this round's plan chose it, an extension moved the cap, and with `--auto`, invoking the skill did. Never run a round the author did not choose.
 
 **The diagnosis** has a fixed form and a free content:
 
-1. **Trajectory** — the fixes per round, with their severities, from the log.
+1. **Trajectory** — the fixes per round, with their severities, from the log, then this round's plan.
 2. **Observations** — each with its evidence: files, findings, rounds. When no cause stands out, say so; never invent one.
-3. **One recommendation**, then the choice.
+3. **One recommendation**, for the author to weigh in the approval.
 
 The common causes below are examples of the expected level, not a list to fit every case into; a cause outside it, or several mixed, is a valid diagnosis.
 
@@ -130,4 +130,4 @@ In this order:
 - No reply claims a fix that is not pushed.
 - No round commits a red build.
 - Every finding of every round gets a decision — `triage-findings` owns how.
-- No round runs that the author did not choose: past the cap, only an explicit extension continues the loop.
+- No round runs that the author did not choose: approving a round's plan, or running the loop with `--auto`, chooses the next one, and past the cap only an explicit extension continues the loop.
