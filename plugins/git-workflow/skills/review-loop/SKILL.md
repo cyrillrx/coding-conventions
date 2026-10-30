@@ -78,7 +78,7 @@ For round `i` from 1 to the cap:
 2. **Decide**:
    - by default, present the round's plan and **wait for one approval for the whole batch** — the author may adjust any line, and may make this round the last. Say so when presenting it: an approval with no such word runs the next round;
    - with `--auto`, the grid's recommendations stand, and the round stops for the author only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a finding that is ambiguous or that contests an earlier decision, a ✅ fix that is structural.
-   - Unless the plan holds no ✅, two rounds wait for the author even with `--auto`: the one whose plan turns the trend — ✅ rising two rounds in a row, or a ✅ on lines an earlier round fixed, read from the log — and the one at the cap. Give the diagnosis below with the plan, and ask in the same question whether the loop goes on after this round or closes after it; at the cap, whether it closes, extends by N rounds (3 suggested), or closes and acts on the recommendation. An extension is a new block of rounds that ends on this same decision point.
+   - Unless the plan holds no ✅, two rounds wait for the author even with `--auto`: the one whose plan turns the trend — ✅ rising two rounds in a row, or a ✅ on lines an earlier round fixed, read from the log — and the one at the cap. Give the diagnosis below with the plan; the one approval still decides everything. When the trend turns, it runs the next round unless the author makes this one the last. At the cap, it closes the loop after this round unless the author extends it by N rounds (3 suggested) or asks to act on the recommendation. An extension is a new block of rounds that ends on this same decision point. Ask again only for a decision the answer left open.
    - Either way, flag a **structural** ✅ — complexity L, or a diff that would break the PR's 200 lines / 10 files budget — and offer to defer it as a 🕐 — except a 🔴, whose minimal fix stays here: the rounds that follow will spend themselves on what it reshapes.
 3. **Collect the 🕐** — keep each ready-to-submit ticket from the plan — or the number of the open ticket a 🕐 points at — in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.
 4. **Converged?** If the approved plan holds no ✅, the loop has converged: go to Step 4.
@@ -86,14 +86,14 @@ For round `i` from 1 to the cap:
 6. **Commit** the round with `/git-workflow:commit --auto` — atomic Conventional Commits, no AI attribution. `--auto`, because invoking this skill was the approval. Do not push.
 7. **Record the round** in a running log kept in this conversation, never handed to the reviewer: the ✅ count and their severities, the files and lines fixed, the ❌ with their title. The trend and the diagnosis read it; the next review stays fresh.
 8. **Continue?** Never ask here: the plan's approval already decided.
-   - If the author made this round the last, or closed the loop at the cap, go to Step 4 with the reason: stopped by the author, or closed at the cap.
+   - If the author made this round the last, or this round is at the cap and the author did not extend the loop, go to Step 4 with the reason: stopped by the author, or closed at the cap.
    - Otherwise, summarise the round in one line with the trend — `Round 3 — 2 fixes (🟠1 🟡1), 1 🕐 · trend 5 → 3 → 2` — and start round `i + 1`: approving this round's plan chose it, an extension moved the cap, and with `--auto`, invoking the skill did. Never run a round the author did not choose.
 
 **The diagnosis** has a fixed form and a free content:
 
-1. **Trajectory** — the fixes per round, with their severities, from the log.
+1. **Trajectory** — the fixes per round, with their severities, from the log, then this round's plan.
 2. **Observations** — each with its evidence: files, findings, rounds. When no cause stands out, say so; never invent one.
-3. **One recommendation**, then the choice.
+3. **One recommendation**, for the author to weigh in the approval.
 
 The common causes below are examples of the expected level, not a list to fit every case into; a cause outside it, or several mixed, is a valid diagnosis.
 
