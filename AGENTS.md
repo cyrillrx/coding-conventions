@@ -96,7 +96,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - ADRs and PRDs start from the skeletons in `templates/`; numbers are never reused, and a superseded document keeps its file
 
 ### Kotlin / Compose (`conventions/kotlin-conventions.md`, `conventions/compose-*.md`)
-- Kotlin only; Jetpack/Compose Multiplatform, no XML layouts, no View-system APIs
+- Kotlin only; Jetpack/Compose Multiplatform: no XML layouts, no View-system APIs
 - MVVM + Unidirectional Data Flow: `StateFlow` for state, `SharedFlow` (one-shot) for events
 - Formatting 100% delegated to ktlint via `configs/.editorconfig` (4-space indent, 120 cols, trailing commas)
 - Prefer early returns over deep nesting; prefer affirmative conditions

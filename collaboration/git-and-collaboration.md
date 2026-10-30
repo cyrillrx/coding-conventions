@@ -74,7 +74,7 @@ Apply this to all file types: source files, resource files, data files, document
 
 Each commit must be a **single, self-contained logical change**. This makes review easier, enables clean `git bisect` and `git revert`, and keeps the history readable.
 
-- **One commit = one change**: a commit should do one thing (add a component, update a data model, add string resources, etc.) Do not mix unrelated changes or changes across different layers in the same commit.
+- **One commit = one change**: a commit should do one thing (add a component, update a data model, add string resources, etc.). Do not mix unrelated changes or changes across different layers in the same commit.
 - **Compilable at every commit**: the project must build and all tests must pass after each individual commit.
 - **Incremental on feature branches**: progress through small, successive commits a reviewer can validate one by one. Avoid large "big bang" commits.
 - **Easy to revert**: an atomic commit can be reverted without side effects on unrelated code.

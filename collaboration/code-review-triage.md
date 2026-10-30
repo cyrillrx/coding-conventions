@@ -116,7 +116,7 @@ Here, a 🕐 with no ticket is a deferral in name only. If the ticket is not goi
 You are reviewing, so the decision to defer is not yours to make and the tracker is not yours to fill. **Hand the finding over rather than filing it:**
 
 - Raise it as a 🕐 comment on the thread, scored (severity, impact, complexity) so the author can decide rather than guess. The thread itself is the trace.
-- **Offer** the ticket; never open one in the author's name without asking. If they want it, they own it; or they ask you to open it, and then you do.
+- **Offer** the ticket; never open one in the author's name without asking. If they want it, they own it, or they ask you to open it, and then you do.
 - If the author declines, that is their call and it is recorded in the thread. Do not re-litigate it, and do not open a ticket to work around the answer.
 - The exception is a 🔴 the change introduces: it does not become a follow-up at all. It is fixed, or it blocks the merge.
 
@@ -161,10 +161,10 @@ A triage produces three things, in this order.
 ```markdown
 ### 1. `SpellRepository.kt:42`: unbounded cache growth
 
-- **Severity**: 🟠 Major - the map never evicts, so a long session ends in an OOM
-- **Impact**: functional + technical - users hit a crash; the cache is also untestable as written
-- **Complexity**: M - hours for the eviction policy and its test, tens of lines across the two files the PR already touches
-- **Recommendation**: ✅ Fix here - cap the map at 100 entries with an LRU eviction
+- **Severity**: 🟠 Major. The map never evicts, so a long session ends in an OOM
+- **Impact**: functional + technical. Users hit a crash; the cache is also untestable as written
+- **Complexity**: M. Hours for the eviction policy and its test, tens of lines across the two files the PR already touches
+- **Recommendation**: ✅ Fix here. Cap the map at 100 entries with an LRU eviction
 - **Rationale**: introduced by this PR, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 

@@ -14,7 +14,7 @@ It builds on the [Kotlin conventions](kotlin-conventions.md), which apply to eve
 
 ## Tech Stack
 
-- **UI Framework**: Compose Multiplatform, no XML layouts, no View-system APIs.
+- **UI Framework**: Compose Multiplatform: no XML layouts, no View-system APIs.
 
 ## Architecture
 

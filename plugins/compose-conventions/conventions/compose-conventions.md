@@ -14,7 +14,7 @@ It builds on the [Kotlin conventions](https://github.com/cyrillrx/coding-convent
 
 ## Tech Stack
 
-- **UI Framework**: Compose Multiplatform, no XML layouts, no View-system APIs.
+- **UI Framework**: Compose Multiplatform: no XML layouts, no View-system APIs.
 
 ## Architecture
 

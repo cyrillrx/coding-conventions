@@ -57,7 +57,7 @@ The findings are already here. This skill is normally invoked straight after a c
 If the conversation holds no findings, or `--review` is passed, **review the change first**, on a fresh context:
 
 - Resolve the base branch as Step 2 describes.
-- Launch a subagent to review `<base>...HEAD`, plus, without `--review`, the uncommitted work, staged or not (`git diff HEAD`), on both axes, and to return the findings of each verbatim, changing nothing:
+- Launch a subagent to review `<base>...HEAD` on both axes, and to return the findings of each verbatim, changing nothing. Without `--review`, it also reviews the uncommitted work, staged or not (`git diff HEAD`):
   - **Correctness**: `/code-review <effort>`, with `<effort>` the `low`, `medium` or `high` argument, `high` by default. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so.
   - **Conformance**: list the changed files (`git diff --name-only`), read the project's `AGENTS.md` / `CLAUDE.md` as an index, then read only the convention documents that apply to those files (the general ones, plus each one bound to a file type the change touches) and nothing else. Report every added line that contradicts a rule read, with its `file:line` and the rule cited as document and section. A finding that cites no rule is not reported.
 - With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over. Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
@@ -173,10 +173,10 @@ Output these three parts, and **change nothing in this step**.
 ```markdown
 ### 1. `SpellRepository.kt:42`: unbounded cache growth
 
-- **Severity**: 🟠 Major - the map never evicts, so a long session ends in an OOM
-- **Impact**: functional + technical - users hit a crash; the cache is also untestable as written
-- **Complexity**: M - hours for the eviction policy and its test, tens of lines across the two files the change already touches
-- **Recommendation**: ✅ Fix here - cap the map at 100 entries with an LRU eviction
+- **Severity**: 🟠 Major. The map never evicts, so a long session ends in an OOM
+- **Impact**: functional + technical. Users hit a crash; the cache is also untestable as written
+- **Complexity**: M. Hours for the eviction policy and its test, tens of lines across the two files the change already touches
+- **Recommendation**: ✅ Fix here. Cap the map at 100 entries with an LRU eviction
 - **Rationale**: introduced by this change, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 
@@ -184,9 +184,9 @@ The rationale explains the **trade-off** (why the other two outcomes were reject
 
 **3. Action plan**, grouped by outcome:
 
-- **✅ To fix here** - the ordered list of edits, with the files each one touches.
-- **🕐 To defer** - on the user's own change: for each, the ticket ready to submit (title, body with context, `file:line`, why it is deferred, link to the PR; on a GitHub tracker, its three labels (`severity:*`, `impact:*`, `complexity:*`) from the scores above) and the tracker it goes to (or, when an open ticket already tracks it, that ticket's number). On someone else's change: the scored comment to leave, and the note that the ticket is the author's call.
-- **❌ No action** - one line each with its reason.
+- **✅ To fix here**: the ordered list of edits, with the files each one touches.
+- **🕐 To defer**: on the user's own change, for each, the ticket ready to submit (title, body with context, `file:line`, why it is deferred, link to the PR) and the tracker it goes to, or the number of the open ticket that already tracks it. On a GitHub tracker, the ticket also carries its three labels from the scores above: `severity:*`, `impact:*` and `complexity:*`. On someone else's change: the scored comment to leave, and the note that the ticket is the author's call.
+- **❌ No action**: one line each with its reason.
 
 End your turn with a question such as "Shall I apply this plan?". Wait for the user to approve, adjust, or override: the recommendations are proposals, and the person who owns the code decides.
 

@@ -73,7 +73,7 @@ How the code is decided (severity, impact, complexity, and when a 🕐 is the ri
 **Reply tone per outcome:**
 
 - ✅ **Apply**: briefly confirm what changed ("Fixed: renamed `X` to `Y`.").
-- 🕐 **Defer**: agree, say it is not done here, and name the trace ("Agreed, but out of this PR's scope, tracked in #142."). Never phrase it as fixed.
+- 🕐 **Defer**: agree, say it is not done here, and name the trace ("Agreed, but out of this PR's scope; tracked in #142."). Never phrase it as fixed.
 - ⚠️ **Discuss**: ask for the missing decision, clarification, or reason.
 - ❌ **Skip**: explain concisely why the comment is declined, citing the conventions or sources that apply.
 - 💬 **Answer**: answer the question, or acknowledge the note.
