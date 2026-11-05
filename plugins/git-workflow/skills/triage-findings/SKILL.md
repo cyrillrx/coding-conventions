@@ -156,6 +156,12 @@ Overrides, which win over the grid:
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
 - **A preference the user cannot justify to themselves** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score the answer. Reviewers owe a justification; that duty is not a licence to dismiss them when they forget it.
 
+Whatever the grid or an override gives, the recommendation is judged on the finding alone:
+
+- **The state of a review loop is not a reason.** A recommendation never depends on whether it lets `/git-workflow:review-loop` converge or close. Convergence is an outcome of the triage, not a criterion of it.
+- **A test that records a behavior does not justify it.** A ❌ that rests on "it is deliberate" traces the decision to a spec, an ADR or a commit message. Without such a trace, score the finding as if the behavior were unspecified: the test may only have recorded a side effect nobody decided.
+- **Recommend the option you rate best.** When the rationale presents an alternative and calls it better, the recommendation is that alternative. Its cost goes into the complexity score, and from there into ✅ or 🕐. A ❌ whose own rationale calls the fix better is a contradiction, not a decision: check every ❌ for it before presenting the plan.
+
 When the emoji conventions are in use, read them as **intent only**: what the reviewer expects. A 🔧 can be factually wrong (→ ❌), a 💭 can uncover a real crash (→ 🔴 ✅), and a comment with no emoji is scored exactly the same way. The emoji never sets severity and never sets the outcome.
 
 ### Step 5: Present the plan, then stop
@@ -224,6 +230,7 @@ The one exception is a round run by `/git-workflow:review-loop`: invoking that s
 - Every finding gets a decision. "Worth considering" is not a decision.
 - Nothing is silently dropped: a finding we skip appears in the table as ❌ with its reason.
 - Severity is about consequences, not taste.
+- A recommendation rests on the finding's merits, never on what it does to a review loop.
 - A deferral is owned by whoever owns the code. Never file a ticket in someone else's name unasked.
 - Never widen the diff beyond what the change is about; that is what 🕐 is for.
 - The plan comes before any change, always.
