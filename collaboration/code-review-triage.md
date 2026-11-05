@@ -89,6 +89,12 @@ The grid is the default, not the verdict. It is overridden by:
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
 - **A preference you cannot justify to yourself** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score it. Reviewers owe a justification ([PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)); that duty is not a licence to dismiss them when they forget it.
 
+Whatever the grid or an override gives, the recommendation is judged on the finding alone:
+
+- **The state of a review loop is not a reason.** A recommendation never depends on whether it lets a [review loop](code-review-loop.md) converge or close. Convergence is an outcome of the triage, not a criterion of it.
+- **A test that records a behavior does not justify it.** A ❌ that rests on "it is deliberate" traces the decision to a spec, an ADR or a commit message. Without such a trace, score the finding as if the behavior were unspecified: the test may only have recorded a side effect nobody decided.
+- **Recommend the option you rate best.** When the rationale presents an alternative and calls it better, the recommendation is that alternative. Its cost goes into the complexity score, and from there into ✅ or 🕐. A ❌ whose own rationale calls the fix better is a contradiction, not a decision.
+
 ## 6. Follow-ups
 
 A deferral needs **an owner and a trace**. Who provides them depends on whose change it is, and that is not a detail: opening a ticket in someone else's name is deciding their roadmap for them.
@@ -175,6 +181,7 @@ A triage produces three things, in this order.
 - Every finding gets a decision. "Worth considering" is not a decision.
 - Every recommendation carries a rationale, and the rationale explains the *trade-off*, not the finding.
 - Severity is about consequences, not taste.
+- A recommendation rests on the finding's merits, never on what it does to a review loop.
 - Nothing is silently dropped: a finding we skip appears in the table as ❌ with its reason.
 - A deferral is owned by whoever owns the code. Never file a ticket in someone else's name unasked.
 - The plan is presented before anything is changed. Applying fixes, opening tickets, and editing the PR description all happen after the author has approved the plan.

@@ -35,6 +35,8 @@ Round 0 does not count toward the round cap.
 | Stopped   | The author makes a round the last one                            | The last fixes were never reviewed: the author judged another round not worth its cost |
 | Blocked   | A decision needs the author, or the build cannot be made to pass | The loop cannot go further on its own                                                  |
 
+Converging is what a triage finds, never what it aims at: no recommendation is bent to produce a round without ✅ (see [Code Review Triage](code-review-triage.md#5-recommendation)).
+
 Reaching the cap is a signal, not a failure to hide, and it is not a hard limit either: it is a decision point. An extension is never silent: the author chooses it with the plan of the round at the cap, after the diagnosis below, as a block of a few more rounds that ends on the same decision point.
 
 ### When the loop does not converge
@@ -51,8 +53,10 @@ Common causes, as examples of the expected level (an observable signal and what 
 |-------------------------------------|---------------------------------------------------------------------------------------|-------------------------------------------------------|
 | Slow convergence                    | Fewer fixes each round, severities falling to 🟡 and 🟢                               | A few more rounds, or close: what remains is cosmetic |
 | A cascade after a structural change | Findings concentrate on an area a fix reshaped                                        | See below                                             |
-| A noisy review                      | Dismissed (❌) or contested findings come back, or nearly everything is 🟢            | Close, or run again at a lower review effort          |
+| A noisy review                      | Dismissed (❌) or contested findings come back unchanged, or nearly everything is 🟢  | Close, or run again at a lower review effort          |
 | A change too broad                  | Findings spread over unrelated areas, the diff beyond the 200 lines / 10 files budget | Close, and split the pull request                     |
+
+A dismissed finding that comes back **with a new argument** (a rule cited, a concrete scenario) is not noise: it is a reason to re-read the rationale of the original ❌, and the plan says which rationale it re-examined and what it concluded.
 
 A cascade after a structural change is often expected, and its trend decides the way out:
 
