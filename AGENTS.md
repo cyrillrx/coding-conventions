@@ -15,6 +15,7 @@ collaboration/
   code-review-comments.md              # Emoji legend for review comments, and the protocol for answering them
   code-review-triage.md                # Severity/impact/complexity grid, fix-here vs follow-up vs no-action
   issue-labels.md                      # The triage scores carried on every ticket as labels
+  decision-document-review.md          # ADRs, PRDs and specs reviewed at the level of their decision, in one pass
   code-review-loop.md                  # Review → triage → fix rounds until a review leaves nothing to fix, and the status label
   pull-request-descriptions.md         # Keeping a PR title and description true to its diff as the branch moves
   project-audit.md                     # Project health audit: scope, axes, audit severities, A–E state and effort grids
@@ -39,7 +40,7 @@ templates/
 .claude-plugin/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
-  git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review, /review-loop
+  git-workflow/                        # /commit, /pull-request, /triage-findings, /address-review, /review-loop, /review-decision
   kotlin-conventions/                  # SessionStart hook pointing to a copy of conventions/kotlin-conventions.md
   compose-conventions/                 # SessionStart hook pointing to copies of the three conventions/compose-*.md, by what is written, and of desktop-distribution-conventions.md for a Desktop target
   coding-conventions/                  # SessionStart hook injecting a copy of conventions/coding-conventions.md; PostToolUse hooks recalling §4 when an edit adds comments and pointing to a copy of docs-conventions.md on Markdown edits
@@ -84,6 +85,7 @@ Use `git mv` for any file rename or move, to preserve history.
 - Every review finding gets a decision (see [code-review-triage.md](collaboration/code-review-triage.md)): severity, impact, complexity, then fix here / follow-up ticket / no action, with its rationale, judged on its merits and never on whether it lets a review loop converge
 - Every ticket carries one `severity:*`, one `impact:*` and one `complexity:*` label on the triage scales (see [issue-labels.md](collaboration/issue-labels.md)); no type label, the title prefix carries it
 - Iterate review rounds per [code-review-loop.md](collaboration/code-review-loop.md): open comments first, a fresh review each round of correctness and of conformance to the conventions in force, one push at the end, stop when a round has no ✅, or when the author makes a round the last (approving a round's plan runs the next one); when the trend turns or at the cap (10 by default), the plan comes with a diagnosis of why the loop does not converge, and the same approval decides: it goes on when the trend turns, and closes the loop at the cap unless the author extends it
+- Decision documents (ADR, PRD, spec) are reviewed per [decision-document-review.md](collaboration/decision-document-review.md): six questions (problem, alternatives, consequences, reversibility, consistency, altitude), a finding only when it changes an answer, implementation detail flagged for removal, one pass per change
 - Project audits follow [project-audit.md](collaboration/project-audit.md): one cause per finding with a stable ID, A–E state and effort grades per module and axis, a verdict from the worst cell and never an average; changing the grading bumps the grid version
 
 ### Documentation (`conventions/docs-conventions.md`)
