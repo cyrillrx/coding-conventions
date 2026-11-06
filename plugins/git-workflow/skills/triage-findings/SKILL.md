@@ -172,12 +172,12 @@ Output these three parts, and **change nothing in this step**.
 
 | #   | Finding                                  | Severity | Impact                 | Complexity | Recommendation |
 |-----|------------------------------------------|----------|------------------------|------------|----------------|
-| 1   | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
+| F1  | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
 
 **2. Detail block per finding**, carrying the rationale of the decision:
 
 ```markdown
-### 1. `SpellRepository.kt:42`: unbounded cache growth
+### F1. `SpellRepository.kt:42`: unbounded cache growth
 
 - **Severity**: 🟠 Major. The map never evicts, so a long session ends in an OOM
 - **Impact**: functional + technical. Users hit a crash; the cache is also untestable as written
@@ -190,9 +190,11 @@ The rationale explains the **trade-off** (why the other two outcomes were reject
 
 **3. Action plan**, grouped by outcome:
 
-- **✅ To fix here**: the ordered list of edits, with the files each one touches.
+- **✅ To fix here**: the edits, in the order they will be applied, with the files each one touches.
 - **🕐 To defer**: on the user's own change, for each, the ticket ready to submit (title, body with context, `file:line`, why it is deferred, link to the PR) and the tracker it goes to, or the number of the open ticket that already tracks it. On a GitHub tracker, the ticket also carries its three labels from the scores above: `severity:*`, `impact:*` and `complexity:*`. On someone else's change: the scored comment to leave, and the note that the ticket is the author's call.
 - **❌ No action**: one line each with its reason.
+
+The summary table numbers the findings F1..Fn, and that number is a finding's only identifier. The detail blocks and the action plan refer to a finding by it, and nothing in the output starts a second numbered list: each line of the plan is a bullet led by the findings it addresses (`- F1, F4: cap the cache at 100 entries, in SpellRepository.kt`). The `F` keeps a finding apart from an issue number such as `#142`. An answer such as "F1 ok, F2 no" then has only one list it can mean.
 
 End your turn with a question such as "Shall I apply this plan?". Wait for the user to approve, adjust, or override: the recommendations are proposals, and the person who owns the code decides.
 

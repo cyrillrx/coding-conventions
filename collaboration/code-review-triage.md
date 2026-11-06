@@ -160,12 +160,12 @@ A triage produces three things, in this order.
 
 | #   | Finding                                  | Severity | Impact                 | Complexity | Recommendation |
 |-----|------------------------------------------|----------|------------------------|------------|----------------|
-| 1   | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
+| F1  | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
 
 **A detail block per finding**, carrying the rationale:
 
 ```markdown
-### 1. `SpellRepository.kt:42`: unbounded cache growth
+### F1. `SpellRepository.kt:42`: unbounded cache growth
 
 - **Severity**: 🟠 Major. The map never evicts, so a long session ends in an OOM
 - **Impact**: functional + technical. Users hit a crash; the cache is also untestable as written
@@ -174,7 +174,9 @@ A triage produces three things, in this order.
 - **Rationale**: introduced by this PR, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
 
-**An action plan**, grouped by outcome: the ordered list of fixes to apply, the follow-up tickets to open (title and body ready to submit) or already open (their number), and the `## 🔁 Follow-ups` block to append to the PR description.
+**An action plan**, grouped by outcome: the fixes to apply, in the order they will be applied, the follow-up tickets to open (title and body ready to submit) or already open (their number), and the `## 🔁 Follow-ups` block to append to the PR description.
+
+The summary table numbers the findings F1..Fn, and that number is a finding's only identifier. The detail blocks and the action plan refer to a finding by it, and nothing in the output starts a second numbered list: each line of the plan is a bullet led by the findings it addresses (`- F1, F4: cap the cache at 100 entries, in SpellRepository.kt`). The `F` keeps a finding apart from an issue number such as `#142`. An answer such as "F1 ok, F2 no" then has only one list it can mean.
 
 ## 9. Non-negotiables
 
