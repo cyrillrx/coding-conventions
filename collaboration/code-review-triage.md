@@ -4,20 +4,21 @@ A review that only lists problems moves the work to the reader. This document de
 
 It applies to any finding, whatever its source: a human reviewer, an automated review tool, a linter, or a self-review before opening the PR.
 
-The grid and the overrides in [§5](#5-recommendation) cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale: the four axes apply, and the judgement is yours. This is a shared default, not an exhaustive rulebook.
+The grid and the overrides in [§5](#5-recommendation) cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale: the five axes apply, and the judgement is yours. This is a shared default, not an exhaustive rulebook.
 
 This document scores a finding; it never speaks to its author. How a comment is answered on a pull request (the reply, its tone, which threads get resolved) belongs to [Code Review Comments](code-review-comments.md#responding-to-a-comment).
 
-## 1. Every finding is scored on four axes
+## 1. Every finding is scored on five axes
 
 | Axis               | Question it answers                          |
 |--------------------|----------------------------------------------|
 | **Severity**       | What happens if we ship it as is?            |
 | **Impact**         | Who pays for it: users, developers, or both? |
 | **Complexity**     | What does it cost to address?                |
+| **Simplicity**     | Does the fix make the code simpler?          |
 | **Recommendation** | What do we do, and why?                      |
 
-A finding without these four axes is an observation, not a review outcome.
+A finding without these five axes is an observation, not a review outcome.
 
 ## 2. Severity
 
@@ -72,6 +73,25 @@ Exactly three outcomes. Each one carries a rationale: the reason the other two w
 
 These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told. A 🔵 that is valid but not worth its cost is a ❌ here; it is never communicated as "your comment is wrong".
 
+### Effect on simplicity
+
+Once a finding is known to stand, one more question weighs on its outcome: **does the fix make the code simpler?** The grid judges a fix by its size, and size says what a fix costs the review, not what it leaves behind.
+
+| Effect          | Signals | What it changes |
+|-----------------|---|---|
+| **Simplifies**  | Fewer concepts to hold, less duplication, one way to do each thing, functions with one job, a lighter read (no needless intermediate variable, no mental bookkeeping, names that remove the need for a comment). Often, not always, fewer lines | ✅ even for a 🔵, even past the diff budget: the fix pays down rather than adds |
+| **Neutral**     | The code moves but reads the same | The grid applies as is |
+| **Complicates** | One more concept, an indirection, a special case, a denser expression, more lines with no gain in clarity | It must be justified: a 🔵 becomes ❌; a 🟡 is a decision for the author, not for the grid (the finding stands, the remedy may cost more than the harm) |
+
+**Fewer lines is evidence, not the test.** A change simplifies the code when a reader holds fewer concepts and does less work to understand it: less duplication, one way to do each thing, functions with one job, intermediate names only where they carry meaning. A shorter version that hides a concept in a dense expression, or merges two responsibilities, does not simplify; an intermediate variable that names a step can.
+
+The effect weighs the remedy, never the scope: a simplifying fix outside the subject of the PR is still a 🕐, per the overrides below. For example:
+
+- Two functions sharing the same shape, folded into one helper: simplifies, fewer lines. ✅
+- A builder parameter added only to remove a few string replacements in tests: neutral to complicating. ❌
+- A test split so each one holds one assertion, for the same cases: complicates, more lines. ❌
+- A constant named in a test whose name already says what the value means: complicates. ❌
+
 ### Default decision grid
 
 | Severity   | Complexity S                         | Complexity M  | Complexity L                                            |
@@ -81,7 +101,7 @@ These are dispositions of a **finding**, not replies to a **person**: they decid
 | 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)    | 🕐 Follow-up  | 🕐 Follow-up                                            |
 | 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
 
-The grid is the default, not the verdict. It is overridden by:
+The grid is the default, not the verdict. The effect on simplicity adjusts it, as above, and it is overridden by:
 
 - **Out of the PR's scope** → 🕐 when it stands, ❌ when it is not worth a trace. The one exception is a 🏕 cleanup (a couple of lines with no behavior change, in a file the PR already touches), which may be ✅, in its own commit. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth (see [PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)).
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
@@ -158,9 +178,9 @@ A triage produces three things, in this order.
 
 **A summary table** (one row per finding, none omitted):
 
-| #   | Finding                                  | Severity | Impact                 | Complexity | Recommendation |
-|-----|------------------------------------------|----------|------------------------|------------|----------------|
-| F1  | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
+| #   | Finding                                  | Severity | Impact                 | Complexity | Simplicity | Recommendation |
+|-----|------------------------------------------|----------|------------------------|------------|------------|----------------|
+| F1  | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | Neutral    | ✅ Fix here    |
 
 **A detail block per finding**, carrying the rationale:
 
@@ -170,6 +190,7 @@ A triage produces three things, in this order.
 - **Severity**: 🟠 Major. The map never evicts, so a long session ends in an OOM
 - **Impact**: functional + technical. Users hit a crash; the cache is also untestable as written
 - **Complexity**: M. Hours for the eviction policy and its test, tens of lines across the two files the PR already touches
+- **Simplicity**: neutral. The map gains a bound; its callers hold no new concept
 - **Recommendation**: ✅ Fix here. Cap the map at 100 entries with an LRU eviction
 - **Rationale**: introduced by this PR, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
@@ -183,6 +204,7 @@ The summary table numbers the findings F1..Fn, and that number is a finding's on
 - Every finding gets a decision. "Worth considering" is not a decision.
 - Every recommendation carries a rationale, and the rationale explains the *trade-off*, not the finding.
 - Severity is about consequences, not taste.
+- Fewer lines is evidence of a simpler fix, not its test.
 - A recommendation rests on the finding's merits, never on what it does to a review loop.
 - Nothing is silently dropped: a finding we skip appears in the table as ❌ with its reason.
 - A deferral is owned by whoever owns the code. Never file a ticket in someone else's name unasked.

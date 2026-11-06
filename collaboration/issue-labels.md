@@ -14,7 +14,7 @@ A ticket carries exactly one label of each family. The scales are those of [Code
 | `impact`     | `impact:functional`, `impact:technical`, `impact:both`                 | [Impact](code-review-triage.md#3-impact)                    |
 | `complexity` | `complexity:S`, `complexity:M`, `complexity:L`                         | [Complexity](code-review-triage.md#4-complexity-to-address) |
 
-The fourth triage axis has no label: an open ticket is a 🕐 by definition, and closing it as ❌ says the rest.
+The last two triage axes have no label: the effect on simplicity only weighs the recommendation, an open ticket is a 🕐 by definition, and closing it as ❌ says the rest.
 
 No type label either. The title already carries the type as its Conventional Commits prefix (`fix(…)`, `feat(…)`, `refactor(…)`), and a label would repeat it.
 

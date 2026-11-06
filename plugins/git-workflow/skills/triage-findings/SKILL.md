@@ -41,7 +41,7 @@ collaboration/issue-labels.md, in cyrillrx/coding-conventions. Keep them in sync
 
 ## Your task
 
-Produce a decision-ready action plan from code review findings. A finding without a decision is not an outcome: every single one leaves this skill with a severity, an impact, a complexity, and a recommendation backed by a rationale.
+Produce a decision-ready action plan from code review findings. A finding without a decision is not an outcome: every single one leaves this skill with a severity, an impact, a complexity, an effect on simplicity, and a recommendation backed by a rationale.
 
 Follow these steps in order.
 
@@ -96,7 +96,7 @@ Either way, a 🔴 the change introduces never becomes a follow-up: it is fixed,
 
 ### Step 4: Score every finding
 
-Apply the four axes below to each finding, then the decision grid.
+Apply the five axes below to each finding, then the decision grid.
 
 **Severity**: the consequence of shipping as is, not how the code looks:
 
@@ -137,6 +137,23 @@ Both estimates cover the test and the verification, not just the edit. When they
 
 ❌ is deliberately weak: it spans "this is wrong" through "correct, but not worth its cost", and most of the time it is simply a finding we skip. It is not a verdict on the code and not a refusal; the default reading is "we looked, we decided, we moved on". These are dispositions of a **finding**, not replies to a **person**: they decide what the codebase does, not what a reviewer is told.
 
+**Effect on simplicity**: Once a finding is known to stand, one more question weighs on its outcome: **does the fix make the code simpler?** The grid judges a fix by its size, and size says what a fix costs the review, not what it leaves behind.
+
+| Effect          | Signals | What it changes |
+|-----------------|---|---|
+| **Simplifies**  | Fewer concepts to hold, less duplication, one way to do each thing, functions with one job, a lighter read (no needless intermediate variable, no mental bookkeeping, names that remove the need for a comment). Often, not always, fewer lines | ✅ even for a 🔵, even past the diff budget: the fix pays down rather than adds |
+| **Neutral**     | The code moves but reads the same | The grid applies as is |
+| **Complicates** | One more concept, an indirection, a special case, a denser expression, more lines with no gain in clarity | It must be justified: a 🔵 becomes ❌; a 🟡 is a decision for the author, not for the grid (the finding stands, the remedy may cost more than the harm) |
+
+**Fewer lines is evidence, not the test.** A change simplifies the code when a reader holds fewer concepts and does less work to understand it: less duplication, one way to do each thing, functions with one job, intermediate names only where they carry meaning. A shorter version that hides a concept in a dense expression, or merges two responsibilities, does not simplify; an intermediate variable that names a step can.
+
+The effect weighs the remedy, never the scope: a simplifying fix outside the subject of the change is still a 🕐, per the overrides below. For example:
+
+- Two functions sharing the same shape, folded into one helper: simplifies, fewer lines. ✅
+- A builder parameter added only to remove a few string replacements in tests: neutral to complicating. ❌
+- A test split so each one holds one assertion, for the same cases: complicates, more lines. ❌
+- A constant named in a test whose name already says what the value means: complicates. ❌
+
 **Default decision grid:**
 
 | Severity   | Complexity S                         | Complexity M  | Complexity L                                            |
@@ -146,9 +163,9 @@ Both estimates cover the test and the verification, not just the edit. When they
 | 🟡 Minor   | ✅ Fix here (leave it cleaner, 🏕)    | 🕐 Follow-up  | 🕐 Follow-up                                            |
 | 🔵 Nit     | ✅ Fix here if the diff budget holds | ❌ No action  | ❌ No action                                            |
 
-The grid and the overrides cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale: the four axes apply, and the judgement belongs to whoever owns the code. This is a shared default, not an exhaustive rulebook.
+The grid and the overrides cover the common cases, not every case. A finding that falls outside them still gets a decision and a rationale: the five axes apply, and the judgement belongs to whoever owns the code. This is a shared default, not an exhaustive rulebook.
 
-Overrides, which win over the grid:
+The effect on simplicity adjusts the grid, as above. Overrides, which win over the grid:
 
 - **Out of the change's scope** → 🕐 when it stands, ❌ when it is not worth a trace. The one exception is a 🏕 cleanup (a couple of lines with no behavior change, in a file the change already touches), which may be ✅, in its own commit. Growing the diff past 200 lines / 10 files costs the review more than the fix is worth.
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
@@ -170,9 +187,9 @@ Output these three parts, and **change nothing in this step**.
 
 **1. Summary table** (one row per finding, none omitted, ordered by severity then complexity):
 
-| #   | Finding                                  | Severity | Impact                 | Complexity | Recommendation |
-|-----|------------------------------------------|----------|------------------------|------------|----------------|
-| F1  | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | ✅ Fix here    |
+| #   | Finding                                  | Severity | Impact                 | Complexity | Simplicity | Recommendation |
+|-----|------------------------------------------|----------|------------------------|------------|------------|----------------|
+| F1  | `SpellRepository.kt:42`: unbounded cache | 🟠 Major | Functional + technical | M          | Neutral    | ✅ Fix here    |
 
 **2. Detail block per finding**, carrying the rationale of the decision:
 
@@ -182,6 +199,7 @@ Output these three parts, and **change nothing in this step**.
 - **Severity**: 🟠 Major. The map never evicts, so a long session ends in an OOM
 - **Impact**: functional + technical. Users hit a crash; the cache is also untestable as written
 - **Complexity**: M. Hours for the eviction policy and its test, tens of lines across the two files the change already touches
+- **Simplicity**: neutral. The map gains a bound; its callers hold no new concept
 - **Recommendation**: ✅ Fix here. Cap the map at 100 entries with an LRU eviction
 - **Rationale**: introduced by this change, user-visible failure mode, and the fix stays inside the current diff. Deferring it would ship a known crash.
 ```
@@ -232,6 +250,7 @@ The one exception is a round run by `/git-workflow:review-loop`: invoking that s
 - Every finding gets a decision. "Worth considering" is not a decision.
 - Nothing is silently dropped: a finding we skip appears in the table as ❌ with its reason.
 - Severity is about consequences, not taste.
+- Fewer lines is evidence of a simpler fix, not its test.
 - A recommendation rests on the finding's merits, never on what it does to a review loop.
 - A deferral is owned by whoever owns the code. Never file a ticket in someone else's name unasked.
 - Never widen the diff beyond what the change is about; that is what 🕐 is for.
