@@ -12,7 +12,7 @@ A document whose purpose is to record a decision and its reasons, rather than to
 - a PRD, in `docs/prd/` (see [`templates/prd-template.md`](../templates/prd-template.md));
 - a spec, or any other document a project's `AGENTS.md` names as one.
 
-A README, a guide or a convention document is not one: it describes, and a regular review applies.
+A document is recognized by its path first, and by its shape when the path says nothing: an `ADR-NNN` or `PRD-NNN` title, or the sections of its template. A README, a guide or a convention document is not one: it describes, and a regular review applies. Neither are comments and KDoc in code: [Coding Conventions](../conventions/coding-conventions.md) governs them.
 
 ## 2. Six questions
 
@@ -47,7 +47,15 @@ A decision document is reviewed once per change, not round after round. The ques
 
 A fix that changes the decision itself (another option chosen, a consequence that changes the choice) is a new decision: it is reviewed again, on its own.
 
-## 6. Expected output
+## 6. Changes that mix code and documents
+
+A pull request that implements a decision often edits its document too. The review is chosen per file, not per pull request:
+
+- **Each file gets its own review.** A decision document gets this one, the code gets a code review. A code review finding anchored in a decision document is not reported; one anchored in the code stays, including when it cites the document: code that departs from its decision is a real finding.
+- **A document edited along the way is reviewed on its diff, once.** An addition that only refines the decision (an invariant, a format, a field name settled while implementing) is an altitude finding: it is removed, not reworded. This is where the drift starts.
+- **When the code and the document disagree, fix whichever is wrong.** Aligning the document on the code changes the decision: it is a new decision, reviewed as one.
+
+## 7. Expected output
 
 One block per finding, in the order of the six questions:
 

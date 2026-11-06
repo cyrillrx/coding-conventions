@@ -20,9 +20,9 @@ allowed-tools:
 ---
 
 <!--
-The six questions, the finding rule, the altitude rule and the one-pass rule are derived from
-collaboration/decision-document-review.md in cyrillrx/coding-conventions. Keep them in sync with
-/sync-plugins.
+The six questions, the finding rule, the altitude rule, the one-pass rule and the mixed-change
+rules are derived from collaboration/decision-document-review.md in cyrillrx/coding-conventions.
+Keep them in sync with /sync-plugins.
 -->
 
 ## Context
@@ -39,7 +39,7 @@ Review decision documents at the level of the decision, and report findings. A c
 - With paths in the arguments, review those.
 - Otherwise, take the decision documents the branch changes. Resolve the base branch with `git symbolic-ref --short refs/remotes/origin/HEAD` (ask if it is missing or the project targets another branch), then list `git diff --name-only <base>...HEAD`, plus uncommitted changes from `git status --short`.
 
-A decision document records a decision and its reasons: an ADR (`docs/adr/`), a PRD (`docs/prd/`), a spec, or any document the project's `AGENTS.md` names as one. A README, a guide or a convention document is not one. If no decision document is found, say so and stop: this skill does not review code.
+A decision document records a decision and its reasons: an ADR (`docs/adr/`), a PRD (`docs/prd/`), a spec, or any document the project's `AGENTS.md` names as one. When the path says nothing, recognize it by its shape: an `ADR-NNN` or `PRD-NNN` title, or the sections of the project's ADR or PRD template. A README, a guide, a convention document, comments and KDoc are not decision documents. If none is found, say so and stop: this skill does not review code. In a change that also holds code, review only the documents: the code goes to a code review, and is read here only to check consistency.
 
 ### Step 2: Read around each document
 
@@ -59,6 +59,8 @@ Read the document in full, then what it must be consistent with: the ADRs and PR
 For a PRD, the decision is the scope: the alternatives are what the Out of Scope section rules out, and the consequences are what the requirements commit the product to.
 
 **A finding that changes none of the six answers is not a finding on the document.** A missing edge case, a field that could be named better, a rule worded loosely: when the decision, its reasons and its costs read the same with or without the fix, do not report it. Its place, if any, is the code review of the implementation.
+
+**A document edited along with the code** is reviewed on its diff. An addition that only refines the decision (an invariant, a format, a field name settled while implementing) is an altitude finding: that is where the drift starts. When the code and the document disagree, the finding says which one is wrong; aligning the document on the code changes the decision, and is reviewed as a new decision.
 
 **Altitude findings ask for removal, never for refinement.** A document states what is decided, concretely enough to be unambiguous, and the concrete shape (class names, field names, file layout) stays when that shape is the decision. Detail goes too far when no alternative turns on it: a rule invariant, a validation format, the content of a field, the exact behavior of an edge case. The fix is to delete it, or to replace it with a pointer to the code or test that holds it. Expect this review to shorten a document more often than lengthen it.
 
