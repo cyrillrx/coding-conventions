@@ -32,7 +32,8 @@ allowed-tools:
 
 <!--
 The loop (round 0, the round, the stop conditions, the closing order and the status labels) is
-derived from collaboration/code-review-loop.md in cyrillrx/coding-conventions. Keep it in sync with
+derived from collaboration/code-review-loop.md, and the one decision review per loop from
+collaboration/decision-document-review.md (§5), in cyrillrx/coding-conventions. Keep it in sync with
 /sync-plugins. Scoring and replies are not restated here: they belong to triage-findings and
 address-review, which this skill calls.
 -->
@@ -74,10 +75,10 @@ Round 0 does not count toward the cap.
 
 For round `i` from 1 to the cap:
 
-1. **Review and triage**: run `/git-workflow:triage-findings --review <effort>`. `--review` makes it start from a fresh review in a subagent, never from the findings earlier rounds left in this conversation. That review covers correctness and conformance to the conventions that apply to the changed files, each conformance finding citing its rule.
+1. **Review and triage**: run `/git-workflow:triage-findings --review <effort>`. `--review` makes it start from a fresh review in a subagent, never from the findings earlier rounds left in this conversation. That review covers correctness and conformance to the conventions that apply to the changed files, each conformance finding citing its rule. From round 2, add `--skip-decision-review`: decision documents (ADRs, PRDs, specs) get their decision review in round 1 only, since questioning a decision does not converge by iteration; conformance still covers them every round.
 2. **Decide**:
    - by default, present the round's plan and **wait for one approval for the whole batch**: the author may adjust any line, and may make this round the last. Say so when presenting it: an approval with no such word runs the next round;
-   - with `--auto`, the grid's recommendations stand, and the round stops for the author only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a 🟡 whose fix complicates the code, a finding that is ambiguous or that contests an earlier decision, a ✅ fix that is structural.
+   - with `--auto`, the grid's recommendations stand, and the round stops for the author only on what the grid does not settle: a 🔴 with complexity L, a ❌ on a 🟠 or a 🔴, a 🟡 whose fix complicates the code, a finding that is ambiguous or that contests an earlier decision, a ✅ fix that is structural, a ✅ fix that changes what a decision document decides (a new decision: the author has it reviewed on its own with `/git-workflow:review-decision`).
    - Unless the plan holds no ✅, two rounds wait for the author even with `--auto`: the one whose plan turns the trend (✅ rising two rounds in a row, or a ✅ on lines an earlier round fixed, read from the log) and the one at the cap. Give the diagnosis below with the plan; the one approval still decides everything. When the trend turns, it runs the next round unless the author makes this one the last. At the cap, the plan recommends closing, so approving it closes the loop after this round; say so when presenting it, even when the diagnosis recommends more rounds. The loop goes on only if the author also asks explicitly for N more rounds (3 suggested), and the author may instead close it and act on the recommendation. An extension is a new block of rounds that ends on this same decision point. Ask again only for a decision the answer left open.
    - Either way, flag a **structural** ✅ (complexity L, or a diff that would break the PR's 200 lines / 10 files budget) and offer to defer it as a 🕐, except a 🔴, whose minimal fix stays here: the rounds that follow will spend themselves on what it reshapes.
 3. **Collect the 🕐**: keep each ready-to-submit ticket from the plan (or the number of the open ticket a 🕐 points at) in a running list, and do not file it now: `triage-findings` Step 6.2 to 6.4 are deferred to Step 4.

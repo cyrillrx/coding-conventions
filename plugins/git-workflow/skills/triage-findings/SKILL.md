@@ -7,7 +7,7 @@ description: >-
   from git; when there are none, or with --review, it runs a fresh code review first. Use when
   findings exist but no decision does, or to review then triage a change. When a reviewer is waiting
   for an answer on an open pull request, use address-review instead.
-argument-hint: "[--review] [low|medium|high]"
+argument-hint: "[--review] [--skip-decision-review] [low|medium|high]"
 # Local reads only. This skill decides; every call that changes something (creating a follow-up
 # ticket, editing a PR description, committing) keeps its permission prompt on purpose.
 # `allowed-tools` merely pre-approves, so listing them here would waive the one check that does not
@@ -26,8 +26,9 @@ allowed-tools:
 ---
 
 <!--
-The triage grid in this skill is derived from collaboration/code-review-triage.md, the two
-review axes of Step 1 from collaboration/code-review-loop.md (§3), and the ticket labels from
+The triage grid in this skill is derived from collaboration/code-review-triage.md, the review
+axes of Step 1 from collaboration/code-review-loop.md (§3), the decision documents' recognition and
+routing from collaboration/decision-document-review.md (§1, §6), and the ticket labels from
 collaboration/issue-labels.md, in cyrillrx/coding-conventions. Keep them in sync with /sync-plugins.
 -->
 
@@ -57,8 +58,10 @@ The findings are already here. This skill is normally invoked straight after a c
 If the conversation holds no findings, or `--review` is passed, **review the change first**, on a fresh context:
 
 - Resolve the base branch as Step 2 describes.
-- Launch a subagent to review `<base>...HEAD` on both axes, and to return the findings of each verbatim, changing nothing. Without `--review`, it also reviews the uncommitted work, staged or not (`git diff HEAD`):
-  - **Correctness**: `/code-review <effort>`, with `<effort>` the `low`, `medium` or `high` argument, `high` by default. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so.
+- Split the changed files: **decision documents** (an ADR in `docs/adr/`, a PRD in `docs/prd/`, a spec or any document the project's `AGENTS.md` names as one; when the path says nothing, a document titled `ADR-NNN` or `PRD-NNN`, or shaped like the project's ADR or PRD template) and the rest. Comments and KDoc are code.
+- Launch a subagent to review `<base>...HEAD` on its axes, and to return the findings of each verbatim, changing nothing. Without `--review`, it also reviews the uncommitted work, staged or not (`git diff HEAD`):
+  - **Correctness**: `/code-review <effort>`, with `<effort>` the `low`, `medium` or `high` argument, `high` by default. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so. It covers the files that are not decision documents: a correctness finding anchored in a decision document is dropped, while one anchored in the code stays, including when it cites the document.
+  - **Decision**: `/git-workflow:review-decision <paths>` on the decision documents, if any. A code review attacks every sentence of a document and makes it grow below its decision; this review asks whether the decision holds, in one pass. Skipped with `--skip-decision-review`, which `/git-workflow:review-loop` passes after its first round.
   - **Conformance**: list the changed files (`git diff --name-only`), read the project's `AGENTS.md` / `CLAUDE.md` as an index, then read only the convention documents that apply to those files (the general ones, plus each one bound to a file type the change touches) and nothing else. Report every added line that contradicts a rule read, with its `file:line` and the rule cited as document and section. A finding that cites no rule is not reported.
 - With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over. Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
 
@@ -171,6 +174,7 @@ The effect on simplicity adjusts the grid, as above. Overrides, which win over t
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
 - **Wrong (the code already handles it, or does not do what it claims) or speculative** → ❌.
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
+- **On a decision document (ADR, PRD, spec), a finding that changes none of its six answers** (problem, alternatives, consequences, reversibility, consistency, altitude) → ❌, whatever its source. When it is about a behavior, it is a finding on the code that implements it: anchor it there and score it again.
 - **A preference the user cannot justify to themselves** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score the answer. Reviewers owe a justification; that duty is not a licence to dismiss them when they forget it.
 
 Whatever the grid or an override gives, the recommendation is judged on the finding alone:
