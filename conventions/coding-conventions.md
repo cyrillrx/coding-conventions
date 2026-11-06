@@ -30,6 +30,7 @@ These rules apply across all technologies (Kotlin, Rust, Go, etc.).
 ## 4. Comments
 
 - **A comment is an admission of failure**: It means the code could not express its intent on its own. The default is *no comment*: refactor names and structure until the code speaks for itself. Reach for a comment only when the code genuinely cannot carry the meaning.
+- **Apply the deletion test**: Delete the comment and reread the code with its names, types and tests. If a reader would not misread it, the comment stays deleted. Judge from that reader, not from the author who has just written the code: an invariant that feels non-obvious while writing it is often already carried by a name, a guard or a test.
 - **Prefer code over comments**: Code tells the truth; comments drift and lie. Make the code self-explanatory instead of describing it.
 - **When a comment earns its place, explain "Why", not "What"**: Capture business rules, non-obvious context, or unavoidable hacks, never a restatement of what the code does. Not every "why" needs stating: if the rationale doesn't matter, omit it.
 - **A "why" recorded elsewhere is not repeated**: When a spec (PRD, ADR) or a test name already states the rule, a comment duplicates it and drifts first.
