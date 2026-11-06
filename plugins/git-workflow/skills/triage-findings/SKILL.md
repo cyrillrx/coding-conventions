@@ -7,7 +7,7 @@ description: >-
   from git; when there are none, or with --review, it runs a fresh code review first. Use when
   findings exist but no decision does, or to review then triage a change. When a reviewer is waiting
   for an answer on an open pull request, use address-review instead.
-argument-hint: "[--review] [--skip-decision-review] [low|medium|high]"
+argument-hint: "[--review] [--decision-review <path>...|none] [low|medium|high]"
 # Local reads only. This skill decides; every call that changes something (creating a follow-up
 # ticket, editing a PR description, committing) keeps its permission prompt on purpose.
 # `allowed-tools` merely pre-approves, so listing them here would waive the one check that does not
@@ -61,7 +61,7 @@ If the conversation holds no findings, or `--review` is passed, **review the cha
 - Split the changed files: **decision documents** (an ADR in `docs/adr/`, a PRD in `docs/prd/`, a spec or any document the project's `AGENTS.md` names as one; when the path says nothing, a document titled `ADR-NNN` or `PRD-NNN`, or shaped like the project's ADR or PRD template) and the rest. Comments and KDoc are code.
 - Launch a subagent to review `<base>...HEAD` on its axes, and to return the findings of each verbatim, changing nothing. Without `--review`, it also reviews the uncommitted work, staged or not (`git diff HEAD`):
   - **Correctness**: `/code-review <effort>`, with `<effort>` the `low`, `medium` or `high` argument, `high` by default. Where `/code-review` is not available, the subagent reviews those diffs itself, and says so. It covers the files that are not decision documents: a correctness finding anchored in a decision document is dropped, while one anchored in the code stays, including when it cites the document.
-  - **Decision**: `/git-workflow:review-decision <paths>` on the decision documents, if any. A code review attacks every sentence of a document and makes it grow below its decision; this review asks whether the decision holds, in one pass. Skipped with `--skip-decision-review`, which `/git-workflow:review-loop` passes after its first round.
+  - **Decision**: `/git-workflow:review-decision <paths>` on the decision documents, if any. A code review attacks every sentence of a document and makes it grow below its decision; this review asks whether the decision holds, in one pass. `--decision-review <path>...` restricts it to those documents, and `--decision-review none` skips it: `/git-workflow:review-loop` passes one or the other after its first round. When a ✅ fix changes what a decision document decides (another option chosen, a consequence that changes the choice), say so in its detail block: that document is a new decision.
   - **Conformance**: list the changed files (`git diff --name-only`), read the project's `AGENTS.md` / `CLAUDE.md` as an index, then read only the convention documents that apply to those files (the general ones, plus each one bound to a file type the change touches) and nothing else. Report every added line that contradicts a rule read, with its `file:line` and the rule cited as document and section. A finding that cites no rule is not reported.
 - With `--review`, triage only what that review returns: findings already in the conversation are from an earlier review, and they are not carried over. Uncommitted work is outside the reviewed range: if `git status` shows any, say so.
 
