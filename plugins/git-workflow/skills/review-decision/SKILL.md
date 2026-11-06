@@ -81,7 +81,7 @@ End by pointing to `/git-workflow:triage-findings` to score and decide the findi
 
 ## Rules
 
-- One pass. Do not review your own earlier findings or their fixes again: a second pass over the answers only reviews their wording, which is the drift this review exists to stop. A fix that changes the decision itself is a new decision, reviewed again on its own.
+- One pass. Do not review your own earlier findings or their fixes again: a second pass over the answers only reviews their wording, which is the drift this review exists to stop. A fix that changes the decision itself is a new decision: that document gets one more pass, alone (in a review loop, the next round runs it).
 - Every finding names the question whose answer it changes, and what the answer becomes.
 - Never propose adding implementation detail to a decision document.
 - Report, never edit, never decide: scoring is `triage-findings`' job.

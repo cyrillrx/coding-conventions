@@ -107,6 +107,7 @@ The grid is the default, not the verdict. The effect on simplicity adjusts it, a
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
 - **The finding is wrong (the code already handles it, or does not do what it claims) or speculative** → ❌.
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
+- **On a decision document, a finding that changes none of [its six answers](decision-document-review.md#3-a-finding-changes-an-answer)** → ❌, whatever its source. When it is about a behavior, it is a finding on the code that implements it: anchor it there and score it again.
 - **A preference you cannot justify to yourself** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score it. Reviewers owe a justification ([PR etiquette](git-and-collaboration.md#7-pull-request-etiquette)); that duty is not a licence to dismiss them when they forget it.
 
 Whatever the grid or an override gives, the recommendation is judged on the finding alone:

@@ -43,9 +43,9 @@ An altitude finding asks for **removal**, never for refinement: the fix is to de
 
 ## 5. One pass
 
-A decision document is reviewed once per change, not round after round. The questions above do not converge by iteration: a second pass over the fixes of the first only reviews the wording of the answers, which is the drift this document exists to stop. In a [review loop](code-review-loop.md), the document is reviewed in the first round only; the conformance review (its template, [docs conventions](../conventions/docs-conventions.md)) still covers it every round.
+A decision document is reviewed once per change, not round after round. The questions above do not converge by iteration: a second pass over the fixes of the first only reviews the wording of the answers, which is the drift this document exists to stop. In a [review loop](code-review-loop.md), the document gets this review in the first round; the conformance review (its template, [docs conventions](../conventions/docs-conventions.md)) still covers it every round.
 
-A fix that changes the decision itself (another option chosen, a consequence that changes the choice) is a new decision: it is reviewed again, on its own.
+A fix that changes the decision itself (another option chosen, a consequence that changes the choice) is a new decision: that document gets one more pass, alone. In a review loop, it is the round that follows, with the same review, without leaving the loop.
 
 ## 6. Changes that mix code and documents
 
