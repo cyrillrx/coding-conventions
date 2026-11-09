@@ -81,12 +81,14 @@ LaunchedEffect(refreshTrigger) {
 
 ### Visibility
 
-Showing or hiding content is expressed with a plain `if`. There is no equivalent of `INVISIBLE` (occupying space while hidden): use `Spacer` with a fixed size if a placeholder is needed. Prefer `AnimatedVisibility` when the appearance/disappearance benefits from a transition.
+Showing or hiding content is expressed with a plain `if`, or with `?.let` when the content is a nullable value: it reads the value once and names it, where `if (value != null)` would repeat it. There is no equivalent of `INVISIBLE` (occupying space while hidden): use `Spacer` with a fixed size if a placeholder is needed. Prefer `AnimatedVisibility` when the appearance/disappearance benefits from a transition.
 
 ```kotlin
 if (isCompanyInfoVisible) {
     CompanyInfoSection()
 }
+
+state.error?.let { ErrorText(it.message()) }
 
 AnimatedVisibility(visible = isCompanyInfoVisible) {
     CompanyInfoSection()
