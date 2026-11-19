@@ -32,6 +32,7 @@ conventions/
   bruno-conventions.md                 # Bruno API testing conventions
 configs/
   .editorconfig                        # Shared editor settings for every file, plus the ktlint configuration for Kotlin
+  .gitattributes                       # Shared line endings Git stores and checks out, matching .editorconfig
 templates/
   adr-template.md                      # Architecture Decision Record skeleton, copied into a project's docs/adr/
   prd-template.md                      # Product Requirement Document skeleton, copied into a project's docs/prd/
