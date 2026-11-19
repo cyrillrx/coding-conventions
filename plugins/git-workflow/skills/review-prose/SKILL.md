@@ -1,5 +1,5 @@
 ---
-name: review-decision
+name: review-prose
 description: >-
   Review a decision document (ADR, PRD, spec) at the level of what it decides, in one pass: problem,
   alternatives, consequences, reversibility, consistency, and altitude (detail that belongs in code or
@@ -21,7 +21,7 @@ allowed-tools:
 
 <!--
 The six questions, the finding rule, the altitude rule, the one-pass rule and the mixed-change
-rules are derived from collaboration/decision-document-review.md in cyrillrx/coding-conventions.
+rules are derived from collaboration/prose-review.md in cyrillrx/coding-conventions.
 Keep them in sync with /sync-plugins.
 -->
 
