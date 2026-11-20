@@ -4,7 +4,8 @@ description: >-
   Turn code review findings into decisions: severity, impact, complexity, then one outcome per finding
   (fix here, follow-up ticket, or no action), each with its rationale, plus the resulting action plan.
   Reads the findings from the conversation, typically right after a code review, and the change itself
-  from git; when there are none, or with --review, it runs a fresh code review first. Use when
+  from git; when there are none, or with --review, it runs a fresh review first
+  (a code review on code, a prose review on prose). Use when
   findings exist but no decision does, or to review then triage a change. When a reviewer is waiting
   for an answer on an open pull request, use address-review instead.
 argument-hint: "[--review] [--prose-review <path>...|none] [--facts-review <path>...|none] [low|medium|high]"
