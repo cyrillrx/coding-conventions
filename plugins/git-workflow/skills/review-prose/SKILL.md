@@ -6,7 +6,7 @@ description: >-
   altitude; a convention, guide, README or skill file on its reasons, consistency, accuracy, altitude
   and actionability. Reports findings only, each naming the answer it changes; it edits nothing and
   decides nothing. Use instead of a code review whenever the change is, or includes, a prose document.
-argument-hint: "[path...]"
+argument-hint: "[--facts] [path...]"
 # Read-only: this skill reports findings. Scoring them belongs to triage-findings.
 allowed-tools:
   - Bash(git status:*)
@@ -101,7 +101,7 @@ End by pointing to `/git-workflow:triage-findings` to score and decide the findi
 
 ## Rules
 
-- One pass. Do not review your own earlier findings or their fixes again: a second pass over the answers only reviews their wording, which is the drift this review exists to stop. A fix that changes what the document decides or prescribes (another option chosen, a rule added, dropped or reversed rather than reworded) makes it a new document: it gets one more pass, alone (in a review loop, the next round runs it).
+- One pass. Do not review your own earlier findings or their fixes again: a second pass over the answers only reviews their wording, which is the drift this review exists to stop. A fix that changes what the document decides or prescribes (another option chosen, a rule added, dropped or reversed rather than reworded) makes it a new document: it gets one more pass, alone (in a review loop, the next round runs it). With `--facts`, after a fix that only rewords the document, answer consistency and accuracy alone: a wrong fact or a contradiction is a bug, and facts converge where wording does not.
 - Every finding names the question whose answer it changes, and what the answer becomes.
 - Never propose adding implementation detail or an edge-case rule to a prose document.
 - Report, never edit, never decide: scoring is `triage-findings`' job.

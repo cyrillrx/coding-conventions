@@ -54,7 +54,7 @@ An altitude finding asks for **removal**, never for refinement: the fix is to de
 
 ## 5. One pass
 
-A prose document is reviewed once per change, not round after round. The questions above do not converge by iteration: a second pass over the fixes of the first only reviews the wording of the answers, which is the drift this document exists to stop. In a [review loop](code-review-loop.md), the document gets this review in the first round; the conformance review (its template, [docs conventions](../conventions/docs-conventions.md)) still covers it every round.
+A prose document is reviewed once per change, not round after round. The questions above do not converge by iteration: a second pass over the fixes of the first only reviews the wording of the answers, which is the drift this document exists to stop. In a [review loop](code-review-loop.md), the document gets this review in the first round; the conformance review (its template, [docs conventions](../conventions/docs-conventions.md)) still covers it every round. A fix that only rewords the document still gets the two factual questions, consistency and accuracy, in the round that follows: a wrong path or a new contradiction is a bug, and facts converge where wording does not.
 
 A fix that changes what the document decides or prescribes (another option chosen, a consequence that changes the choice, a rule added, dropped or reversed rather than reworded) makes it a new document: it gets one more pass, alone. In a review loop, it is the round that follows, with the same review, without leaving the loop.
 
