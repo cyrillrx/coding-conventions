@@ -29,6 +29,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 ## Shared configs
 
 - [`configs/.editorconfig`](configs/.editorconfig): editor settings for every project (UTF-8, LF, final newline, no trailing whitespace), plus the ktlint configuration for Kotlin; copy it to the project root
+- [`configs/.gitattributes`](configs/.gitattributes): line endings Git stores and checks out (LF, CRLF for Windows scripts, `*.jar` binary), matching `.editorconfig`; copy it to the project root next to `.editorconfig`, then renormalize once in a dedicated commit with `git add --renormalize .`
 - [`.github/pull_request_template.md`](.github/pull_request_template.md): PR description template; copy it into a project's own `.github/`
 
 ## Templates
