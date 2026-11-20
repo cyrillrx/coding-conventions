@@ -39,7 +39,7 @@ A commit message should help reviewers get context around a change, but more imp
   - `build`: build system, dependencies, schema/migration files
 - **Scope**: The component or area affected (e.g. the feature name or layer name). Keep it short and consistent within a project.
 - **Subject**: Use the imperative, present tense: "add" not "added" nor "adds". Don't capitalize the first letter. No dot (`.`) at the end.
-- **Body** (optional): Explain the *why* and the context, not the *what* (the diff already shows the what). Wrap at a readable width. Reference issue IDs here when relevant (e.g. `Resolves: PROJ-123`).
+- **Body** (optional): Explain the *why* and the context, not the *what* (the diff already shows the what). One line per paragraph, never hard-wrapped (see [Documentation Conventions](../conventions/docs-conventions.md#line-wrapping)). Reference issue IDs here when relevant (e.g. `Resolves: PROJ-123`).
 
 ### Commit Examples
 
