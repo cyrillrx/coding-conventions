@@ -29,7 +29,7 @@ allowed-tools:
 <!--
 The triage grid in this skill is derived from collaboration/code-review-triage.md, the review
 axes of Step 1 from collaboration/code-review-loop.md (§3), the prose documents' recognition and
-routing from collaboration/prose-review.md (§1, §6), and the ticket labels from
+routing from collaboration/prose-review.md (§1, §3, §6), and the ticket labels from
 collaboration/issue-labels.md, in cyrillrx/coding-conventions. Keep them in sync with /sync-plugins.
 -->
 
