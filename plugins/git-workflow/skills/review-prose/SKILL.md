@@ -43,7 +43,7 @@ Review prose documents at the level of what they decide or prescribe, and report
 A prose document is written to be read rather than run, and comes in two kinds:
 
 - **A decision document** records a decision and its reasons: an ADR (`docs/adr/`), a PRD (`docs/prd/`), a spec, or any document the project's `AGENTS.md` names as one. When the path says nothing, recognize it by its shape: an `ADR-NNN` or `PRD-NNN` title, or the sections of the project's ADR or PRD template.
-- **A prescriptive document** tells its reader what to do: a convention, a guide, a README, a skill file (`SKILL.md`), an `AGENTS.md`, a template.
+- **A prescriptive document** tells its reader what to do: a convention, a guide, a README, a skill file (`SKILL.md`), an `AGENTS.md`, a template (even one shaped like an ADR or a PRD).
 
 Any other Markdown or text document is one or the other, whichever its purpose is closer to. Comments and KDoc are code. If no prose document is found, say so and stop: this skill does not review code. In a change that also holds code, review only the documents: the code goes to a code review, and is read here only to check consistency.
 
@@ -52,6 +52,8 @@ Any other Markdown or text document is one or the other, whichever its purpose i
 Read the document in full, then what it must be consistent with: the documents it links or derives from (a derived skill names its source), the others in its folder whose subject overlaps, and the code it governs where the branch touches it. For a document the branch modifies, read its diff too, but review the document as it now stands.
 
 ### Step 3: Answer the questions
+
+With `--facts`, answer consistency and accuracy alone (consistency alone for a decision document, where a wrong fact contradicts the code or the document it cites): the caller already decided that a fix only reworded the document. Otherwise, answer them all.
 
 A decision document gets six:
 
@@ -101,7 +103,7 @@ End by pointing to `/git-workflow:triage-findings` to score and decide the findi
 
 ## Rules
 
-- One pass. Do not review your own earlier findings or their fixes again: a second pass over the answers only reviews their wording, which is the drift this review exists to stop. A fix that changes what the document decides or prescribes (another option chosen, a rule added, dropped or reversed rather than reworded) makes it a new document: it gets one more pass, alone (in a review loop, the next round runs it). With `--facts`, after a fix that only rewords the document, answer consistency and accuracy alone (consistency alone for a decision document, where a wrong fact contradicts the code or the document it cites): a wrong fact or a contradiction is a bug, and facts converge where wording does not.
+- One pass. Do not review your own earlier findings or their fixes again: a second pass over the answers only reviews their wording, which is the drift this review exists to stop. A fix that changes what the document decides or prescribes (another option chosen, a rule added, dropped or reversed rather than reworded) makes it a new document: it gets one more pass, alone (in a review loop, the next round runs it). A fix that only rewords the document gets the `--facts` pass instead (Step 3): a wrong fact or a contradiction is a bug, and facts converge where wording does not.
 - Every finding names the question whose answer it changes, and what the answer becomes.
 - Never propose adding implementation detail or an edge-case rule to a prose document.
 - Report, never edit, never decide: scoring is `triage-findings`' job.

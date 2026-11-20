@@ -9,7 +9,7 @@ Its findings are then scored and decided like any other, per [Code Review Triage
 A document written to be read, by a person or an agent, rather than run. It comes in two kinds:
 
 - **A decision document** records a decision and its reasons: an ADR, in `docs/adr/` (see [Git & Collaboration](git-and-collaboration.md#9-architecture-decision-records-adrs) and [`templates/adr-template.md`](../templates/adr-template.md)); a PRD, in `docs/prd/` (see [`templates/prd-template.md`](../templates/prd-template.md)); a spec, or any other document a project's `AGENTS.md` names as one. It is recognized by its path first, and by its shape when the path says nothing: an `ADR-NNN` or `PRD-NNN` title, or the sections of its template.
-- **A prescriptive document** tells its reader what to do: a convention, a guide, a README, a skill file (`SKILL.md`), an `AGENTS.md`, a template.
+- **A prescriptive document** tells its reader what to do: a convention, a guide, a README, a skill file (`SKILL.md`), an `AGENTS.md`, a template (even one shaped like an ADR or a PRD).
 
 Every other Markdown or text document is one or the other, whichever its purpose is closer to. Comments and KDoc are not prose documents: they are code, and [Coding Conventions](../conventions/coding-conventions.md) governs them.
 
