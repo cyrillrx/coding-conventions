@@ -29,6 +29,7 @@ Two document types recur across projects and have a shared skeleton to start fro
 ## Line wrapping
 
 - Do not hard-wrap prose. One line per paragraph, per bullet, per table row. Rendering and editing both soft-wrap.
+- The rule covers every prose text a project writes, not only its Markdown: commit messages, pull request descriptions and issues.
 - A hard wrap turns a one-word edit into a reflowed paragraph: the diff shows several changed lines instead of one, and review comments anchor to lines the change never touched.
 - Column limits belong to code, not to prose. Inside fenced code blocks, follow the language's own convention (120 columns for Kotlin, the `rustfmt` and `gofmt` defaults).
 
