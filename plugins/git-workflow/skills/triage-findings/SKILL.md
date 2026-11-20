@@ -174,7 +174,7 @@ The effect on simplicity adjusts the grid, as above. Overrides, which win over t
 - **Pre-existing, not introduced here** → 🕐 by default, whatever its severity.
 - **Wrong (the code already handles it, or does not do what it claims) or speculative** → ❌.
 - **Already tracked by an open ticket** → 🕐 pointing at that ticket. No second ticket is opened: the existing one is the trace. A ❌ would read as "nothing will happen" when the work is planned.
-- **On a prose document, a finding that changes none of its `review-prose` answers** → ❌, whatever its source. When it is about a behavior, it is a finding on the code that implements it: anchor it there and score it again.
+- **On a prose document, a finding that changes none of its `review-prose` answers** → ❌, whatever its source, except a conformance finding, which is scored on the rule it cites. When it is about a behavior, it is a finding on the code that implements it: anchor it there and score it again.
 - **A preference the user cannot justify to themselves** → ❌. But a reviewer's request that merely *arrives* without a stated reason is not a ❌: ask for the reason, then score the answer. Reviewers owe a justification; that duty is not a licence to dismiss them when they forget it.
 
 Whatever the grid or an override gives, the recommendation is judged on the finding alone:
