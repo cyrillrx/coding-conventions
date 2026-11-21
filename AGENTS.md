@@ -101,6 +101,8 @@ Use `git mv` for any file rename or move, to preserve history.
 
 ### Kotlin / Compose (`conventions/kotlin-conventions.md`, `conventions/compose-*.md`)
 - Kotlin only; Jetpack/Compose Multiplatform: no XML layouts, no View-system APIs
+- Split by feature, then by layer (`feature/<x>/{domain,data,presentation}`, generic tools in `core/<role>`, assembly in `main`); dependencies point toward the domain (presentation → domain ← data), a feature reaches another through its domain only, and `Ram`/`Sample` implementations live in `domain/inmemory`
+- Packages by default; a module only where a target, a second deployable or a team requires it
 - MVVM + Unidirectional Data Flow: `StateFlow` for state, `SharedFlow` (one-shot) for events
 - Formatting 100% delegated to ktlint via `configs/.editorconfig` (4-space indent, 120 cols, trailing commas)
 - Prefer early returns over deep nesting; prefer affirmative conditions

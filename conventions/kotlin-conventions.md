@@ -47,10 +47,49 @@ Always put overloads next to each other in a class.
 
 ## Architecture
 
-Code follows a **Clean Architecture** and **Layered** approach.
+Code is split **by feature first, then by layer**, following Clean Architecture. Within a feature, **dependencies point toward the domain: presentation → domain ← data.**
 
-- **Domain**: Pure Kotlin. Contains entities and use cases. Independent of any framework.
-- **Data**: Repositories abstract the data sources. Return Kotlin `Flow` for reactive data streams and `suspend` functions for one-shot operations.
+```
+feature/
+  <feature>/
+    domain/            models, use cases, the interfaces they depend on, the errors
+      inmemory/        the Ram and Sample implementations
+    data/              the implementations of the domain's interfaces
+    presentation/      screens, ViewModels, the feature's routes and router
+core/
+  <role>/              generic tools: network, database, designsystem
+main/                  the composition root and the navigation graph
+```
+
+A layer-first tree spreads each feature over every layer, and only review keeps one feature out of another's data. Feature-first keeps a feature in one place and makes its boundary a path.
+
+### Layers
+
+- **Domain**: Pure Kotlin. Contains entities, use cases, and the interfaces they depend on: the repositories, and any port a repository needs (a store, an API client). The errors its callers branch on are declared here too; a generic result or error type may come from `core`, and the feature declares its own cases. Independent of any framework, it imports neither the data layer nor the presentation layer. Its `inmemory` package holds the [in-memory implementations](#naming-in-memory-repositories).
+- **Data**: Implements the interfaces the domain declares. Repositories abstract the data sources. Return Kotlin `Flow` for reactive data streams and `suspend` functions for one-shot operations. Imports the domain and `core`, never the presentation layer.
+- **Presentation**: Reaches the data layer through the domain only, and never imports it. A ViewModel calls a use case when there is logic to hold (a rule, several repositories, another feature), and a repository otherwise; never a parser, a mapper or a file format of the data layer. Previews and ViewModel tests use the domain's `inmemory` implementations.
+- **`main`**: The composition root, which builds the data implementations and hands them over, and the navigation graph. It is the only code that imports every feature.
+
+The contract belongs to whoever needs it. An interface declared in the data layer either names a domain type, which makes the data layer define a contract only the domain uses, or invents a failure type of its own that the domain translates a second time. A ViewModel that reaches into the data layer ties the screen to a storage format, and puts logic out of reach of the domain tests.
+
+### Between features
+
+- **A feature uses another through its domain only**, never its data or its presentation.
+- **A feature never navigates to another's screen itself.** It exposes its routes, and declares the router its screens take ([Compose conventions](compose-conventions.md#navigation-callbacks-in-primary-composables)); `main` implements that router with the other features' routes.
+- **Code that names a feature belongs to a feature**, even when others use it: to the domain of the feature that owns it.
+- **`core` holds generic tools only**, ones that would work unchanged for a feature that does not exist yet. It is split by role (`network`, `database`, `designsystem`), never `common` or `utils`, and imports no feature.
+
+When a Kotlin server and a Kotlin client share a repository, what both sides must agree on goes in a root `shared` module: the wire types in `contract/<feature>`, and the base they share (a result type, its errors) in `core/`. `shared` says who shares the code, `core` says what it is.
+
+### Packages first, modules when needed
+
+The boundaries are **packages** by default. A module costs a build file and longer paths for every feature and layer, and on a small project review already keeps the boundary. Split along the same tree into **modules** when something requires it:
+
+- **A target**: the server is JVM only, and the client multiplatform; the wire contract compiles to every client target.
+- **A second deployable** assembling the same features.
+- **A team**, whose boundaries the build should enforce rather than review.
+
+An architecture test (Konsist, ArchUnit) checks the import rules above without splitting modules. How many deployables a server has, and who owns which database schema, are project decisions recorded in an ADR.
 
 ## Naming Rules
 
@@ -118,7 +157,7 @@ Name in-memory repository implementations after their **strategy**, not after th
 
 `Ram` keeps only its first letter capitalized, per the acronym rule above.
 
-These implementations belong to the **main source set** of the data layer (e.g. `shared/core/src/commonMain/.../<feature>/data/`), not to a test source set: Compose previews depend on them too. ViewModel tests reuse these implementations rather than declaring a test double of their own.
+These implementations belong to the feature's domain, in its `inmemory` package (`feature/<feature>/domain/inmemory/`), and to the **main source set**, not to a test source set: Compose previews depend on them too. They depend on nothing but the domain, so the presentation layer reaches them without importing the data layer. ViewModel tests reuse these implementations rather than declaring a test double of their own.
 
 ## Formatting
 
@@ -222,7 +261,7 @@ class IsValidWalkSpeedTest {
 Applies to Kotlin Multiplatform projects only.
 
 - **Targets**: Kotlin Multiplatform (KMP) targeting Android, iOS, and Desktop (JVM).
-- **Shared modules**: Pure Kotlin domain/data code lives in shared modules.
+- **Shared module**: every feature and every `core` package live in the multiplatform module; the platform modules hold only their entry points.
 - **Local Database**: SQLDelight (when persistence is needed).
 - **Public API**: A public declaration of a shared module gets a KDoc when it has a contract its signature does not carry: a precondition, a thrown exception, the meaning of `null`, a unit, an invariant. A KDoc that only restates the name is a redundant comment (`coding-conventions.md` §4) and is left out.
 

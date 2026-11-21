@@ -18,7 +18,7 @@ It builds on the [Kotlin conventions](kotlin-conventions.md), which apply to eve
 
 ## Architecture
 
-The presentation layer (Compose + ViewModels) lives in the app module, on top of the domain and data layers described in the [Kotlin conventions](kotlin-conventions.md#architecture).
+The presentation layer (Compose + ViewModels) lives in each feature's `presentation` package, on top of its domain, as described in the [Kotlin conventions](kotlin-conventions.md#architecture).
 
 ### Presentation Layer (MVVM + UDF)
 
