@@ -45,7 +45,7 @@ Only once the user has explicitly approved the plan (e.g. "yes", "go ahead", "ok
 
 - **Subject**: imperative, present tense ("add" not "added"), no capital first letter, no trailing dot.
 - **Scope**: the component or area affected (feature or layer name). Optional but encouraged; keep it short and consistent.
-- **Body** (optional): explain the *why*, not the *what*. Wrap at a readable width.
+- **Body** (optional): explain the *why*, not the *what*. One line per paragraph, never hard-wrapped.
 - **English only**.
 - **No em dash** (`—`): a colon, a comma, parentheses or a second sentence instead.
 
