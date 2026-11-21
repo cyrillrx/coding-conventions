@@ -4,7 +4,7 @@ This file provides guidance to AI agents working in this repository.
 
 ## Purpose
 
-Documentation-only repository containing coding conventions and collaboration guidelines, shared across projects. It holds no application and no library, and has no build system: the files are Markdown, a shared editor config, and small scripts that enforce the conventions as plugin hooks. Each script has a test under `tests/hooks/`, run with `bash tests/hooks/<script>-test.sh`. The conventions are the human-readable source of truth and must remain understandable without any AI tooling.
+Documentation-only repository containing coding conventions and collaboration guidelines, shared across projects. It holds no application and no library, and has no build system: the files are Markdown, shared editor and Git configs, and small scripts that enforce the conventions as plugin hooks. Each script has a test under `tests/hooks/`, run with `bash tests/hooks/<script>-test.sh`. The conventions are the human-readable source of truth and must remain understandable without any AI tooling.
 
 ## Structure
 
