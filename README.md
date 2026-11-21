@@ -29,7 +29,11 @@ Coding conventions and collaboration guidelines, shared across projects. These d
 ## Shared configs
 
 - [`configs/.editorconfig`](configs/.editorconfig): editor settings for every project (UTF-8, LF, final newline, no trailing whitespace outside Markdown, where two trailing spaces are a line break), plus the ktlint configuration for Kotlin; copy it to the project root
-- [`configs/.gitattributes`](configs/.gitattributes): line endings for Git: LF in the repository, checked out as LF, or CRLF for Windows scripts, matching `.editorconfig`; copy it to the project root next to `.editorconfig`, commit it with the renormalized files in a dedicated commit, staged with `git add .gitattributes` and `git add --renormalize .`, then, with no uncommitted work, refresh the working tree with `git rm --cached -r .`, then `git reset --hard`
+- [`configs/.gitattributes`](configs/.gitattributes): line endings for Git: LF in the repository, checked out as LF, or CRLF for Windows scripts, matching `.editorconfig`. To adopt it, with no uncommitted work:
+  1. Copy it to the project root next to `.editorconfig`, or merge its rules into an existing `.gitattributes`: overwriting one drops rules such as Git LFS tracking.
+  2. Stage it with the renormalized files, `git add .gitattributes` then `git add --renormalize .`, and commit them alone.
+  3. Refresh the working tree, which renormalizing leaves untouched: `git rm --cached -r .`, then `git reset --hard`.
+  4. Every other existing clone runs step 3 once after pulling that commit.
 - [`.github/pull_request_template.md`](.github/pull_request_template.md): PR description template; copy it into a project's own `.github/`
 
 ## Templates
