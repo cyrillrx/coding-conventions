@@ -57,14 +57,14 @@ With `--facts`, answer consistency and accuracy alone (consistency alone for a d
 
 A decision document gets six:
 
-| Question          | What it asks                                                                         |
-|-------------------|--------------------------------------------------------------------------------------|
-| **Problem**       | Is the problem stated, with enough context to be understood a year from now?         |
-| **Alternatives**  | Are the real options listed, each with the reason it was rejected?                   |
-| **Consequences**  | Are they honest about what the decision costs, and about what it does not guarantee? |
-| **Reversibility** | Can the decision be undone, and at what price? Is that said?                         |
-| **Consistency**   | Does it contradict a PRD, another ADR, a document it cites, or the code it governs?  |
-| **Altitude**      | Does it hold detail that belongs in code or tests?                                   |
+| Question          | What it asks                                                                                |
+|-------------------|---------------------------------------------------------------------------------------------|
+| **Problem**       | Is the problem stated, with enough context to be understood a year from now?                |
+| **Alternatives**  | Are the real options listed, each with the reason it was rejected?                          |
+| **Consequences**  | Are they honest about what the decision costs, and about what it does not guarantee?        |
+| **Reversibility** | Can the decision be undone, and at what price? Is that said?                                |
+| **Consistency**   | Does it contradict itself, a PRD, another ADR, a document it cites, or the code it governs? |
+| **Altitude**      | Does it hold detail that belongs in code or tests?                                          |
 
 For a PRD, the decision is the scope: the alternatives are what the Out of Scope section rules out, and the consequences are what the requirements commit the product to.
 
