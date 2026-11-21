@@ -6,9 +6,11 @@ Number 000 is conventionally the product vision; feature PRDs start at 001. A la
 
 # PRD-NNN: <feature name>
 
-> **Status**: Draft | **Version**: 0.1 | **Last updated**: YYYY-MM-DD
+**Status**: Draft  
+**Version**: 0.1  
+**Last updated**: YYYY-MM-DD
 
-<!-- Status: Draft while being written, Approved once agreed, Implemented when shipped, Superseded by PRD-NNN when replaced. Bump the version on every substantive edit: a PRD is a living document, and readers need to know which version they reviewed. -->
+<!-- Status: Draft while being written, Approved once agreed, Implemented when shipped, Superseded by PRD-NNN when replaced. Bump the version on every substantive edit: a PRD is a living document, and readers need to know which version they reviewed. End every line of the header but the last with two spaces, a Markdown line break. -->
 
 ## Overview
 
