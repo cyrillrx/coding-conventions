@@ -10,7 +10,7 @@ See collaboration/git-and-collaboration.md §9 for when an ADR is required.
 **Date**: YYYY-MM-DD  
 **Context**: <the moment this is being decided, e.g. "Phase 5: character sheets, before implementation">
 
-<!-- Status: Proposed while under discussion, Accepted once agreed, Superseded by ADR-NNN when replaced, Deprecated when the decision no longer applies. Keep the original document; never rewrite history to hide a reversal. Each header field sits on its own line; end every line but the last with two spaces, a Markdown line break. -->
+<!-- Status: Proposed while under discussion, Accepted once agreed, Superseded by ADR-NNN when replaced, Deprecated when the decision no longer applies. Keep the original document; never rewrite history to hide a reversal. End every line of the header but the last with two spaces, a Markdown line break. -->
 
 ## Decision
 
