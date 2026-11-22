@@ -34,7 +34,7 @@ Coding conventions and collaboration guidelines, shared across projects. These d
   2. Stage it with the renormalized files, `git add .gitattributes` then `git add --renormalize .`, and commit them alone.
   3. Refresh the working tree, which renormalizing leaves untouched: `git rm --cached -r .`, then `git reset --hard`.
   4. Every other existing clone, with no uncommitted work, runs step 3 once after pulling that commit.
-  5. A branch opened before that commit, with no uncommitted work, merges it with `git merge -X renormalize`, then repeats steps 2 and 3.
+  5. A branch opened before that commit, with no uncommitted work, merges it with `git merge -X renormalize` and commits the merge, then repeats steps 2 and 3.
 - [`.github/pull_request_template.md`](.github/pull_request_template.md): PR description template; copy it into a project's own `.github/`
 
 ## Templates
