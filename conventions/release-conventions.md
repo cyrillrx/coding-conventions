@@ -45,13 +45,18 @@ The App is installed on **selected repositories** only, never on all of them: a 
 
 1. Add the repository to the App's installation (GitHub settings, Applications, `cyrillrx-release`, Configure).
 2. Store the App's client ID, which starts with `Iv`, in the repository variable `RELEASE_APP_CLIENT_ID`, and the private key, the whole `.pem` file, in the repository secret `RELEASE_APP_PRIVATE_KEY`.
-3. Run the release workflow by hand once: a `Not Found` on the token step means the App is not installed on the repository; an empty `client-id` error means the variable is missing.
+3. Run the release-please workflow by hand once: a `Not Found` on the token step means the App is not installed on the repository; an empty `client-id` error means the variable is missing.
 
 ## Workflow
 
 The token is minted in the job that runs release-please, and only there:
 
 ```yaml
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
 permissions: {}
 
 jobs:
@@ -72,6 +77,7 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
 ```
 
+- `workflow_dispatch` lets a repository check its setup without a commit on `main` ([step 3](#adding-a-repository)).
 - The workflow grants the `GITHUB_TOKEN` nothing (`permissions: {}`), and each other job asks for what it needs. The release-please job needs no `GITHUB_TOKEN` permission at all.
 - The `permission-*` inputs narrow the token to what release-please uses, even if the App is later granted more.
 - Without an `owner` input, the token is valid for the current repository only, whatever else the App is installed on.
