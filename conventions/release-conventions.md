@@ -86,6 +86,8 @@ jobs:
 
 The App versions and tags; it does not publish. A build, an upload to a store or a library publication keeps its own credentials in its own job: a store's service account, a package registry's token, or the `GITHUB_TOKEN` with `packages: write`. The App is never granted Packages or Actions permissions for that.
 
+release-please creates the GitHub Release as a draft, with its tag (`"draft": true` and `"force-tag-creation": true` in `release-please-config.json`: a draft alone creates no tag). The job that attaches the artifacts publishes it once they are all attached, so a failed build leaves no public Release with missing artifacts, as the [Desktop release workflow](desktop-distribution-conventions.md#release-workflow) requires.
+
 ## Key Rotation
 
 Generate a new private key on the App, update `RELEASE_APP_PRIVATE_KEY` in every repository the App is installed on, then delete the old key. Both keys stay valid in between, so no release fails during the switch.
