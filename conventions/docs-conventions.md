@@ -16,6 +16,7 @@ Two document types recur across projects and have a shared skeleton to start fro
 | Product Requirement Document | `docs/prd/` | `prd-NNN-title.md` | [`templates/prd-template.md`](../templates/prd-template.md) |
 
 - Numbers are assigned in order and never reused, including for a document that was withdrawn.
+- An ADR is edited in place until its decision is implemented: what its validation or the first steps of its implementation teach refines the same decision, and a second ADR would split its reasoning across documents nobody lived with. Once it is implemented, a reversal is a new ADR that supersedes it.
 - A superseded document keeps its file and its number; its status line points at the one replacing it. Rewriting or deleting it hides the reasoning that led there.
 - `prd-000` is conventionally the product vision. A feature PRD that outgrows a readable length splits into `prd-001a`, `prd-001b`, … rather than gaining sections.
 - When an ADR settles a PRD's open question, link it from the PRD instead of deleting the question.
