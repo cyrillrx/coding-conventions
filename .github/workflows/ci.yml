@@ -10,8 +10,11 @@ permissions:
 
 jobs:
   hook-tests:
-    name: Hook tests
-    runs-on: ubuntu-latest
+    name: Hook tests (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
       - name: Run the hook tests
