@@ -86,7 +86,7 @@ jobs:
 
 The App versions and tags; it does not publish. A build, an upload to a store or a library publication keeps its own credentials in its own job: a store's service account, a package registry's token, or the `GITHUB_TOKEN` with `packages: write`. The App is never granted Packages or Actions permissions for that.
 
-A repository whose release attaches artifacts (installers, binaries) has release-please create the GitHub Release as a draft, with its tag (`"draft": true` and `"force-tag-creation": true` in `release-please-config.json`: a draft alone creates no tag, and `release-please-action` before v4.4.1 ignores `force-tag-creation` without a word). The job that attaches the artifacts publishes it once they are all attached, so a failed build leaves no public Release with missing artifacts, as the [Desktop release workflow](desktop-distribution-conventions.md#release-workflow) requires. Any other repository lets release-please publish the Release directly: nothing else would publish a draft.
+A repository whose release attaches artifacts (installers, binaries) has release-please create the GitHub Release as a draft, with its tag (`"draft": true` and `"force-tag-creation": true` in `release-please-config.json`: a draft alone creates no tag, and `release-please-action` before v4.4.1 ignores `force-tag-creation` without a word). A job that runs after every attaching job publishes it, as the `publish` job of the [Desktop release workflow](desktop-distribution-conventions.md#release-workflow) does, so a failed build leaves no public Release with missing artifacts. Any other repository lets release-please publish the Release directly: nothing else would publish a draft.
 
 ## Key Rotation
 
