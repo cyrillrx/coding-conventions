@@ -32,7 +32,7 @@ One App, `cyrillrx-release`, serves every repository. It is created once, on the
 | Webhook                               | Inactive: the App runs no code, it only lends its identity        |
 | Repository permissions: Contents      | Read and write: the changelog commit, the tag, the GitHub Release |
 | Repository permissions: Pull requests | Read and write: the release pull request                          |
-| Repository permissions: Issues        | Read and write: the `autorelease: *` labels on that pull request  |
+| Repository permissions: Issues        | Read and write: release-please-action's documented requirement    |
 | Repository permissions: Metadata      | Read-only, imposed by GitHub                                      |
 | Every other permission                | No access                                                         |
 | Where can this App be installed?      | Only on this account                                              |
