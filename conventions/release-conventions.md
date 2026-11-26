@@ -21,7 +21,7 @@ release-please writes with a token from a GitHub App, never with the workflow's 
 - The same rule applies to the tag: a tag pushed with the `GITHUB_TOKEN` starts no tag-triggered workflow, such as the [release workflow](desktop-distribution-conventions.md#release-workflow) of a Desktop application.
 - An App token is scoped to the permissions the workflow asks for, and expires after an hour.
 
-A personal access token would lift the same restriction, but it acts as the maintainer rather than as a bot, and it expires on a date someone has to remember.
+A personal access token would lift the same restriction, but it acts as the maintainer rather than as a bot, and it either expires on a date someone has to remember or never expires at all.
 
 ## The Shared App
 
