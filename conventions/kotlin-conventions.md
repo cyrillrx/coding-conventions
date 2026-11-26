@@ -67,7 +67,7 @@ A layer-first tree spreads each feature over every layer, and only review keeps 
 
 - **Domain**: Pure Kotlin. Contains entities, use cases, and the interfaces they depend on: the repositories, and any port a repository needs (a store, an API client). The errors its callers branch on are declared here too; a generic result or error type may come from `core`, and the feature declares its own cases. Independent of any framework, it imports neither the data layer nor the presentation layer. Its `inmemory` package holds the [in-memory implementations](#naming-in-memory-repositories).
 - **Data**: Implements the interfaces the domain declares. Repositories abstract the data sources. Return Kotlin `Flow` for reactive data streams and `suspend` functions for one-shot operations. Imports the domain and `core`, never the presentation layer.
-- **Presentation**: Reaches the data layer through the domain only, and never imports it. A ViewModel calls a use case when there is logic to hold (a rule, several repositories, another feature), and a repository otherwise; never a parser, a mapper or a file format of the data layer. Previews and ViewModel tests use the domain's `inmemory` implementations.
+- **Presentation**: Reaches the data layer through the domain only, and never imports it. A ViewModel calls a use case when there is logic to hold (a rule, several repositories, another feature), and a repository otherwise: a use case that only forwards the call adds a class and no rule. It never calls a parser, a mapper or a file format of the data layer. Previews and ViewModel tests use the domain's `inmemory` implementations.
 - **`main`**: The composition root, which builds the data implementations and hands them over, and the navigation graph. It is the only code that imports every feature.
 
 The contract belongs to whoever needs it. An interface declared in the data layer either names a domain type, which makes the data layer define a contract only the domain uses, or invents a failure type of its own that the domain translates a second time. A ViewModel that reaches into the data layer ties the screen to a storage format, and puts logic out of reach of the domain tests.
@@ -75,11 +75,11 @@ The contract belongs to whoever needs it. An interface declared in the data laye
 ### Between features
 
 - **A feature uses another through its domain only**, never its data or its presentation.
-- **A feature never navigates to another's screen itself.** It exposes its routes, and declares the router its screens take ([Compose conventions](compose-conventions.md#navigation-callbacks-in-primary-composables)); `main` implements that router with the other features' routes.
+- **A feature never navigates to another's screen itself.** It exposes its routes, and declares the router its screens take ([Compose conventions](compose-conventions.md#navigation-callbacks-in-primary-composables)); `main` implements that router with the other features' routes. A screen that imported another feature's routes would tie the two presentations together, and once split into modules each feature would need a separate routes module for the others to import.
 - **Code that names a feature belongs to a feature**, even when others use it: to the domain of the feature that owns it.
 - **`core` holds generic tools only**, ones that would work unchanged for a feature that does not exist yet. It is split by role (`network`, `database`, `designsystem`), never `common` or `utils`, and imports no feature.
 
-When a Kotlin server and a Kotlin client share a repository, what both sides must agree on goes in a root `shared` module: the wire types in `contract/<feature>`, and the base they share (a result type, its errors) in `core/`. `shared` says who shares the code, `core` says what it is.
+When a Kotlin server and a Kotlin client share a repository, what both sides must agree on goes in a root `shared` module: the wire types in `contract/<feature>`, and the base they share (a result type, its errors) in `core/`. `shared` says who shares the code, `core` says what it is: one word per meaning keeps `core/` readable inside an app's multiplatform module, conventionally named `shared`, where a `shared/` tools package would give `shared/shared/`.
 
 ### Packages first, modules when needed
 
@@ -157,7 +157,7 @@ Name in-memory repository implementations after their **strategy**, not after th
 
 `Ram` keeps only its first letter capitalized, per the acronym rule above.
 
-These implementations belong to the feature's domain, in its `inmemory` package (`feature/<feature>/domain/inmemory/`), and to the **main source set**, not to a test source set: Compose previews depend on them too. They depend on nothing but the domain, so the presentation layer reaches them without importing the data layer. ViewModel tests reuse these implementations rather than declaring a test double of their own.
+These implementations belong to the feature's domain, in its `inmemory` package (`feature/<feature>/domain/inmemory/`), and to the **main source set**, not to a test source set: Compose previews depend on them too. They depend on nothing but the domain, so the presentation layer reaches them without importing the data layer. ViewModel tests reuse these implementations rather than declaring a test double of their own. The package is named after the strategy too: `inmemory` covers both prefixes, where `sample` would misfile a `Ram` store.
 
 ## Formatting
 
