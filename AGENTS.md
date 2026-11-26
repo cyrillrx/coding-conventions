@@ -39,6 +39,7 @@ templates/
   prd-template.md                      # Product Requirement Document skeleton, copied into a project's docs/prd/
 .github/
   pull_request_template.md             # PR description template, copied into other projects
+  workflows/ci.yml                     # Runs the hook tests on every pull request
 .claude-plugin/
   marketplace.json                     # Claude Code marketplace registry (cyrillrx-conventions)
 plugins/                               # Derived plugin skills (regenerate with /sync-plugins)
