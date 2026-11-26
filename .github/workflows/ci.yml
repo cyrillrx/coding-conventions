@@ -13,6 +13,6 @@ jobs:
     name: Hook tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run the hook tests
         run: for t in tests/hooks/*-test.sh; do bash "$t" || exit 1; done
